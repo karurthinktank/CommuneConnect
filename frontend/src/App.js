@@ -18,6 +18,12 @@ import { isTokenExpired } from "../src/helpers/jwt-token-access/accessToken";
 // Import scss
 import "./assets/scss/theme.scss";
 
+//theme
+import "primereact/resources/themes/lara-light-indigo/theme.css";     
+    
+//core
+import "primereact/resources/primereact.min.css";                                       
+        
 const getLayout = (layoutType) => {
   let Layout = VerticalLayout;
   switch (layoutType) {

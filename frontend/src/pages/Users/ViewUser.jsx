@@ -1,6 +1,6 @@
 import { React, useState, useEffect, Fragment } from "react";
 import { useParams } from 'react-router';
-import { CASES_URL } from "helpers/url_helper";
+import { USER_URL } from "helpers/url_helper";
 import { GET } from "helpers/api_helper";
 import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
@@ -49,7 +49,7 @@ function ViewCase() {
         },
     ];
     const fetchCase = async () => {
-        let url = CASES_URL + id;
+        let url = USER_URL + id;
         const response = await GET(url);
         if (response.status === 200) {
             console.log(response)

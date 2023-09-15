@@ -33,8 +33,10 @@ function UsersListTable() {
     const header = (
         <div className="d-flex flex-wrap align-items-center  gap-2">
             <span className="text-xl text-900 font-bold"></span>
+            <Link to={`/users/add`} className="ms-auto">
+            <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>குடும்ப சேரக்கை</button>
+            </Link>
 
-            <button className="btn btn-primary btn-block ms-auto " type="submit"><span className="mdi mdi-plus fs-5 me-2"></span>குடும்ப சேரக்கை</button>
         </div>
     );
     return (

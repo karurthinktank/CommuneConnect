@@ -1,8 +1,8 @@
 import logging
 import json
 from django.utils import timezone
-from .serializers import UserSerializer
-from .models import Users
+from .serializers import PeopleSerializer, UserSerializer
+from .models import People
 from rest_framework import permissions
 from rest_framework import viewsets, status
 from django.contrib.auth.models import Group
@@ -23,9 +23,9 @@ User creation, list, view, edit and delete
 """
 
 
-class UsersViewSet(viewsets.ModelViewSet):
-    queryset = Users.objects.filter(deleted=False)
-    serializer_class = UserSerializer
+class PeopleViewSet(viewsets.ModelViewSet):
+    queryset = People.objects.filter(deleted=False)
+    serializer_class = PeopleSerializer
 
     def list(self, request, *args, **kwargs):
         """
@@ -58,7 +58,7 @@ class UsersViewSet(viewsets.ModelViewSet):
                 page = int(page)
             except Exception:
                 page = 1
-            case_list = Users.objects.filter(deleted=False).order_by(sort_by)
+            case_list = People.objects.filter(deleted=False).order_by(sort_by)
             paginator = Paginator(case_list, count)
             try:
                 resource = paginator.page(page)
@@ -99,21 +99,12 @@ class UsersViewSet(viewsets.ModelViewSet):
         try:
             data = request.body
             data = json.loads(data)
-            data['created_by'] = request.user.id
-            if not data['filing_date']:
-                data['filing_date'] = None
-            if not data['registration_date']:
-                data['registration_date'] = None
-            existing_case = Users.objects.filter()
-            if existing_case:
-                logging.error({"CNR": data['cnr_number'], "message": "Duplicate CNR Number"})
-                response['message'] = "Duplicate CNR number"
-                response['code'] = 400
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            data['created_by'] = request.user.first_name
+
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
                 serializer.save()
-                logging.info({"CNR": data['cnr_number'], "message": "Created Successfully!"})
+                logging.info()
             else:
                 response['message'] = "Bad Request!"
                 response['code'] = 400
@@ -124,7 +115,7 @@ class UsersViewSet(viewsets.ModelViewSet):
         except Exception as e:
             response['message'] = str(e)
             response['code'] = 500
-            logging.error({"CNR": data['cnr_number'], "message": str(e)})
+            logging.error()
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def update(self, request, *args, **kwargs):
@@ -133,11 +124,11 @@ class UsersViewSet(viewsets.ModelViewSet):
         try:
             data = request.body
             data = json.loads(data)
-            data['modified_by'] = request.user
+            data['modified_by'] = request.user.first_name
             data['modified_at'] = timezone.now()
-            case = Users.objects.filter()
-            if not case:
-                logging.error({"case": data['cnr_number'], "message": "Invalid CNR number"})
+            people = People.objects.filter()
+            if not people:
+                logging.error()
                 response['message'] = "Invalid CNR Number"
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -163,7 +154,7 @@ class UsersViewSet(viewsets.ModelViewSet):
         response = dict()
         try:
             slug = kwargs.get("pk", None)
-            case = Users.objects.filter().first()
+            case = People.objects.filter().first()
             if not case:
                 logging.info({"case": slug, "message": "Invalid Case"})
                 response['message'] = "Invalid Case"
@@ -185,7 +176,7 @@ class UsersViewSet(viewsets.ModelViewSet):
         response = dict()
         try:
             slug = kwargs.get("pk", None)
-            case = Users.objects.filter().first()
+            case = People.objects.filter().first()
             case.deleted = True
             case.modified_by = request.user
             case.modified_at = timezone.now()
@@ -197,6 +188,13 @@ class UsersViewSet(viewsets.ModelViewSet):
             response['message'] = str(e)
             response['code'] = 500
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(methods=['get'], detail=False, url_path='get-user')
+    def get_user(self, request):
+        # qs = self.queryset.filter(id=pk, is_superuser=False).first()
+        serializer = UserSerializer(request.user, context={'request': request})
+        data = serializer.data
+        return Response(data)
 
 
 

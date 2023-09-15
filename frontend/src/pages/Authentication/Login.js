@@ -18,7 +18,7 @@ import "../../assets/scss/_login.scss"
 import logo from "assets/images/logo.svg";
 import bgbanner from "assets/images/Sri-Ranganathaswamy-Temple.jpeg"
 import { GET, POST } from "../../helpers/api_helper";
-import { LOGIN_URL, USER_DETAIL_URL } from "../../helpers/url_helper";
+import { LOGIN_URL, USER } from "../../helpers/url_helper";
 // import { setUser } from "../../helpers/jwt-token-access/accessToken";
 
 function Login() {
@@ -33,11 +33,11 @@ function Login() {
     enableReinitialize: true,
 
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter your Email / Login Id"),
+      username: Yup.string().required("Please Enter your username"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: async (values) => {
@@ -58,7 +58,7 @@ function Login() {
   });
 
   const get_user = async (token) => {
-    var res = await GET(USER_DETAIL_URL, { headers: { Authorization: `Bearer ${token}` } });
+    var res = await GET(USER, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status == 200) {
       localStorage.setItem("auth_user", JSON.stringify(res.data));
       navigate('/home');
@@ -96,21 +96,21 @@ function Login() {
                       }}>
 
                   <div className="mb-3">
-                    <Label className="form-label">Email/Login ID</Label>
+                    <Label className="form-label">Username</Label>
                     <Input
-                      name="email"
+                      name="username"
                       className="form-control"
-                      placeholder="Enter email / login id"
+                      placeholder="Enter username"
                       type="text"
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
-                      value={validation.values.email || ""}
+                      value={validation.values.username || ""}
                       invalid={
-                        validation.touched.email && validation.errors.email ? true : false
+                        validation.touched.username && validation.errors.username ? true : false
                       }
                     />
-                    {validation.touched.email && validation.errors.email ? (
-                      <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                    {validation.touched.username && validation.errors.username ? (
+                      <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
                     ) : null}
                   </div>
 

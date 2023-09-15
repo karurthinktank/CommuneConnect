@@ -605,11 +605,11 @@ function AddUser() {
                                                             type="text"
                                                             onChange={validation.handleChange}
                                                             value={validation.values.members[index].member_name}
-                                                            invalid={validation.touched.members[index].member_name && validation.errors.members[index].member_name ? true : false}
+                                                            // invalid={validation.touched.members[index]?.member_name && validation.errors?.members[index].member_name ? true : false}
                                                         />
-                                                        {validation.touched.members[index].member_name && validation.errors.members[index].member_name ? (
+                                                        {/* {validation.touched.members[index].member_name && validation.errors.members[index].member_name ? (
                                                             <FormFeedback type="invalid">{validation.errors.members[index].member_name}</FormFeedback>
-                                                        ) : null}
+                                                        ) : null} */}
                                                     </div>
                                                     <div className="mb-3">
                                                         <Label className="form-label">ஆதார் எண்</Label>
@@ -634,11 +634,11 @@ function AddUser() {
                                                             onChange={validation.handleChange}
                                                             onBlur={validation.handleBlur}
                                                             value={validation.values.members[index].member_mobile_number}
-                                                            invalid={validation.touched.members[index].member_mobile_number && validation.errors.members[index].member_mobile_number ? true : false}
+                                                            // invalid={validation.touched.members[index].member_mobile_number && validation.errors.members[index].member_mobile_number ? true : false}
                                                         />
-                                                        {validation.touched.members[index].member_mobile_number && validation.errors.members[index].member_mobile_number ? (
+                                                        {/* {validation.touched.members[index].member_mobile_number && validation.errors.members[index].member_mobile_number ? (
                                                             <FormFeedback type="invalid">{validation.errors.members[index].member_mobile_number}</FormFeedback>
-                                                        ) : null}
+                                                        ) : null} */}
                                                     </div>
                                                     <div className="mb-3">
                                                         <Label className="form-label">பாலினம்</Label>
@@ -651,15 +651,15 @@ function AddUser() {
                                                             onChange={validation.handleChange}
                                                             onBlur={validation.handleBlur}
                                                             value={validation.values.gender || ''}
-                                                            invalid={validation.touched.gender && validation.errors.gender ? true : false}
+                                                            // invalid={validation.touched.gender && validation.errors.gender ? true : false}
                                                         >
                                                             <option value="" disabled >பாலினத்தைத் தேர்ந்தெடுக்கவும்</option>
                                                             <option key="ஆண்" value="ஆண்">ஆண்</option>
                                                             <option key="பெண்" value="பெண்">பெண்</option>
                                                         </Input>
-                                                        {validation.touched.gender && validation.errors.gender ? (
+                                                        {/* {validation.touched.gender && validation.errors.gender ? (
                                                             <FormFeedback type="invalid">{validation.errors.gender}</FormFeedback>
-                                                        ) : null}
+                                                        ) : null} */}
                                                     </div>
 
                                                     <div className="mb-3">
@@ -687,14 +687,14 @@ function AddUser() {
                                                             onChange={validation.handleChange}
                                                             onBlur={validation.handleBlur}
                                                             value={validation.values.relationship || ''}
-                                                            invalid={validation.touched.relationship && validation.errors.relationship ? true : false}
+                                                            // invalid={validation.touched.relationship && validation.errors.relationship ? true : false}
                                                         >
                                                             <option value="" disabled >உறவைத் தேர்ந்தெடுக்கவும்</option>
                                                             {districtList.map((element) => (<option key={element.key} value={element.value}>{element.key}</option>))}
                                                         </Input>
-                                                        {validation.touched.relationship && validation.errors.relationship ? (
+                                                        {/* {validation.touched.relationship && validation.errors.relationship ? (
                                                             <FormFeedback type="invalid">{validation.errors.relationship}</FormFeedback>
-                                                        ) : null}
+                                                        ) : null} */}
                                                     </div>
                                                     <div className="mb-3">
                                                         <Label className="form-label">திருமண நிலை</Label>

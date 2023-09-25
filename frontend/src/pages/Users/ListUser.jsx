@@ -5,13 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Paginator } from 'primereact/paginator';
-import { ProductService } from "./data";
-import { Tag } from 'primereact/tag';
 import { GET } from "helpers/api_helper";
 import { USER_URL } from "helpers/url_helper";
 
 function UsersListTable() {
-    const [products, setProducts] = useState([]);
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
     const [rows, setRows] = useState(25);
@@ -50,23 +47,6 @@ function UsersListTable() {
     };
 
 
-    const statusBodyTemplate = (product) => {
-        return <Tag value={product.status} severity={getSeverity(product)}></Tag>;
-    };
-
-    const getSeverity = (product) => {
-        switch (product.status) {
-            case 'Yes':
-                return 'success';
-
-            case 'No':
-                return 'warning';
-
-            default:
-                return null;
-        }
-    };
-
     const header = (
         <div className="d-flex flex-wrap align-items-center  gap-2">
             <span className="text-xl text-900 font-bold"></span>
@@ -104,8 +84,8 @@ function UsersListTable() {
 
                             </DataTable>
                             <div className="card">
-            <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />
-        </div>
+                                <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />
+                            </div>
                         </div>
                     </div>
                 </div>

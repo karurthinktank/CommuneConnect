@@ -6,12 +6,12 @@ function Authmiddleware(props){
   console.log(props.children);
   // todo: need to implement auth middleware
   // console.log("dqwdq", isTokenExpired())
-  // if (isTokenExpired()) {
-  //   unsetToken();
-  //   return (
-  //     <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-  //   );
-  // }
+  if (isTokenExpired()) {
+    unsetToken();
+    return (
+      <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
+    );
+  }
   // remove expired token if any
   return (<React.Fragment>
     {props.children}

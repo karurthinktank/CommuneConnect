@@ -1,13 +1,16 @@
 import logging
 import json
+import base64
+
 from django.utils import timezone
-from .serializers import PeopleSerializer, UserSerializer
+from .serializers import PeopleSerializer, UserSerializer, FamilyMembersSerializer
 from .models import People
 from rest_framework import permissions
 from rest_framework import viewsets, status
 from django.contrib.auth.models import Group
 from rest_framework.response import Response
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib.auth.base_user import get_random_string
 
 from django.db.models import Q
 from rest_framework.views import APIView
@@ -97,14 +100,34 @@ class PeopleViewSet(viewsets.ModelViewSet):
         response = dict()
         data = dict()
         try:
-            data = request.body
-            data = json.loads(data)
+            profile_image = request.FILES.get('profile_image').read()
+            data = json.loads(request.POST.get("form_data"))
             data['created_by'] = request.user.first_name
+            data['code'] = get_random_string(10)
+            data['profile_image'] = base64.b64encode(profile_image).decode()
 
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
                 serializer.save()
-                logging.info()
+                for member in data['members']:
+                    member['name'] = member['member_name']
+                    member['code'] = get_random_string(10)
+                    member['mobile_number'] = member['member_mobile_number']
+                    member['people_id'] = serializer.data['id']
+                    member['created_by'] = request.user.first_name
+                    people = People.objects.filter(id=serializer.data['id']).first()
+                    member['people'] = people
+                    if not member['date_of_birth']:
+                        member['date_of_birth'] = None
+
+                    member_serializer = FamilyMembersSerializer(data=member)
+                    if member_serializer.is_valid():
+                        member_serializer.validated_data['people_id'] = serializer.data['id']
+                        member_serializer.save()
+                    else:
+                        response['message'] = "Bad Request!"
+                        response['code'] = 400
+                        return Response(response, status=status.HTTP_400_BAD_REQUEST)
             else:
                 response['message'] = "Bad Request!"
                 response['code'] = 400
@@ -115,7 +138,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
         except Exception as e:
             response['message'] = str(e)
             response['code'] = 500
-            logging.error()
+            logging.error(str(e))
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def update(self, request, *args, **kwargs):

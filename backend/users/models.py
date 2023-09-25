@@ -16,6 +16,9 @@ class TMSUser(AbstractUser):
 class People(models.Model):
     # organization = models.ForeignKey()
     name = models.CharField(max_length=250)
+    code = models.CharField(max_length=100, unique=True)
+    member_prefix = models.CharField(max_length=5, null=True, blank=True)
+    member_head_name = models.CharField(max_length=100, null=True, blank=True)
     mobile_number = models.CharField(max_length=10)
     deleted = models.BooleanField(default=0)
     receipt_no = models.CharField(max_length=100, null=True, blank=True)
@@ -43,9 +46,13 @@ class People(models.Model):
     created_by = models.CharField(max_length=100)
     updated_by = models.CharField(max_length=100, null=True, blank=True)
 
+    class Meta:
+        unique_together = ('name', 'mobile_number')
+
 
 class FamilyMembers(models.Model):
     people = models.ForeignKey(People, on_delete=models.CASCADE)
+    code = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=50)
     aadhar_no = models.CharField(max_length=20, null=True, blank=True)
     mobile_number = models.CharField(max_length=10)

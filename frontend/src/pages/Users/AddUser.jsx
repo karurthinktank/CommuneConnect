@@ -10,48 +10,25 @@ import CustomToast from "components/Common/Toast";
 
 // Formik Validation
 import * as Yup from "yup";
-import { useFormik, FieldArray, FormikProvider } from "formik";
+import { useFormik, FieldArray, FormikProvider, Formik, Field, ErrorMessage } from "formik";
 import { mobileRegExp } from "constants/constants";
-import { USER_URL, MASTER_DATA_URL } from "helpers/url_helper";
-import { POST, GET } from "helpers/api_helper";
-import { eventChannel } from "redux-saga";
+import { USER_URL } from "helpers/url_helper";
+import { POST, GET, UPLOAD } from "helpers/api_helper";
+import { DISTRICT_LIST, STATE_LIST, COUNTRY_LIST } from "constants/constants";
 
 function AddUser() {
 
-    const [rows1, setrows1] = useState([{ id: 1 }]);
-
-    function handleAddRowNested() {
-        const modifiedRows = [...rows1];
-        modifiedRows.push({ id: modifiedRows.length + 1 });
-        setrows1(modifiedRows);
-    }
-
-    function handleRemoveRow(id) {
-        if (id !== 1) {
-            var modifiedRows = [...rows1];
-            modifiedRows = modifiedRows.filter(x => x["id"] !== id);
-            setrows1(modifiedRows);
-        }
-    }
-
+    const billBook = [1,2,3,4,5];
     const [address, setAddress] = useState("same_address");
-    const [districtList, setDistrict] = useState([]);
-    const [courtList, setCourt] = useState([]);
     const navigate = useNavigate();
+    const [profileImage, setProfileImage] = useState()
 
-    // const casetypevalue = (event) => {
-    //     setchecked(event.target.value);
-    //     validation.setFieldValue("case_for", event.target.value);
-    // }
     const addressvalue = (event) => {
         setAddress(event.target.value);
     }
-    // useEffect(() => {
-    //     fetchCourtMasterData();
-    // }, [])
 
 
-    const validation = useFormik({
+    const addUserForm = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: false,
         initialValues: {
@@ -91,7 +68,8 @@ function AddUser() {
             country: Yup.string().required("This field is required!"),
             state: Yup.string().required("This field is required!"),
             district: Yup.string().required("This field is required!"),
-            mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
+            mobile_number: Yup.string().required("This field is required!").matches(mobileRegExp, 'Invalid Mobile number!'),
+            secondary_mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
             members: Yup.array().of(
                 Yup.object({
                     member_name: Yup.string().required("This field is required!"),
@@ -110,11 +88,15 @@ function AddUser() {
                 .required('Must have Family Members')
         }),
         onSubmit: async (values) => {
-            var res = await POST(USER_URL, values);
+            const formData = new FormData();
+            formData.append("profile_image", profileImage);
+            values['files'] = formData;
+            formData.append("form_data", JSON.stringify(values));
+            var res = await UPLOAD(USER_URL, formData);
             console.log(res);
             if (res.status === 200 || res.status === 201) {
                 CustomToast(res.data.message, "success");
-                navigate('/cases-list');
+                navigate('/users');
             }
             else {
                 CustomToast(res.data.message, "error");
@@ -124,7 +106,21 @@ function AddUser() {
 
 
     const handleCancle = () => {
-        navigate('/cases-list');
+        addUserForm.resetForm();
+        navigate('/users');
+    }
+
+
+    // const handleFormArray = (event) => {
+    //     let index = event.target.id.split("$")[0];
+    //     console.log(event.target.name)
+    //     addUserForm.setFieldValue(`members.${index}.${event.target.name}`, event.target.value);
+    // }
+
+    const handleFiles = (event) => {
+        let files = event.target.files[0];
+        setProfileImage(files);
+        addUserForm.setFieldValue('profile_image', event.target.value);
     }
 
 
@@ -139,14 +135,14 @@ function AddUser() {
 
                             </CardHeader>
                             <CardBody>
-                                <FormikProvider value={validation}>
+                                <FormikProvider value={addUserForm}>
                                     <Form
                                         className="form-horizontal"
                                         onSubmit={(e) => {
                                             e.preventDefault();
-                                            console.log(validation)
-                                            validation.handleSubmit();
-                                            // validation.isValid ? validation.handleSubmit() : CustomToast("Please fill all the required fields.", "error");;
+                                            console.log(addUserForm)
+                                            addUserForm.handleSubmit();
+                                            // addUserForm.isValid ? addUserForm.handleSubmit() : CustomToast("Please fill all the required fields.", "error");;
                                             return false;
                                         }}
                                     >
@@ -165,13 +161,13 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="குடும்பத் தலைவரின் பெயரை உள்ளிடவும்                                                                        "
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.name}
-                                                            invalid={validation.touched.name && validation.errors.name ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.name}
+                                                            invalid={addUserForm.touched.name && addUserForm.errors.name ? true : false}
                                                         />
-                                                        {validation.touched.name && validation.errors.name ? (
-                                                            <FormFeedback type="invalid">{validation.errors.name}
+                                                        {addUserForm.touched.name && addUserForm.errors.name ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.name}
                                                             </FormFeedback>
                                                         ) : null}
                                                     </div>
@@ -183,17 +179,17 @@ function AddUser() {
                                                             className="form-control"
 
                                                             type="select"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.is_group_member || ''}
-                                                            invalid={validation.touched.is_group_member && validation.errors.is_group_member ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.is_group_member || ''}
+                                                            invalid={addUserForm.touched.is_group_member && addUserForm.errors.is_group_member ? true : false}
                                                         >
                                                             <option value="" disabled >அவர் இந்த அறக்கட்டளையின் உறுப்பினரா?</option>
                                                             <option key="Yes" value="Yes">Yes</option>
                                                             <option key="No" value="No">No</option>
                                                         </Input>
-                                                        {validation.touched.is_group_member && validation.errors.is_group_member ? (
-                                                            <FormFeedback type="invalid">{validation.errors.is_group_member}</FormFeedback>
+                                                        {addUserForm.touched.is_group_member && addUserForm.errors.is_group_member ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.is_group_member}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -204,13 +200,13 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="உறுப்பினர் பதிவு எண்ணை உள்ளிடவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.member_registration_number}
-                                                            invalid={validation.touched.member_registration_number && validation.errors.member_registration_number ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.member_registration_number}
+                                                            invalid={addUserForm.touched.member_registration_number && addUserForm.errors.member_registration_number ? true : false}
                                                         />
-                                                        {validation.touched.member_registration_number && validation.errors.member_registration_number ? (
-                                                            <FormFeedback type="invalid">{validation.errors.member_registration_number}
+                                                        {addUserForm.touched.member_registration_number && addUserForm.errors.member_registration_number ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.member_registration_number}
                                                             </FormFeedback>
                                                         ) : null}
                                                     </div>
@@ -222,13 +218,13 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="தற்போதைய முகவரியை உள்ளிடவும்"
                                                             type="textarea"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.current_address}
-                                                            invalid={validation.touched.current_address && validation.errors.current_address ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.current_address}
+                                                            invalid={addUserForm.touched.current_address && addUserForm.errors.current_address ? true : false}
                                                         />
-                                                        {validation.touched.current_address && validation.errors.current_address ? (
-                                                            <FormFeedback type="invalid">{validation.errors.current_address}
+                                                        {addUserForm.touched.current_address && addUserForm.errors.current_address ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.current_address}
                                                             </FormFeedback>
                                                         ) : null}
                                                     </div>
@@ -265,8 +261,8 @@ function AddUser() {
                                                                             name="permanent_address"
                                                                             className="form-control"
                                                                             type="textarea"
-                                                                            onChange={validation.handleChange}
-                                                                            value={validation.values.current_address}
+                                                                            onChange={addUserForm.handleChange}
+                                                                            value={addUserForm.values.current_address}
 
                                                                         />
 
@@ -285,8 +281,8 @@ function AddUser() {
                                                                             className="form-control"
                                                                             placeholder="பூர்விக முகவரியை உள்ளிடவும்"
                                                                             type="textarea"
-                                                                            onChange={validation.handleChange}
-                                                                            value={validation.values.permanent_address}
+                                                                            onChange={addUserForm.handleChange}
+                                                                            value={addUserForm.values.permanent_address}
 
                                                                         />
 
@@ -306,16 +302,16 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="நாட்டினை தேர்வுசெய்"
                                                             type="select"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.country || ''}
-                                                            invalid={validation.touched.country && validation.errors.country ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.country || ''}
+                                                            invalid={addUserForm.touched.country && addUserForm.errors.country ? true : false}
                                                         >
                                                             <option value="" disabled >நாடு தேர்ந்தெடுக்கவும்</option>
-                                                            {districtList.map((element) => (<option key={element.key} value={element.value}>{element.key}</option>))}
+                                                            {COUNTRY_LIST.map((element) => (<option key={element} value={element}>{element}</option>))}
                                                         </Input>
-                                                        {validation.touched.country && validation.errors.country ? (
-                                                            <FormFeedback type="invalid">{validation.errors.country}</FormFeedback>
+                                                        {addUserForm.touched.country && addUserForm.errors.country ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.country}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -326,16 +322,16 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="மாநிலத்தைத் தேர்ந்தெடுக்கவும்"
                                                             type="select"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.state || ''}
-                                                            invalid={validation.touched.state && validation.errors.state ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.state || ''}
+                                                            invalid={addUserForm.touched.state && addUserForm.errors.state ? true : false}
                                                         >
-                                                            <option value="" disabled >Select District</option>
-                                                            {districtList.map((element) => (<option key={element.key} value={element.value}>{element.key}</option>))}
+                                                            <option value="" disabled >Select State</option>
+                                                            {STATE_LIST.map((element) => (<option key={element} value={element}>{element}</option>))}
                                                         </Input>
-                                                        {validation.touched.state && validation.errors.state ? (
-                                                            <FormFeedback type="invalid">{validation.errors.district}</FormFeedback>
+                                                        {addUserForm.touched.state && addUserForm.errors.state ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.district}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -344,18 +340,18 @@ function AddUser() {
                                                             id="district"
                                                             name="district"
                                                             className="form-control"
-                                                            placeholder="Select Court Name"
+                                                            placeholder="Select district"
                                                             type="select"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.district || ''}
-                                                            invalid={validation.touched.district && validation.errors.district ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.district || ''}
+                                                            invalid={addUserForm.touched.district && addUserForm.errors.district ? true : false}
                                                         >
                                                             <option value="" disabled >Select District</option>
-                                                            {districtList.map((element) => (<option key={element.key} value={element.value}>{element.key}</option>))}
+                                                            {DISTRICT_LIST.map((element) => (<option key={element} value={element}>{element}</option>))}
                                                         </Input>
-                                                        {validation.touched.district && validation.errors.district ? (
-                                                            <FormFeedback type="invalid">{validation.errors.district}</FormFeedback>
+                                                        {addUserForm.touched.district && addUserForm.errors.district ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.district}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -365,16 +361,16 @@ function AddUser() {
                                                             name="receipt_book_no"
                                                             className="form-control"
                                                             type="select"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.court_name || ''}
-                                                            invalid={validation.touched.court_name && validation.errors.court_name ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.receipt_book_no || ''}
+                                                            invalid={addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? true : false}
                                                         >
                                                             <option value="" disabled >ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
-                                                            {courtList.map((code) => (<option key={code} value={code}>{code}</option>))}
+                                                            {billBook.map((code) => (<option key={code} value={code}>{code}</option>))}
                                                         </Input>
-                                                        {validation.touched.court_name && validation.errors.court_name ? (
-                                                            <FormFeedback type="invalid">{validation.errors.court_name}</FormFeedback>
+                                                        {addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_book_no}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -385,9 +381,9 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.receipt_no}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.receipt_no}
                                                         />
 
                                                     </div>
@@ -401,9 +397,9 @@ function AddUser() {
                                                             <Input type="date"
                                                                 name="receipt_date"
                                                                 id="receipt_date"
-                                                                onChange={validation.handleChange}
-                                                                onBlur={validation.handleBlur}
-                                                                value={validation.values.receipt_date}
+                                                                onChange={addUserForm.handleChange}
+                                                                onBlur={addUserForm.handleBlur}
+                                                                value={addUserForm.values.receipt_date}
                                                             >
                                                             </Input>
                                                         </FormGroup>
@@ -417,9 +413,9 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="வட்டத்தை தேர்ந்தெடுக்கவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.area}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.area}
                                                         />
 
                                                     </div>
@@ -431,9 +427,9 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="பஞ்சாயத்து  தேர்ந்தெடுக்கவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.panchayat}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.panchayat}
                                                         />
 
                                                     </div>
@@ -445,9 +441,9 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="கிராமப் பெயரை உள்ளிடவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.village}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.village}
                                                         />
 
                                                     </div>
@@ -459,27 +455,27 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="தபால் அலுவலக எண்ணை உள்ளிடவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.postal_code}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.postal_code}
                                                         />
 
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label className="form-label">அலைபேசி எண்</Label>
+                                                        <Label className="form-label">அலைபேசி எண்<span className="text-danger">*</span></Label>
                                                         <Input
                                                             id="mobile_number"
                                                             name="mobile_number"
                                                             className="form-control"
                                                             placeholder="தொலைபேசி எண்ணை உள்ளிடவும்"
                                                             type="number"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.mobile_number}
-                                                            invalid={validation.touched.mobile_number && validation.errors.mobile_number ? true : false}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.mobile_number}
+                                                            invalid={addUserForm.touched.mobile_number && addUserForm.errors.mobile_number ? true : false}
                                                         />
-                                                        {validation.touched.mobile_number && validation.errors.mobile_number ? (
-                                                            <FormFeedback type="invalid">{validation.errors.mobile_number}</FormFeedback>
+                                                        {addUserForm.touched.mobile_number && addUserForm.errors.mobile_number ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.mobile_number}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -490,28 +486,33 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="கூடுதல் தொலைபேசி எண்ணை உள்ளிடவும்"
                                                             type="number"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.secondary_mobile_number}
-                                                        />
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.secondary_mobile_number}
+                                                            invalid={addUserForm.touched.secondary_mobile_number && addUserForm.errors.secondary_mobile_number ? true : false}
+                                                            />
+                                                            {addUserForm.touched.secondary_mobile_number && addUserForm.errors.secondary_mobile_number ? (
+                                                                <FormFeedback type="invalid">{addUserForm.errors.secondary_mobile_number}
+                                                                </FormFeedback>
+                                                            ) : null}
 
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
+                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்<span className="text-danger">*</span></Label>
                                                         <Input
                                                             id="profile_image"
                                                             name="profile_image"
                                                             className="form-control"
                                                             placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
                                                             type="file"
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.profile_image}
-                                                            onChange={validation.handleChange}
-                                                            invalid={validation.touched.profile_image && validation.errors.profile_image ? true : false}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.profile_image}
+                                                            onChange={handleFiles}
+                                                            invalid={addUserForm.touched.profile_image && addUserForm.errors.profile_image ? true : false}
 
                                                         />
-                                                        {validation.touched.profile_image && validation.errors.profile_image ? (
-                                                            <FormFeedback type="invalid">{validation.errors.profile_image}</FormFeedback>
+                                                        {addUserForm.touched.profile_image && addUserForm.errors.profile_image ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.profile_image}</FormFeedback>
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
@@ -521,10 +522,10 @@ function AddUser() {
                                                             name="country_code"
                                                             className="form-control"
                                                             placeholder="International Country Code"
-                                                            type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.country_code}
+                                                            type="number"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.country_code}
                                                         />
 
                                                     </div>
@@ -536,9 +537,9 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="சர்வதேச அலைபேசி எண்ணை உள்ளிடவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.international_mobile_number}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.international_mobile_number}
                                                         />
 
                                                     </div>
@@ -549,10 +550,10 @@ function AddUser() {
                                                             name="std_code"
                                                             className="form-control"
                                                             placeholder="தரைவழி STD Code உள்ளிடவும்"
-                                                            type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.std_code}
+                                                            type="number"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.std_code}
                                                         />
 
                                                     </div>
@@ -564,9 +565,9 @@ function AddUser() {
                                                             className="form-control"
                                                             placeholder="தரைவழி தொலைபேசி எண்ணை உள்ளிடவும்"
                                                             type="text"
-                                                            onChange={validation.handleChange}
-                                                            onBlur={validation.handleBlur}
-                                                            value={validation.values.phone_number}
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.phone_number}
                                                         />
 
                                                     </div>
@@ -597,86 +598,80 @@ function AddUser() {
 
 
                                                             </div>
-                                                            {validation.values.members.map((member, index) => (
+                                                            {addUserForm.values.members.map((member, index) => (
                                                                 <div key={index} className=" p-3 mb-3 rounded" style={{border:"1px solid #D3D3D3"}}>
                                                                     <div className="row">
                                                                         <div className="col-md-6">
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">பெயர்<span className="text-danger">*</span></Label>
                                                                                 <Input
-                                                                                    id="member_name"
-                                                                                    name="member_name"
+                                                                                    id={`members.${index}.member_name`}
+                                                                                    name={`members.${index}.member_name`}
                                                                                     className="form-control"
                                                                                     placeholder="பெயரை உள்ளிடுக"
                                                                                     type="text"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.members[index].member_name}
-                                                                                // invalid={validation.touched.members[index]?.member_name && validation.errors?.members[index].member_name ? true : false}
+                                                                                    value={addUserForm.values.members[index].member_name}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    invalid={addUserForm.values.members[index]?.member_name ? false : true}
                                                                                 />
-                                                                                {/* {validation.touched.members[index].member_name && validation.errors.members[index].member_name ? (
-                                                            <FormFeedback type="invalid">{validation.errors.members[index].member_name}</FormFeedback>
-                                                        ) : null} */}
+                                                                                {addUserForm.values.members[index]?.member_name ? null : (
+                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">ஆதார் எண்</Label>
                                                                                 <Input
-                                                                                    id="aadhar_no"
-                                                                                    name="aadhar_no"
+                                                                                    id={`members.${index}.aadhar_no`}
+                                                                                    name={`members.${index}.aadhar_no`}
                                                                                     className="form-control"
                                                                                     placeholder="ஆதார் எண்ணை உள்ளிடவும்"
                                                                                     type="text"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.aadhar_no}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].aadhar_no}
                                                                                 />
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">அலைபேசி எண்  <span className="text-danger">*</span></Label>
                                                                                 <Input
-                                                                                    id="member_mobile_number"
-                                                                                    name="member_mobile_number"
+                                                                                    id={`members.${index}.member_mobile_number`}
+                                                                                    name={`members.${index}.member_mobile_number`}
                                                                                     className="form-control"
                                                                                     placeholder="தொலைபேசி எண்ணை உள்ளிடவும்"
                                                                                     type="number"
-                                                                                    onChange={validation.handleChange}
-                                                                                    onBlur={validation.handleBlur}
-                                                                                    value={validation.values.members[index].member_mobile_number}
-                                                                                // invalid={validation.touched.members[index].member_mobile_number && validation.errors.members[index].member_mobile_number ? true : false}
-                                                                                />
-                                                                                {/* {validation.touched.members[index].member_mobile_number && validation.errors.members[index].member_mobile_number ? (
-                                                            <FormFeedback type="invalid">{validation.errors.members[index].member_mobile_number}</FormFeedback>
-                                                        ) : null} */}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    invalid={addUserForm.values.members[index]?.member_mobile_number ? false : true}
+                                                                                    value={addUserForm.values.members[index].member_mobile_number}
+                                                                                    />
+                                                                                    {addUserForm.values.members[index]?.member_mobile_number ? null : (
+                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">பாலினம்</Label>
                                                                                 <Input
-                                                                                    id="gender"
-                                                                                    name="gender"
+                                                                                    id={`members.${index}.gender`}
+                                                                                    name={`members.${index}.gender`}
                                                                                     className="form-control"
                                                                                     placeholder="Select Gender"
                                                                                     type="select"
-                                                                                    onChange={validation.handleChange}
-                                                                                    onBlur={validation.handleBlur}
-                                                                                    value={validation.values.gender || ''}
-                                                                                // invalid={validation.touched.gender && validation.errors.gender ? true : false}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].gender}
+                                                                                    invalid={addUserForm.values.members[index]?.gender ? false : true}
                                                                                 >
                                                                                     <option value="" disabled >பாலினத்தைத் தேர்ந்தெடுக்கவும்</option>
                                                                                     <option key="ஆண்" value="ஆண்">ஆண்</option>
                                                                                     <option key="பெண்" value="பெண்">பெண்</option>
                                                                                 </Input>
-                                                                                {/* {validation.touched.gender && validation.errors.gender ? (
-                                                            <FormFeedback type="invalid">{validation.errors.gender}</FormFeedback>
-                                                        ) : null} */}
+                                                                                {addUserForm.values.members[index]?.gender ? null : (
+                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
 
                                                                             <div className="mb-3">
                                                                                 <FormGroup>
                                                                                     <Label className="form-label">பிறந்த தேதி </Label>
                                                                                     <Input type="date"
-                                                                                        name="date_of_birth"
-                                                                                        id="date_of_birth"
-                                                                                        onChange={validation.handleChange}
-                                                                                        onBlur={validation.handleBlur}
-                                                                                        value={validation.values.date_of_birth}
+                                                                                        name={`members.${index}.date_of_birth`}
+                                                                                        id={`members.${index}.date_of_birth`}
+                                                                                        onChange={addUserForm.handleChange}
+                                                                                        value={addUserForm.values.members[index].date_of_birth}
                                                                                     >
                                                                                     </Input>
                                                                                 </FormGroup>
@@ -686,68 +681,70 @@ function AddUser() {
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">உறவுமுறை</Label>
                                                                                 <Input
-                                                                                    id="relationship"
-                                                                                    name="relationship"
+                                                                                    id={`members.${index}.relationship`}
+                                                                                    name={`members.${index}.relationship`}
                                                                                     className="form-control"
                                                                                     type="select"
-                                                                                    onChange={validation.handleChange}
-                                                                                    onBlur={validation.handleBlur}
-                                                                                    value={validation.values.relationship || ''}
-                                                                                // invalid={validation.touched.relationship && validation.errors.relationship ? true : false}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].relationship}
+                                                                                    invalid={addUserForm.values.members[index]?.relationship ? false : true}
                                                                                 >
                                                                                     <option value="" disabled >உறவைத் தேர்ந்தெடுக்கவும்</option>
-                                                                                    {districtList.map((element) => (<option key={element.key} value={element.value}>{element.key}</option>))}
+                                                                                    <option key="Son" value="Son">Son</option>
+                                                                                    <option key="Daughter" value="Daughter">Daughter</option>
+                                                                                    <option key="Wife" value="Wife">Wife</option>
+                                                                                    <option key="Brother" value="Brother">Brother</option>
+                                                                                    <option key="Sister" value="Sister">Sister</option>
                                                                                 </Input>
-                                                                                {/* {validation.touched.relationship && validation.errors.relationship ? (
-                                                            <FormFeedback type="invalid">{validation.errors.relationship}</FormFeedback>
-                                                        ) : null} */}
+                                                                                {addUserForm.values.members[index]?.relationship ? null : (
+                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">திருமண நிலை</Label>
                                                                                 <Input
-                                                                                    id="martial_status"
-                                                                                    name="martial_status"
+                                                                                    id={`members.${index}.martial_status`}
+                                                                                    name={`members.${index}.martial_status`}
                                                                                     className="form-control"
                                                                                     placeholder="திருமண நிலை"
                                                                                     type="text"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.martial_status || ''}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].martial_status}
                                                                                 />
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">தொழில்</Label>
                                                                                 <Input
-                                                                                    id="occupation"
-                                                                                    name="occupation"
+                                                                                    id={`members.${index}.occupation`}
+                                                                                    name={`members.${index}.occupation`}
                                                                                     className="form-control"
                                                                                     placeholder="தொழில்"
                                                                                     type="text"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.occupation || ''}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].occupation}
                                                                                 />
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label>தொழில் குறிப்பு </Label>
                                                                                 <Input
-                                                                                    id="career_reference"
-                                                                                    name="career_reference"
+                                                                                    id={`members.${index}.career_reference`}
+                                                                                    name={`members.${index}.career_reference`}
                                                                                     className="form-control"
                                                                                     placeholder="உங்கள் தொழில் விவரங்களை உள்ளிடவும்"
                                                                                     type="textarea"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.career_reference || ''}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].career_reference}
                                                                                 />
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">Blood Group</Label>
                                                                                 <Input
-                                                                                    id="blood_group"
-                                                                                    name="blood_group"
+                                                                                    id={`members.${index}.blood_group`}
+                                                                                    name={`members.${index}.blood_group`}
                                                                                     className="form-control"
                                                                                     placeholder="Select Blood Group"
                                                                                     type="select"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.blood_group || ''}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].blood_group}
                                                                                 >
                                                                                     <option value="" disabled >Select Blood Group</option>
                                                                                     <option key="O+" value="O+">O+</option>
@@ -761,26 +758,27 @@ function AddUser() {
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">Card Details</Label>
                                                                                 <Input
-                                                                                    id="card_details"
-                                                                                    name="card_details"
+                                                                                    id={`members.${index}.card_details`}
+                                                                                    name={`members.${index}.card_details`}
                                                                                     className="form-control"
                                                                                     placeholder="Enter Card Details"
                                                                                     type="password"
-                                                                                    onChange={validation.handleChange}
-                                                                                    value={validation.values.card_details || ''}
+                                                                                    onChange={addUserForm.handleChange}
+                                                                                    value={addUserForm.values.members[index].card_details}
                                                                                 />
+
 
                                                                             </div>
                                                                         </div>
 
                                                                     </div>
                                                                     <div className="d-flex justify-content-end gap-3">
-                                                                    <input
+                                                                    {addUserForm.values.members.length > 1 && (<input
                                                                             type="button"
                                                                             className="btn btn-danger"
                                                                             value="Remove"
                                                                             onClick={() => arrayHelpers.remove(index)}
-                                                                        />
+                                                                        />)}
                                                                         <input
                                                                             type="button"
                                                                             className="btn btn-success"

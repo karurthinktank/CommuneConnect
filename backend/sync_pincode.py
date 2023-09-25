@@ -42,7 +42,7 @@ if __name__ == "__main__":
         if command == 'updatepincode':
             import django
 
-            os.environ.setdefault("DJANGO_SETTINGS_MODULE", "elawfirm.settings")
+            os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tms.settings")
             django.setup()
             print("Sync started....")
             csv_parsing()

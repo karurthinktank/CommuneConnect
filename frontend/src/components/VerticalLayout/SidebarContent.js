@@ -163,7 +163,7 @@ const SidebarContent = props => {
             </li>
 
             <li>
-              <Link to="/users-list" >
+              <Link to="/users" >
                 <i className="bx bx-task"></i>
                 <span>{props.t("User")}</span>
               </Link>

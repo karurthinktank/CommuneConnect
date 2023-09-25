@@ -18,7 +18,7 @@ import ViewCase from "pages/Users/ViewUser"
 
 const authProtectedRoutes = [
   { path: "/home", component: <Dashboard/> },
-  {path:"/users-list", component:<UsersListTable/>},
+  {path:"/users", component:<UsersListTable/>},
   {path:"/cases-view/:id", component:<ViewCase/>},
   {path:"/users/add", component:<AddUser/>},
   

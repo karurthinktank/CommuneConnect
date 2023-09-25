@@ -4,14 +4,51 @@ import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Paginator } from 'primereact/paginator';
 import { ProductService } from "./data";
 import { Tag } from 'primereact/tag';
+import { GET } from "helpers/api_helper";
+import { USER_URL } from "helpers/url_helper";
+
 function UsersListTable() {
     const [products, setProducts] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [first, setFirst] = useState(0);
+    const [rows, setRows] = useState(25);
+    const [totalRows, setTotalRows] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     useEffect(() => {
-        ProductService.getProductsMini().then((data) => setProducts(data));
+        fetchUsers(currentPage);
     }, []);
+
+    const fetchUsers = async(page, count=rows, additiotal_params={}) => {
+        let query_params = {
+            page: page,
+            count: count
+        }
+        query_params = {...query_params, ...additiotal_params}
+        let url = USER_URL +  "?" + new URLSearchParams(query_params).toString();
+        const response = await GET(url);
+        console.log(response);
+        if (response.status === 200) {
+            setUsers(response.data.data);
+            setTotalRows(response.total_count);
+        }
+        else {
+            // setLoading(false);
+        }
+    }
+
+    const handlePageChange = (event) => {
+        let page = event.page + 1;
+        setFirst(event.first);
+        setRows(event.rows);
+        setCurrentPage(page);
+        fetchUsers(page, event.rows)
+    };
+
 
     const statusBodyTemplate = (product) => {
         return <Tag value={product.status} severity={getSeverity(product)}></Tag>;
@@ -39,6 +76,8 @@ function UsersListTable() {
 
         </div>
     );
+
+
     return (
         <>
             <div className="page-content">
@@ -47,28 +86,26 @@ function UsersListTable() {
                         <Breadcrumb title="User" breadcrumbItem="Uses List" />
                         <div className="card">
                             <DataTable
-                                value={products}
+                                value={users}
                                 header={header}
-                                paginator
-                                rows={5}
-                                rowsPerPageOptions={[5, 10, 25, 50]}
-                                scrollable>
-
-                                <Column field="id" header="Id"></Column>
-                                <Column header="Status" sortable body={statusBodyTemplate} ></Column>
-                                <Column field="serialnumber" sortable header="இரசீது எண்" ></Column>
-                                <Column field="serialdate" sortable header="இரசீது தேதி "></Column>
-                                <Column field="familyname" sortable header="குடும்பபெயர் " ></Column>
-                                <Column field="address" sortable header=" முகவரி"></Column>
+                                scrollable
+                                >
+                                <Column field="name" sortable header="குடும்ப தலைவர் பெயர் " ></Column>
+                                <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
+                                <Column field="receipt_date" sortable header="இரசீது தேதி "></Column>
+                                <Column field="mobile_number" sortable header=" அலைபேசி எண்" alignFrozen="right" frozen></Column>
+                                <Column field="current_address" sortable header=" முகவரி"></Column>
                                 <Column field="country" sortable header=" நாடு"></Column>
                                 <Column field="state" sortable header=" மாநிலம்"></Column>
                                 <Column field="distrcit" sortable header=" மாவட்டம்"></Column>
-                                <Column field="Taluk" sortable header="வட்டம்"></Column>
-                                <Column field="panchayath" sortable header="பஞ்சாயத்து"></Column>
-                                <Column field="mobilenumber" sortable header=" அலைபேசி எண்" alignFrozen="right" frozen></Column>
-
+                                <Column field="area" sortable header="வட்டம்"></Column>
+                                <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column>
+                                <Column field="" sortable header="Action" alignFrozen="right" frozen></Column>
 
                             </DataTable>
+                            <div className="card">
+            <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />
+        </div>
                         </div>
                     </div>
                 </div>

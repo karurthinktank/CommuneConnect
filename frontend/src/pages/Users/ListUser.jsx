@@ -7,7 +7,8 @@ import { Column } from 'primereact/column';
 import { Paginator } from 'primereact/paginator';
 import { GET } from "helpers/api_helper";
 import { USER_URL } from "helpers/url_helper";
-
+import '../../assets/scss/_listuser.scss';
+import "../../assets/scss/_listusers.scss";
 function UsersListTable() {
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
@@ -15,18 +16,34 @@ function UsersListTable() {
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const actionItems = () => {
+        console.log("called");
+        return (
+            <>
+            <div className="fs-2 d-flex gap-2">
+            <Link><i className="mdi mdi-plus-circle text-success" /></Link>
+            <Link><i className="mdi mdi-eye-circle" /></Link>
+                <Link><i className="mdi mdi-pencil-circle text-secondary" /></Link>
+                
+                <Link><i className="mdi mdi-delete-circle text-danger" /></Link>
+              
+                
+                </div>
+            </>
+        );
+    };
 
     useEffect(() => {
         fetchUsers(currentPage);
     }, []);
 
-    const fetchUsers = async(page, count=rows, additiotal_params={}) => {
+    const fetchUsers = async (page, count = rows, additiotal_params = {}) => {
         let query_params = {
             page: page,
             count: count
         }
-        query_params = {...query_params, ...additiotal_params}
-        let url = USER_URL +  "?" + new URLSearchParams(query_params).toString();
+        query_params = { ...query_params, ...additiotal_params }
+        let url = USER_URL + "?" + new URLSearchParams(query_params).toString();
         const response = await GET(url);
         console.log(response);
         if (response.status === 200) {
@@ -51,7 +68,7 @@ function UsersListTable() {
         <div className="d-flex flex-wrap align-items-center  gap-2">
             <span className="text-xl text-900 font-bold"></span>
             <Link to={`/users/add`} className="ms-auto">
-            <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>குடும்ப சேரக்கை</button>
+                <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>குடும்ப சேரக்கை</button>
             </Link>
 
         </div>
@@ -68,8 +85,7 @@ function UsersListTable() {
                             <DataTable
                                 value={users}
                                 header={header}
-                                scrollable
-                                >
+                                scrollable>
                                 <Column field="name" sortable header="குடும்ப தலைவர் பெயர் " ></Column>
                                 <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
                                 <Column field="receipt_date" sortable header="இரசீது தேதி "></Column>
@@ -80,8 +96,7 @@ function UsersListTable() {
                                 <Column field="distrcit" sortable header=" மாவட்டம்"></Column>
                                 <Column field="area" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column>
-                                <Column field="" sortable header="Action" alignFrozen="right" frozen></Column>
-
+                                <Column field="actions" sortable header="Action" alignFrozen="right" frozen body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />

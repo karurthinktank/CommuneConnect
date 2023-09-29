@@ -1,0 +1,28 @@
+.photo{
+    max-width: 100px;
+    height: auto;
+    margin-bottom: 15px;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.family-member {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+}
+.member-details{
+    border: 1px solid #ccc !important;
+    border-radius: 20px;
+}
+.member-profile{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+

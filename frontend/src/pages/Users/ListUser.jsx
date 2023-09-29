@@ -7,7 +7,6 @@ import { Column } from 'primereact/column';
 import { Paginator } from 'primereact/paginator';
 import { GET } from "helpers/api_helper";
 import { USER_URL } from "helpers/url_helper";
-import '../../assets/scss/_listuser.scss';
 import "../../assets/scss/_listusers.scss";
 function UsersListTable() {
     const [users, setUsers] = useState([]);
@@ -80,7 +79,7 @@ function UsersListTable() {
             <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
-                        <Breadcrumb title="User" breadcrumbItem="Uses List" />
+                        <Breadcrumb title="User" breadcrumbItem="Family Members" />
                         <div className="card">
                             <DataTable
                                 value={users}

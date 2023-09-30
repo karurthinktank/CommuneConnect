@@ -18,11 +18,11 @@ import { DISTRICT_LIST, STATE_LIST, COUNTRY_LIST } from "constants/constants";
 
 function AddUser() {
 
-    const billBook = [1,2,3,4,5];
+    const billBook = [1, 2, 3, 4, 5];
     const [address, setAddress] = useState("same_address");
     const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState()
-
+    const [language, setLanguage] = useState(true);
     const addressvalue = (event) => {
         setAddress(event.target.value);
     }
@@ -110,7 +110,10 @@ function AddUser() {
         navigate('/users');
     }
 
+    function chooseLanguage() {
 
+        setLanguage(!language);
+    };
     // const handleFormArray = (event) => {
     //     let index = event.target.id.split("$")[0];
     //     console.log(event.target.name)
@@ -131,8 +134,22 @@ function AddUser() {
                     <div className="col-md-12">
                         <Breadcrumb title="Home" breadcrumbItem="Add User" />
                         <Card className="usercard">
-                            <CardHeader>
+                            <CardHeader className="d-flex">
+                                <h5></h5>
+                                <div className="ms-auto">
+                                    <FormGroup switch>
 
+                                     <Input
+                                            type="switch"
+                                            
+                                             onClick={chooseLanguage}
+                                            checked={language}
+                                            className="fs-4"
+                                        />
+                                        <Label check>{language ? "English" : "Tamil"}  </Label> 
+                                    </FormGroup>
+                                    
+                                </div>
                             </CardHeader>
                             <CardBody>
                                 <FormikProvider value={addUserForm}>
@@ -490,11 +507,11 @@ function AddUser() {
                                                             onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.secondary_mobile_number}
                                                             invalid={addUserForm.touched.secondary_mobile_number && addUserForm.errors.secondary_mobile_number ? true : false}
-                                                            />
-                                                            {addUserForm.touched.secondary_mobile_number && addUserForm.errors.secondary_mobile_number ? (
-                                                                <FormFeedback type="invalid">{addUserForm.errors.secondary_mobile_number}
-                                                                </FormFeedback>
-                                                            ) : null}
+                                                        />
+                                                        {addUserForm.touched.secondary_mobile_number && addUserForm.errors.secondary_mobile_number ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.secondary_mobile_number}
+                                                            </FormFeedback>
+                                                        ) : null}
 
                                                     </div>
                                                     <div className="mb-3">
@@ -583,7 +600,7 @@ function AddUser() {
                                                     name="members"
                                                     render={(arrayHelpers) => (
                                                         <div>
-                                                            <div className="d-flex align-items-center p-3 mb-3" style={{backgroundColor:"#f8f8f1"}}>
+                                                            <div className="d-flex align-items-center p-3 mb-3" style={{ backgroundColor: "#f8f8f1" }}>
                                                                 <h5 className="m-0">குடும்ப உறுப்பினர்களின் தகவல்கள் :-</h5>
                                                                 <input
                                                                     type="button"
@@ -599,7 +616,7 @@ function AddUser() {
 
                                                             </div>
                                                             {addUserForm.values.members.map((member, index) => (
-                                                                <div key={index} className=" p-3 mb-3 rounded" style={{border:"1px solid #D3D3D3"}}>
+                                                                <div key={index} className=" p-3 mb-3 rounded" style={{ border: "1px solid #D3D3D3" }}>
                                                                     <div className="row">
                                                                         <div className="col-md-6">
                                                                             <div className="mb-3">
@@ -615,7 +632,7 @@ function AddUser() {
                                                                                     invalid={addUserForm.values.members[index]?.member_name ? false : true}
                                                                                 />
                                                                                 {addUserForm.values.members[index]?.member_name ? null : (
-                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
+                                                                                    <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">ஆதார் எண்</Label>
@@ -640,9 +657,9 @@ function AddUser() {
                                                                                     onChange={addUserForm.handleChange}
                                                                                     invalid={addUserForm.values.members[index]?.member_mobile_number ? false : true}
                                                                                     value={addUserForm.values.members[index].member_mobile_number}
-                                                                                    />
-                                                                                    {addUserForm.values.members[index]?.member_mobile_number ? null : (
-                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
+                                                                                />
+                                                                                {addUserForm.values.members[index]?.member_mobile_number ? null : (
+                                                                                    <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">பாலினம்</Label>
@@ -661,7 +678,7 @@ function AddUser() {
                                                                                     <option key="பெண்" value="பெண்">பெண்</option>
                                                                                 </Input>
                                                                                 {addUserForm.values.members[index]?.gender ? null : (
-                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
+                                                                                    <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
 
                                                                             <div className="mb-3">
@@ -697,7 +714,7 @@ function AddUser() {
                                                                                     <option key="Sister" value="Sister">Sister</option>
                                                                                 </Input>
                                                                                 {addUserForm.values.members[index]?.relationship ? null : (
-                                                            <FormFeedback type="invalid">This field is required!</FormFeedback>)}
+                                                                                    <FormFeedback type="invalid">This field is required!</FormFeedback>)}
                                                                             </div>
                                                                             <div className="mb-3">
                                                                                 <Label className="form-label">திருமண நிலை</Label>
@@ -773,7 +790,7 @@ function AddUser() {
 
                                                                     </div>
                                                                     <div className="d-flex justify-content-end gap-3">
-                                                                    {addUserForm.values.members.length > 1 && (<input
+                                                                        {addUserForm.values.members.length > 1 && (<input
                                                                             type="button"
                                                                             className="btn btn-danger"
                                                                             value="Remove"
@@ -788,7 +805,7 @@ function AddUser() {
                                                                                 date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: '',
                                                                             })}
                                                                         />
-                                                                       
+
                                                                     </div>
 
                                                                 </div>
@@ -803,7 +820,7 @@ function AddUser() {
 
                                         <div className="mt-4 text-center">
                                             <button type="button" className="btn btn-secondary me-2" onClick={handleCancle}>Cancel</button>
-                                        <button className="btn btn-primary btn-block " type="submit">
+                                            <button className="btn btn-primary btn-block " type="submit">
                                                 Save Changes
                                             </button>
                                         </div>

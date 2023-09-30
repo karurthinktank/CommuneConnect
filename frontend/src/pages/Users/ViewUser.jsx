@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import Breadcrumb from "components/Common/Breadcrumb";
 import classnames from "classnames";
 import { Accordion, AccordionTab } from 'primereact/accordion'
-import { Row, CardBody, Card, Col, Container, Label, CardText, Badge } from "reactstrap";
+import { Row, CardBody, Card, Col, Container, Label, CardText, Badge, CardHeader } from "reactstrap";
 import "../../assets/scss/_listview.scss";
 import avatar from '../../assets/images/users/avatar-1.jpg';
 import avatar1 from '../../assets/images/users/avatar-2.jpg'
@@ -68,11 +68,14 @@ function ViewCase() {
                 <Breadcrumb title="User" breadcrumbItem="Family Members" />
                 <Container fluid>
                     <Card>
+                        <CardHeader className="head-member border">
+                            <h5 >உறுப்பினர் விபரங்கள்</h5>
+                        </CardHeader>
                         <CardBody>
                             <div>
-                                <Accordion activeIndex={0}>
-                                    <AccordionTab header="உறுப்பினர் விபரங்கள் ">
-                                       <div className="row p-3 gap-5">
+                                
+                                    {/* உறுப்பினர் விபரங்கள் */}
+                                    <div className="row p-3 gap-5">
                                             <div className="col-md-4  p-3 member-details" style={{maxHeight:"300px"}}>
                                                 <div className="d-flex justify-content-center">
                                                     <img className="photo" src={avatar} alt="User Avatar" />
@@ -97,8 +100,8 @@ function ViewCase() {
                                                     ))}
                                                 </div>
                                             </div>
-                                        </div>
-                                    </AccordionTab>
+                                    </div>
+                                   <Accordion>
                                     <AccordionTab header="குடும்ப விபரங்கள் ">
                                         <Row>
                                             <Col lg="12">

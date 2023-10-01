@@ -18,9 +18,9 @@ import {
     DISTRICT_LIST, STATE_LIST, COUNTRY_LIST, RECEIPT_BOOK_NO, RELATIONSHIP, OCCUPATION,
     GENDER, MARTIAL_STATUS
 } from "constants/constants";
-
+import "../../App.css";
 import Sanscript from "@indic-transliteration/sanscript";
-
+import { FileUpload } from 'primereact/fileupload';
 function AddUser() {
 
     const [isSameAddress, setAddress] = useState(false);
@@ -75,7 +75,7 @@ function AddUser() {
             receipt_book_no: Yup.string().required("This field is required!"),
             receipt_no: Yup.string().required("This field is required!"),
             profile_image: Yup.string(),
-            is_charity_member:Yup.boolean().required("This field is required!"),
+            is_charity_member: Yup.boolean().required("This field is required!"),
             current_address: Yup.string().required("This field is required!"),
             country: Yup.string().required("This field is required!"),
             state: Yup.string().required("This field is required!"),
@@ -198,22 +198,18 @@ function AddUser() {
                     <div className="col-md-12">
                         <Breadcrumb title="Home" breadcrumbItem="Add User" />
                         <Card className="usercard">
-                            <CardHeader className="d-flex">
-                                <h5></h5>
-                                <div className="ms-auto">
-                                    <FormGroup switch>
-
-                                        <Input
-                                            type="switch"
-                                            onClick={chooseLanguage}
-                                            checked={language}
-                                            className="fs-4"
-                                            defaultValue={true}
-                                        />
-                                        <Label check>{language ? "Tamil" : "English"}  </Label>
-                                    </FormGroup>
-
-                                </div>
+                            <CardHeader>
+                                <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
+                                    <Label className="m-0 fw-bold">மொழியை தேர்ந்தெடுங்கள்</Label>
+                                    <Input
+                                        type="switch"
+                                        onClick={chooseLanguage}
+                                        checked={language}
+                                        className="fs-2 ms-1"
+                                        defaultValue={true}
+                                    />
+                                    <Label check>{language ? "தமிழ்" : "English"}  </Label>
+                                </FormGroup>
                             </CardHeader>
                             <CardBody>
                                 <FormikProvider value={addUserForm}>
@@ -347,11 +343,12 @@ function AddUser() {
                                                     </div>
                                                     <div className="mb-3">
                                                         {/* <Label> தற்போதைய முகவரியும் நிரந்தர முகவரியும் ஒன்றா?</Label> */}
-                                                        <FormGroup check>
-                                                            <Label check>
-                                                                <Input type="checkbox" onChange={addressvalue} />
-                                                                தற்போதைய முகவரியும் நிரந்தர முகவரியும் ஒன்றா?
+                                                        <FormGroup check className="d-flex align-items-center gap-2">
+                                                            <Label>
+                                                               
                                                             </Label>
+                                                            <Input type="checkbox" className="fs-4" onChange={addressvalue} />
+                                                                தற்போதைய முகவரியும் நிரந்தர முகவரியும் ஒன்றா?
                                                         </FormGroup>
                                                     </div>
                                                     {(() => {
@@ -623,6 +620,18 @@ function AddUser() {
                                                         {addUserForm.touched.profile_image && addUserForm.errors.profile_image ? (
                                                             <FormFeedback type="invalid">{addUserForm.errors.profile_image}</FormFeedback>
                                                         ) : null}
+                                                        {profileImage && (
+                                                            <div className="preview-container">
+                                                                <img src={URL.createObjectURL(profileImage)}
+                                                                    alt="Selected File"
+                                                                    className="preview-image">
+                                                                </img>
+
+
+                                                            </div>
+
+                                                        )
+                                                        }
                                                     </div>
                                                     {addUserForm.values.country !== "இந்தியா" && (<><div className="mb-3">
                                                         <Label className="form-label">International Country Code</Label>

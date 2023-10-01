@@ -155,12 +155,6 @@ const SidebarContent = props => {
 
             {/* <li className="menu-title">{props.t("Apps")}</li> */}
 
-            <li>
-              <Link to="/organization" >
-                <i className="bx bx-briefcase-alt"></i>
-                <span>{props.t("Organization")}</span>
-              </Link>
-            </li>
 
             <li>
               <Link to="/users" >

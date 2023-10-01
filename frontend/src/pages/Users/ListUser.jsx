@@ -8,6 +8,8 @@ import { Paginator } from 'primereact/paginator';
 import { GET } from "helpers/api_helper";
 import { USER_URL } from "helpers/url_helper";
 import "../../assets/scss/_listusers.scss";
+import { ProductService } from "./data";
+import noprofile from '../../assets/images/noprofile.jpg'
 function UsersListTable() {
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
@@ -19,18 +21,37 @@ function UsersListTable() {
         console.log("called");
         return (
             <>
-            <div className="fs-2 d-flex gap-2">
-            {/* <Link><i className="mdi mdi-plus-circle text-success" /></Link> */}
-            <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle" /></Link>
-            <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle text-secondary" /></Link>              
-                
+                <div className="fs-2 d-flex gap-2">
+
+                    <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle fs-1" /></Link>
+                    <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle fs-1 text-secondary" /></Link>
+                    <Link><i className="mdi mdi-card-account-details text-success fs-1" /></Link>
                 </div>
             </>
         );
     };
-
+    const values = [
+        {
+            name: 'ramprasath muththt',
+            father_or_husband: 'yes',
+            member_id: 'ERO-01544',
+            receipt_no: '1999-03-12',
+            receipt_date: 'Ramprasath',
+            current_address: '1/57, south street , sevaloor, Melamaruthappuram(post),Tenkasi Dist',
+            country: '',
+            state: 'INSTOCK',
+            district: 'Tamilnadu',
+            taluk: 'Tenkasi',
+            panchayat: 'Others',
+            cardmapped: "yes",
+        }
+    ]
     useEffect(() => {
-        fetchUsers(currentPage);
+        // fetchUsers(currentPage);
+        // ProductService.getProductsData().then((data)=>setUsers(data));
+        // 
+        setUsers(values);
+
     }, []);
 
     const fetchUsers = async (page, count = rows, additiotal_params = {}) => {
@@ -58,7 +79,9 @@ function UsersListTable() {
         setCurrentPage(page);
         fetchUsers(page, event.rows)
     };
-
+    const getImage = ()=>{
+        return<img src={noprofile} className="shadow-2 border-round" style={{width:"80px"}}/>
+    }
 
     const header = (
         <div className="d-flex flex-wrap align-items-center  gap-2">
@@ -82,7 +105,17 @@ function UsersListTable() {
                                 value={users}
                                 header={header}
                                 scrollable>
-                                <Column field="name" sortable header="குடும்ப தலைவர் பெயர் " ></Column>
+                                
+                                <Column
+                                    field="name"
+                                    header="குடும்ப தலைவர் பெயர் "
+                                    body={(rowData) => (
+                                        <td className={rowData.cardmapped === 'yes' ? 'green-cell' : 'red-cell'}>
+                                            {rowData.name}
+                                        </td>
+                                    )}
+                                ></Column>
+                                <Column field="image" sortable body={getImage}header="குடும்ப தலைவர் புகைப்படம்" ></Column>
                                 <Column field="father_or_husband" sortable header="தபெ/கபெ பெயர் " ></Column>
                                 <Column field="member_id" sortable header="Member ID " ></Column>
                                 <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>

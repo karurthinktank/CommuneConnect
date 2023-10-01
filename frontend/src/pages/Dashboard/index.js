@@ -23,10 +23,13 @@ const Dashboard = props => {
   //meta title
   document.title = "Home | ElawFirm";
   const reports = [
-    { title: "Total Cases", iconClass: "bx-copy-alt", description: "100" },
-    { title: "Closed Cases", iconClass: "bx-archive-in", description: "40" },
-    { title: "Pending Cases", iconClass: "bx-archive-in", description: "30" },
-    { title: "New  Cases", iconClass: "bx-archive-in", description: "30" },
+    { title: "குடும்பங்கள்", iconClass: "mdi-family-tree", description: "100" },
+    { title: "குடிப்பாடுக்காரர்கள் ", iconClass: "mdi-timelapse", description: "40" },
+    { title: "ஆண்கள்", iconClass: "mdi-human-male", description: "30" },
+    { title: "பெண்கள் ", iconClass: "mdi-human-female", description: "30" },
+    { title: "மணியன்  ", iconClass: "mdi-human-male", description: "30" },
+    { title: "கண்ணந்தை  ", iconClass: "mdi-human-female", description: "30" },
+    { title: "அடையாள அட்டை  ", iconClass: "mdi-card-account-details", description: "30" },
    
   ];
 
@@ -52,9 +55,10 @@ const Dashboard = props => {
                             <span className="avatar-title rounded-circle bg-success">
                               <i
                                 className={
-                                  "bx " + report.iconClass + " font-size-24"
+                                  "mdi " + report.iconClass + " font-size-24"
                                 }
                               ></i>
+                              
                             </span>
                           </div>
                           <div className="ms-3">

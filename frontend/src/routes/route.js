@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom";
 import { isTokenExpired,  unsetToken } from "../helpers/jwt-token-access/accessToken";
 
 function Authmiddleware(props){
-  console.log(props.children);
   // todo: need to implement auth middleware
   // console.log("dqwdq", isTokenExpired())
   if (isTokenExpired()) {

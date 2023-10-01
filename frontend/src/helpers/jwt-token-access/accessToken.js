@@ -19,9 +19,7 @@ export function unsetToken(){
 // Parses JWT token and returns the token expiration date
 export function getTokenExpiration(){
     var token = getToken();
-    console.log(token)
     let decoded = jwt(token);
-    console.log(decoded)
     return new Date(decoded.exp * 1000);
 }
 

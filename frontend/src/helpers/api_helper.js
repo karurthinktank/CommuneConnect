@@ -67,3 +67,10 @@ export async function UPLOAD(url, data, config = {}) {
     .catch((error) => error);
 }
 
+export async function UPDATE_UPLOAD(url, data, config = {}) {
+  return await axiosMediaApi
+    .put(url, data)
+    .then((response) => response)
+    .catch((error) => error);
+}
+

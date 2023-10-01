@@ -15,17 +15,14 @@ function UsersListTable() {
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const actionItems = () => {
+    const actionItems = (row) => {
         console.log("called");
         return (
             <>
             <div className="fs-2 d-flex gap-2">
-            <Link><i className="mdi mdi-plus-circle text-success" /></Link>
-            <Link><i className="mdi mdi-eye-circle" /></Link>
-                <Link><i className="mdi mdi-pencil-circle text-secondary" /></Link>
-                
-                <Link><i className="mdi mdi-delete-circle text-danger" /></Link>
-              
+            {/* <Link><i className="mdi mdi-plus-circle text-success" /></Link> */}
+            <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle" /></Link>
+            <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle text-secondary" /></Link>              
                 
                 </div>
             </>
@@ -86,14 +83,16 @@ function UsersListTable() {
                                 header={header}
                                 scrollable>
                                 <Column field="name" sortable header="குடும்ப தலைவர் பெயர் " ></Column>
+                                <Column field="father_or_husband" sortable header="தபெ/கபெ பெயர் " ></Column>
+                                <Column field="member_id" sortable header="Member ID " ></Column>
                                 <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
                                 <Column field="receipt_date" sortable header="இரசீது தேதி "></Column>
                                 <Column field="mobile_number" sortable header=" அலைபேசி எண்" alignFrozen="right" frozen></Column>
                                 <Column field="current_address" sortable header=" முகவரி"></Column>
                                 <Column field="country" sortable header=" நாடு"></Column>
                                 <Column field="state" sortable header=" மாநிலம்"></Column>
-                                <Column field="distrcit" sortable header=" மாவட்டம்"></Column>
-                                <Column field="area" sortable header="வட்டம்"></Column>
+                                <Column field="district" sortable header=" மாவட்டம்"></Column>
+                                <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column>
                                 <Column field="actions" sortable header="Action" alignFrozen="right" frozen body={actionItems}></Column>
                             </DataTable>

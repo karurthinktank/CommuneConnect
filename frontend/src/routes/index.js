@@ -10,16 +10,18 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword"
 // Dashboard
 import Dashboard from "../pages/Dashboard/index"
 
-// Case
+// User
 import UsersListTable from "pages/Users/ListUser"
 import AddUser from "pages/Users/AddUser"
-import ViewCase from "pages/Users/ViewUser"
+import ViewUser from "pages/Users/ViewUser"
+import EditUser from "pages/Users/EditUser"
 
 
 const authProtectedRoutes = [
   { path: "/home", component: <Dashboard/> },
   {path:"/users", component:<UsersListTable/>},
-  {path:"/cases-view/:id", component:<ViewCase/>},
+  {path:"/users/view/:id", component:<ViewUser/>},
+  {path:"/users/edit/:id", component:<EditUser/>},
   {path:"/users/add", component:<AddUser/>},
   
 

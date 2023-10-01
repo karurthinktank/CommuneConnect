@@ -4,7 +4,7 @@ import base64
 
 from django.utils import timezone
 from .serializers import PeopleSerializer, UserSerializer, FamilyMembersSerializer
-from .models import People
+from .models import People, FamilyMembers
 from rest_framework import permissions
 from rest_framework import viewsets, status
 from django.contrib.auth.models import Group
@@ -100,11 +100,13 @@ class PeopleViewSet(viewsets.ModelViewSet):
         response = dict()
         data = dict()
         try:
-            profile_image = request.FILES.get('profile_image').read()
+            profile_image = request.FILES.get('profile_image')
             data = json.loads(request.POST.get("form_data"))
             data['created_by'] = request.user.first_name
             data['code'] = get_random_string(10)
-            data['profile_image'] = base64.b64encode(profile_image).decode()
+            if profile_image:
+                profile_image = profile_image.read()
+                data['profile_image'] = base64.b64encode(profile_image).decode()
 
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
@@ -145,22 +147,64 @@ class PeopleViewSet(viewsets.ModelViewSet):
         response = dict()
         data = dict()
         try:
-            data = request.body
-            data = json.loads(data)
+            data = json.loads(request.POST.get("form_data"))
+            slug = kwargs.get("pk", None)
             data['modified_by'] = request.user.first_name
             data['modified_at'] = timezone.now()
-            people = People.objects.filter()
+            people = People.objects.filter(member_id=slug).first()
             if not people:
                 logging.error()
-                response['message'] = "Invalid CNR Number"
+                response['message'] = "Invalid Member ID"
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            profile_image = request.FILES.get('profile_image')
+            data['code'] = people.code
+            data['created_by'] = people.created_by
+            if profile_image:
+                profile_image = profile_image.read()
+                data['profile_image'] = base64.b64encode(profile_image).decode()
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
-                serializer.save()
-                logging.info({"CNR": data['cnr_number'], "message": "Updated Successfully!"})
+                serializer.update(people, serializer.validated_data)
+                logging.info({"Member Id": data['member_id'], "message": "Updated Successfully!"})
+                for member in data['members']:
+                    existing_member = FamilyMembers.objects.filter(code=member['code'], people=people).first()
+                    if existing_member:
+                        if not member['date_of_birth']:
+                            member['date_of_birth'] = None
+                        member_serializer = FamilyMembersSerializer(data=member)
+                        if member_serializer.is_valid():
+                            member_serializer.validated_data['people_id'] = people.id
+                            serializer.update(existing_member, member_serializer.validated_data)
+                        else:
+                            response['message'] = "Bad Request!"
+                            response['code'] = 400
+                            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        member['code'] = get_random_string(10)
+                        member['people_id'] = people.id
+                        member['created_by'] = request.user.first_name
+                        member['people'] = people
+                        if not member['date_of_birth']:
+                            member['date_of_birth'] = None
+
+                        member_serializer = FamilyMembersSerializer(data=member)
+                        if member_serializer.is_valid():
+                            member_serializer.validated_data['people_id'] = people.id
+                            member_serializer.validated_data['code'] = get_random_string(10)
+                            member_serializer.save()
+                        else:
+                            response['message'] = "Bad Request!"
+                            response['code'] = 400
+                            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+                # soft delete members
+                for deleted in data['deleted_members']:
+                    member_instance = FamilyMembers.objects.filter(code=deleted['code'], people=people).first()
+                    member_instance.deleted = True
+                    member_instance.save()
             else:
-                logging.info({"CNR": data['cnr_number'], "message": serializer.errors})
+                logging.info({"Member ID": data['member_id'], "message": serializer.errors})
                 response['message'] = "Bad Request!"
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -170,21 +214,25 @@ class PeopleViewSet(viewsets.ModelViewSet):
         except Exception as e:
             response['message'] = str(e)
             response['code'] = 500
-            logging.error({"CNR": data['cnr_number'], "message": str(e)})
+            logging.error({"Member ID": data['member_id'], "message": str(e)})
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def retrieve(self, request, *args, **kwargs):
         response = dict()
         try:
             slug = kwargs.get("pk", None)
-            case = People.objects.filter().first()
-            if not case:
-                logging.info({"case": slug, "message": "Invalid Case"})
-                response['message'] = "Invalid Case"
+            people = People.objects.filter(member_id=slug).first()
+            if not people:
+                logging.info({"User": slug, "message": "Invalid User"})
+                response['message'] = "Invalid User"
                 response['code'] = 400
                 response['data'] = dict()
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-            data = self.serializer_class(case, context={'request': request}).data
+            data = self.serializer_class(people, context={'request': request}).data
+            family_members = FamilyMembers.objects.filter(people=people, deleted=False)
+            data['family_members'] = FamilyMembersSerializer(family_members,
+                                                             context={'request': request}, many=True).data
+            print(data)
             response['message'] = "Success!"
             response['code'] = 200
             response['data'] = data

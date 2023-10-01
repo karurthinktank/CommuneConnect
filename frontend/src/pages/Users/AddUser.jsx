@@ -198,7 +198,7 @@ function AddUser() {
                     <div className="col-md-12">
                         <Breadcrumb title="Home" breadcrumbItem="Add User" />
                         <Card className="usercard">
-                            <CardHeader>
+                            <CardHeader className="position-sticky top-0">
                                 <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
                                     <Label className="m-0 fw-bold">மொழியை தேர்ந்தெடுங்கள்</Label>
                                     <Input
@@ -211,7 +211,7 @@ function AddUser() {
                                     <Label check>{language ? "தமிழ்" : "English"}  </Label>
                                 </FormGroup>
                             </CardHeader>
-                            <CardBody>
+                            <CardBody style={{maxHeight:"650px",overflow:"scroll"}}>
                                 <FormikProvider value={addUserForm}>
                                     <Form
                                         className="form-horizontal"

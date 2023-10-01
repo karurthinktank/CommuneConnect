@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import "../../assets/scss/_login.scss"
 // import images
 import logo from "assets/images/logo.svg";
-import bgbanner from "assets/images/Sri-Ranganathaswamy-Temple.jpeg"
+import bgbanner from "assets/images/login.jpeg"
 import { GET, POST } from "../../helpers/api_helper";
 import { LOGIN_URL, USER } from "../../helpers/url_helper";
 // import { setUser } from "../../helpers/jwt-token-access/accessToken";
@@ -70,23 +70,29 @@ function Login() {
 
   return (
     <>
-      <div className="home-btn d-none d-sm-block">
-        <Link to="/" className="text-dark">
-          <i className="bx bx-home h2" />
-        </Link>
-      </div>
+    
 
       <div className="account-pages my-5 pt-sm-5">
 
         <div class="container">
-          <div class="row m-5 no-gutters shadow-lg">
+          <div class="row m-5 no-gutters shadow-lg m-0">
             <div class="col-md-8 d-none d-md-block">
               {/* <img src="https://images.unsplash.com/photo-1566888596782-c7f41cc184c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=2134&q=80" class="img-fluid"/> */}
               <img src={bgbanner} class="img-fluid" style={{ minHeight: "100%" }} />
 
             </div>
             <div class="col-md-4 bg-white p-5">
-              <h3 class="pb-3">Login Form</h3>
+               <div className="text-center text-warning mb-3">
+                <h5>
+                  Welcome
+                </h5>
+                <h5>
+                  To 
+                </h5>
+                <h5>
+                Temple Management System
+                </h5>
+               </div>
               <div class="form-style">
                 <form  className="form-horizontal"
                       onSubmit={(e) => {

@@ -123,41 +123,57 @@ function AddUser() {
         navigate('/users');
     }
 
-    const handleBlur = (event) => {
-        let translate = "";
-        let value = event.target.value;
+    // const handleBlur = (event) => {
+    //     let translate = "";
+    //     let value = event.target.value;
 
-        let name = event.target.name;
+    //     let name = event.target.name;
 
-        if (inputs[name]) {
-            translate = Sanscript.t(inputs[name], "itrans", "tamil");
-        }
-        value = value.replace(inputs[name], translate);
-        setInputs(values => ({ ...values, [name]: '' }));
-        addUserForm.setFieldValue(name, value);
+    //     if (inputs[name]) {
+    //         translate = Sanscript.t(inputs[name], "itrans", "tamil");
+    //     }
+    //     value = value.replace(inputs[name], translate);
+    //     setInputs(values => ({ ...values, [name]: '' }));
+    //     addUserForm.setFieldValue(name, value);
         
-    }
+    // }
 
     const handleChange = (event) => {
         let name = event.target.name;
-        if(language){
-            let current_value = ""
-            if (inputs[name]) {
-                if (event.nativeEvent.data != null)
-                    current_value += inputs[name] + event.nativeEvent.data;
-                else{
-                    let value = inputs[name].slice(0, -1)
-                    current_value += value;
-                }
-            }
-            else if (event.nativeEvent.data != null)
-                current_value += event.nativeEvent.data;
+        let value = event.target.value;
+        let translate = "";
+        let current_value = ""
 
-            if(!event.target.value)
-                current_value = "";
-            setInputs(values => ({ ...values, [name]: current_value }));
+        if(language){
+            // if (inputs[name]) {
+                            //     if (event.nativeEvent.data != null)
+            //         current_value += inputs[name] + event.nativeEvent.data;
+            //     else{
+            //         let value = inputs[name].slice(0, -1)
+            //         current_value += value;
+            //     }
+            // }
+            // else if (event.nativeEvent.data != null)
+            //     current_value += event.nativeEvent.data;
+
+            // if(!event.target.value)
+            //     current_value = "";
+            // setInputs(values => ({ ...values, [name]: current_value }));
+            if (event.nativeEvent.data != null)
+                current_value = event.nativeEvent.data;
+            // else{
+            //     let value = inputs[name].slice(0, -1)
+            //     current_value += value;
+            // }
         }
-        addUserForm.setFieldValue(name, event.target.value);
+        if(current_value){
+            translate = Sanscript.t(current_value, "itrans", "tamil");
+        // value = value.replace(current_value, translate);
+        value = value.slice(0, -1);
+        value += translate;
+        }
+        addUserForm.setFieldValue(name, value);
+        // addUserForm.setFieldValue(name, event.target.value);
     }
 
 
@@ -227,7 +243,7 @@ function AddUser() {
                                                             placeholder="குடும்பத் தலைவரின் பெயரை உள்ளிடவும்                                                                        "
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.name}
                                                             invalid={addUserForm.touched.name && addUserForm.errors.name ? true : false}
                                                         />
@@ -245,7 +261,7 @@ function AddUser() {
                                                             placeholder="தபெ/கபெ பெயரை உள்ளிடவும் "
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.father_or_husband}
                                                             invalid={addUserForm.touched.father_or_husband && addUserForm.errors.father_or_husband ? true : false}
                                                         />
@@ -320,7 +336,7 @@ function AddUser() {
                                                             placeholder="தற்போதைய முகவரியை உள்ளிடவும்"
                                                             type="textarea"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.current_address}
                                                             invalid={addUserForm.touched.current_address && addUserForm.errors.current_address ? true : false}
                                                         />
@@ -370,7 +386,7 @@ function AddUser() {
                                                                             placeholder="பூர்விக முகவரியை உள்ளிடவும்"
                                                                             type="textarea"
                                                                             onChange={handleChange}
-                                                                            onBlur={handleBlur}
+                                                                            onBlur={addUserForm.handleBlur}
                                                                             value={addUserForm.values.permanent_address}
 
                                                                         />
@@ -507,7 +523,7 @@ function AddUser() {
                                                             placeholder="வட்டத்தை தேர்ந்தெடுக்கவும்"
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.taluk}
                                                         />
 
@@ -521,7 +537,7 @@ function AddUser() {
                                                             placeholder="பஞ்சாயத்து  தேர்ந்தெடுக்கவும்"
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.panchayat}
                                                         />
 
@@ -535,7 +551,7 @@ function AddUser() {
                                                             placeholder="கிராமப் பெயரை உள்ளிடவும்"
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={addUserForm.handleBlur}
                                                             value={addUserForm.values.village}
                                                         />
 
@@ -706,7 +722,7 @@ function AddUser() {
                                                                                     type="text"
                                                                                     value={addUserForm.values.members[index].member_name}
                                                                                     onChange={handleChange}
-                                                                                    onBlur={handleBlur}
+                                                                                    onBlur={addUserForm.handleBlur}
                                                                                     invalid={addUserForm.values.members[index]?.member_name ? false : true}
                                                                                 />
                                                                                 {addUserForm.values.members[index]?.member_name ? null : (
@@ -831,7 +847,7 @@ function AddUser() {
                                                                                     placeholder="உங்கள் தொழில் விவரங்களை உள்ளிடவும்"
                                                                                     type="textarea"
                                                                                     onChange={handleChange}
-                                                                                    onBlur={handleBlur}
+                                                                                    onBlur={addUserForm.handleBlur}
                                                                                     value={addUserForm.values.members[index].career_reference}
                                                                                 />
                                                                             </div>

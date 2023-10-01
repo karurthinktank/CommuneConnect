@@ -157,24 +157,20 @@ function EditUser() {
 
     const handleChange = (event) => {
         let name = event.target.name;
-        if(language){
-            let current_value = ""
-            if (inputs[name]) {
-                if (event.nativeEvent.data != null)
-                    current_value += inputs[name] + event.nativeEvent.data;
-                else{
-                    let value = inputs[name].slice(0, -1)
-                    current_value += value;
-                }
-            }
-            else if (event.nativeEvent.data != null)
-                current_value += event.nativeEvent.data;
+        let value = event.target.value;
+        let translate = "";
+        let current_value = ""
 
-            if(!event.target.value)
-                current_value = "";
-            setInputs(values => ({ ...values, [name]: current_value }));
+        if(language){
+            if (event.nativeEvent.data != null)
+                current_value = event.nativeEvent.data;
         }
-        editUserForm.setFieldValue(name, event.target.value);
+        if(current_value){
+            translate = Sanscript.t(current_value, "itrans", "tamil");
+        value = value.slice(0, -1);
+        value += translate;
+        }
+        editUserForm.setFieldValue(name, value);
     }
 
 
@@ -254,7 +250,7 @@ function EditUser() {
                                                             placeholder="குடும்பத் தலைவரின் பெயரை உள்ளிடவும்                                                                        "
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.name}
                                                             invalid={editUserForm.touched.name && editUserForm.errors.name ? true : false}
                                                         />
@@ -272,7 +268,7 @@ function EditUser() {
                                                             placeholder="தபெ/கபெ பெயரை உள்ளிடவும் "
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.father_or_husband}
                                                             invalid={editUserForm.touched.father_or_husband && editUserForm.errors.father_or_husband ? true : false}
                                                         />
@@ -349,7 +345,7 @@ function EditUser() {
                                                             placeholder="தற்போதைய முகவரியை உள்ளிடவும்"
                                                             type="textarea"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.current_address}
                                                             invalid={editUserForm.touched.current_address && editUserForm.errors.current_address ? true : false}
                                                         />
@@ -399,7 +395,7 @@ function EditUser() {
                                                                             placeholder="பூர்விக முகவரியை உள்ளிடவும்"
                                                                             type="textarea"
                                                                             onChange={handleChange}
-                                                                            onBlur={handleBlur}
+                                                                            onBlur={editUserForm.handleBlur}
                                                                             value={editUserForm.values.permanent_address}
 
                                                                         />
@@ -536,7 +532,7 @@ function EditUser() {
                                                             placeholder="வட்டத்தை தேர்ந்தெடுக்கவும்"
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.taluk}
                                                         />
 
@@ -550,7 +546,7 @@ function EditUser() {
                                                             placeholder="பஞ்சாயத்து  தேர்ந்தெடுக்கவும்"
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.panchayat}
                                                         />
 
@@ -564,7 +560,7 @@ function EditUser() {
                                                             placeholder="கிராமப் பெயரை உள்ளிடவும்"
                                                             type="text"
                                                             onChange={handleChange}
-                                                            onBlur={handleBlur}
+                                                            onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.village}
                                                         />
 
@@ -735,7 +731,7 @@ function EditUser() {
                                                                                     type="text"
                                                                                     value={editUserForm.values.members[index].name}
                                                                                     onChange={handleChange}
-                                                                                    onBlur={handleBlur}
+                                                                                    onBlur={editUserForm.handleBlur}
                                                                                     invalid={editUserForm.values.members[index]?.name ? false : true}
                                                                                 />
                                                                                 {editUserForm.values.members[index]?.name ? null : (
@@ -860,7 +856,7 @@ function EditUser() {
                                                                                     placeholder="உங்கள் தொழில் விவரங்களை உள்ளிடவும்"
                                                                                     type="textarea"
                                                                                     onChange={handleChange}
-                                                                                    onBlur={handleBlur}
+                                                                                    onBlur={editUserForm.handleBlur}
                                                                                     value={editUserForm.values.members[index].career_reference}
                                                                                 />
                                                                             </div>

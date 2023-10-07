@@ -92,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'tms_dev',
-        'USER': 'ranjith',
-        'PASSWORD': 'ranjith123',
+        'USER': 'root',
+        'PASSWORD': 'Ranjith123',
         'HOST': 'localhost',
         'PORT': '5432',
     }

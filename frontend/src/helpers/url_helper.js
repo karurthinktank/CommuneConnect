@@ -1,8 +1,9 @@
 
 //people
 export const USER_URL = "people/";
-export const PEOPLE_DETAIL = "people/:slug/"
-export const USER = "people/get-user/"
+export const PEOPLE_DETAIL = "people/:slug/";
+export const USER = "people/get-user/";
+export const DASHBOARD = "dashboard/"
 
 //LOGIN
 export const LOGIN_URL = "api-token-auth/";

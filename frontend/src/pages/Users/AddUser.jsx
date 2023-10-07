@@ -62,6 +62,7 @@ function AddUser() {
             std_code: '',
             phone_number: '',
             profile_image: '',
+            gender: '',
             members: [{
                 member_name: '', aadhar_no: '', member_mobile_number: '', gender: '', relationship: '',
                 date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: '',
@@ -74,6 +75,7 @@ function AddUser() {
             member_id: Yup.string().required("This field is required!"),
             receipt_book_no: Yup.string().required("This field is required!"),
             receipt_no: Yup.string().required("This field is required!"),
+            gender: Yup.string().required("This field is required!"),
             profile_image: Yup.string(),
             is_charity_member: Yup.boolean().required("This field is required!"),
             current_address: Yup.string().required("This field is required!"),
@@ -263,6 +265,27 @@ function AddUser() {
                                                         />
                                                         {addUserForm.touched.father_or_husband && addUserForm.errors.father_or_husband ? (
                                                             <FormFeedback type="invalid">{addUserForm.errors.father_or_husband}
+                                                            </FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">பாலினம்</Label>
+                                                        <Input
+                                                            id="gender"
+                                                            name="gender"
+                                                            className="form-control"
+                                                            placeholder="Select Gender"
+                                                            type="select"
+                                                            onChange={addUserForm.handleChange}
+                                                            value={addUserForm.gender}
+                                                            invalid={addUserForm.touched.gender && addUserForm.errors.gender ? true : false}
+                                                        >
+                                                            <option value="" disabled defaultValue="" selected>பாலினத்தைத் தேர்ந்தெடுக்கவும்</option>
+                                                            {GENDER.map((code) => (<option key={code} value={code}>{code}</option>))}
+
+                                                        </Input>
+                                                        {addUserForm.touched.gender && addUserForm.errors.gender ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.gender}
                                                             </FormFeedback>
                                                         ) : null}
                                                     </div>

@@ -23,6 +23,7 @@ class People(models.Model):
     mobile_number = models.CharField(max_length=10, null=True, blank=True)
     deleted = models.BooleanField(default=0)
     receipt_no = models.CharField(max_length=100)
+    gender = models.CharField(max_length=10)
     receipt_date = models.DateField(null=True)
     receipt_book_no = models.IntegerField()
     is_charity_member = models.BooleanField(default=False)

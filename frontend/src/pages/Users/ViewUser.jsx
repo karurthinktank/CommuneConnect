@@ -9,8 +9,8 @@ import classnames from "classnames";
 import { Accordion, AccordionTab } from 'primereact/accordion'
 import { Row, CardBody, Card, Col, Container, Label, CardText, Badge, CardHeader } from "reactstrap";
 import "../../assets/scss/_listview.scss";
-import avatar from '../../assets/images/users/avatar-1.jpg';
-import { ProductService } from "./data";
+import noprofile from '../../assets/images/noprofile.jpg'
+
 function ViewUser() {
 
 
@@ -18,29 +18,20 @@ function ViewUser() {
     const [data, setData] = useState({});
 
     useEffect(() => {
-        //  fetchUser();
-        // ProductService.getProductsData().then((data)=>setData(data));
+         fetchUser();
     }, []);
-    const values = [
-        { name: "Ramprasath M", Label: "Name" },
-        { name: "Father", Label: "father_or_husband" },
-        { name: "6382679574", Label: "mobile_number" },
-        { name: "ERT-12345", Label: "receipt_no" },
-
-    ]
 
     const fetchUser = async () => {
         let url = USER_URL + id + '/';
         const response = await GET(url);
         if (response.status === 200) {
             console.log(response)
-            // setData(response.data.data);
+            setData(response.data.data);
         }
         else {
             CustomToast(response.data.message, "error");
         }
     }
-    // setData(data);
 
 
     return (
@@ -60,12 +51,12 @@ function ViewUser() {
                                     <div className="col-md-4  p-3 member-details" >
                                         <div className="d-flex justify-content-center">
                                             {data?.profile_image ? (<img className="photo" src={"data:image/png;base64," + data?.profile_image} alt="User Avatar" />)
-                                                : <img className="photo" src={avatar} alt="User Avatar" />}
+                                                : <img className="photo" src={noprofile} alt="User Profie" />}
                                                 
                                         </div>
                                         <div className="mt-1 text-center">
                                                 <Badge className="rounded-pill d-inlineflex p-2" color="secondary">Member ID<span>
-                                                    <Badge color="success" className="rounded-pill ms-2 fs-7">403540</Badge></span></Badge>
+                                                    <Badge color="success" className="rounded-pill ms-2 fs-7">{data?.member_id}</Badge></span></Badge>
                                             </div>
 
 
@@ -73,52 +64,52 @@ function ViewUser() {
 
                                         <div className="profile-info">
                                             <div className="row text-center">
-                                                <div className="col-5">
+                                                {/* <div className="col-5">
                                                     <label>Name:</label>
-                                                </div>
+                                                </div> */}
 
-                                                <div className="col-7">
-                                                    <strong>Ramprasath M</strong>
+                                                <div className="col-12">
+                                                    <strong>{data?.name}</strong>
                                                 </div>
                                             </div>
                                             <div className="row text-center">
-                                                <div className="col-5">
+                                                {/* <div className="col-5">
                                                     <label>Father/Husband</label>
-                                                </div>
+                                                </div> */}
 
-                                                <div className="col-7">
+                                                <div className="col-12">
                                                     <strong>{data?.father_or_husband}</strong>
                                                 </div>
                                             </div>
                                             <div className="row text-center">
-                                                <div className="col-5">
+                                                {/* <div className="col-5">
                                                     <label>Mobile Number</label>
-                                                </div>
+                                                </div> */}
 
-                                                <div className="col-7">
+                                                <div className="col-12">
                                                     <strong>{data?.mobile_number}</strong>
                                                 </div>
                                             </div>
                                             <div className="row text-center">
-                                                <div className="col-5">
+                                                {/* <div className="col-5">
                                                     <label>Receipt Number</label>
-                                                </div>
+                                                </div> */}
 
-                                                <div className="col-7">
+                                                <div className="col-12">
                                                     <strong>{data?.receipt_no} / {data?.receipt_book_no}</strong>
                                                 </div>
                                             </div>
                                             <div className="d-flex gap-2">
-                                            <div className="mt-1 ">
+                                            {data?.is_card_mapped && <div className="mt-1 ">
                                                 <Badge className="rounded-pill p-2 d-inline-flex align-items-center"  color="success">
                                                     <span className="mdi mdi-check fs-5"></span>Cardmapped
                                                 </Badge>
-                                            </div>
-                                            <div className="mt-1 ">
+                                            </div>}
+                                            {/* <div className="mt-1 ">
                                                 <Badge className="rounded-pill p-2 d-inline-flex align-items-center"  color="danger">
-                                                    <span className="mdi mdi-close fs-5"></span>NotMapped
+                                                    <span className="mdi mdi-close fs-5"></span>Card NotMapped
                                                 </Badge>
-                                            </div>
+                                            </div> */}
                                             </div>
                                             
                                             <div>
@@ -128,21 +119,22 @@ function ViewUser() {
                                                 <span>Not Mapped</span> */}
 
                                             </div>
+                                            {data?.is_profile_completed ? (<>
                                             <span className="">Profile completed</span>
                                             <div class="progress bg-transparent progress-sm">
                                                 
-                                                <div class="progress-bar bg-success rounded" role="progressbar" style={{ width: "94%" }} aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar bg-success rounded" role="progressbar" style={{ width: "100%" }} aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            <span className="">Profile Not completed</span>
+                                            </>) : (
+                                            <>
+                
                                             <div class="progress bg-transparent progress-sm">
-                                                
-                                                <div class="progress-bar bg-danger rounded" role="progressbar" style={{ width: "54%" }} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar bg-danger rounded" role="progressbar" style={{ width: "100%" }} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
+                                            <span className="text-muted">Profile Not completed</span>
+                                            </>)}
 
                                         </div>
-
-
-
 
                                     </div>
                                     <div className="col-md-7  p-3 member-details">
@@ -307,6 +299,7 @@ function ViewUser() {
 
                 </Container>
             </div>
+            <ToastContainer/>
         </>
     )
 }

@@ -153,7 +153,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
             data['modified_at'] = timezone.now()
             people = People.objects.filter(member_id=slug).first()
             if not people:
-                logging.error()
+                logging.error("")
                 response['message'] = "Invalid Member ID"
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -266,6 +266,31 @@ class PeopleViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user, context={'request': request})
         data = serializer.data
         return Response(data)
+
+
+class DashboardViewSet(viewsets.ModelViewSet):
+    queryset = People.objects.filter(deleted=False)
+    serializer_class = PeopleSerializer
+
+    def list(self, request, *args, **kwargs):
+        try:
+            family_count = self.queryset.count()
+            members = FamilyMembers.objects.filter(deleted=False)
+            total_members_count = family_count + members.count()
+            card_mapped_count = self.queryset.filter(is_card_mapped=True).count()
+            male_count = self.queryset.filter(gender="ஆண்").count() + members.filter(gender="ஆண்").count()
+            female_count = self.queryset.filter(gender="பெண்").count() + members.filter(gender="பெண்").count()
+            response = {
+                "family_count": family_count,
+                "members_count": total_members_count,
+                "id_card_count": card_mapped_count,
+                "male_count": male_count,
+                "female_count": female_count
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 

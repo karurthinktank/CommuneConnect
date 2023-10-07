@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -18,10 +19,32 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 //i18n
 import { withTranslation } from "react-i18next";
+import { DASHBOARD } from "helpers/url_helper";
+import { GET } from "helpers/api_helper";
+import CustomToast from "components/Common/Toast";
+import { ToastContainer } from "react-toastify";
+
 const Dashboard = props => {
 
   //meta title
-  document.title = "Home | ElawFirm";
+  document.title = "Home | TMS";
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    fetchData();
+}, []);
+
+const fetchData = async () => {
+   const response = await GET(DASHBOARD);
+   if (response.status === 200) {
+       console.log(response)
+       setData(response.data);
+   }
+   else {
+       CustomToast(response.data.message, "error");
+   }
+}
+
   const reports = [
     { title: "குடும்பங்கள்", iconClass: "mdi-family-tree", description: "100" },
     { title: "குடிப்பாடுக்காரர்கள் ", iconClass: "mdi-timelapse", description: "40" },
@@ -44,34 +67,97 @@ const Dashboard = props => {
           />
           <div>
           <Row>
-                {/* Reports Render */}
-                {reports.map((report, key) => (
-                  <Col md="3" key={"_col_" + key}>
-                    <Card className="mini-stats-wid">
-                      <CardBody>
-                        <div className="d-flex">
-                          
-                          <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                            <span className="avatar-title rounded-circle bg-success">
-                              <i
-                                className={
-                                  "mdi " + report.iconClass + " font-size-24"
-                                }
-                              ></i>
-                              
-                            </span>
-                          </div>
-                          <div className="ms-3">
-                            <p className="text-muted fw-medium">
-                              {report.title}
-                            </p>
-                            <h4 className="mb-0">{report.description}</h4>
-                          </div>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </Col>
-                ))}
+          <Col md="3" key="1">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-family-tree font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">குடும்பங்கள்</p>
+                      <h4 className="mb-0">{data?.family_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+
+          <Col md="3" key="2">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-timelapse font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">குடிப்பாடுக்காரர்கள்</p>
+                      <h4 className="mb-0">{data?.members_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+          <Col md="3" key="3">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-human-male font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">ஆண்கள்</p>
+                      <h4 className="mb-0">{data?.male_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+          <Col md="3" key="4">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-human-female font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">பெண்கள்</p>
+                      <h4 className="mb-0">{data?.female_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+          <Col md="3" key="5">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-card-account-details font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">அடையாள அட்டை</p>
+                      <h4 className="mb-0">{data?.id_card_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
             </Row>
             <Row>
             </Row>

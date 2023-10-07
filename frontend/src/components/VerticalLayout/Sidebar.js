@@ -13,16 +13,16 @@ import logo from "../../assets/images/logo.svg";
 import logoLightPng from "../../assets/images/logo-light.png";
 import logoLightSvg from "../../assets/images/logo-light.svg";
 import logoDark from "../../assets/images/logo-dark.png";
-
+import sidebarlogo from "../../assets/images/sidelogodark.png";
 const Sidebar = props => {
 
   return (
     <React.Fragment>
       <div className="vertical-menu">
-        <div className="navbar-brand-box">
+        <div className="navbar-brand-box mb-4">
           <Link to="/" className="logo logo-dark">
             <span className="logo-sm">
-              {/* <img src={logo} alt="" height="22" /> */}
+              {/* <img src={sidebarlogo} alt="" height="22" /> */}
               <p>Temple</p>
             </span>
             <span className="logo-lg">
@@ -33,14 +33,15 @@ const Sidebar = props => {
 
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
-              <img src={logoLightSvg} alt="" height="22" />
+              <img src={sidebarlogo} alt="" style={{height:"38px"}}/>
+              
             </span>
-            <span className="logo-lg">
-              <img src={logoLightPng} alt="" height="19" />
+            <span className="logo-lg ms-4">
+              <img src={sidebarlogo} alt="" style={{height:"97px"}}/>
             </span>
           </Link>
         </div>
-        <div data-simplebar className="h-100">
+        <div data-simplebar className="h-100 mt-1">
           {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
         </div>
         <div className="sidebar-background"></div>

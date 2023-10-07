@@ -13,7 +13,8 @@ import withRouter from "components/Common/withRouter";
 import { useNavigate } from "react-router-dom";
 
 // users
-import user1 from "../../../assets/images/users/avatar-1.jpg";
+import user1 from "../../../assets/images/noprofile.jpg";
+
 
 function ProfileMenu(props) {
   // Declare a new state variable, which we'll call "menu"
@@ -69,10 +70,10 @@ function ProfileMenu(props) {
             <i className="bx bx-wrench font-size-16 align-middle me-1" />
             {props.t("Settings")}
           </DropdownItem> */}
-          <DropdownItem tag="a" href="auth-lock-screen">
+          {/* <DropdownItem tag="a" href="auth-lock-screen">
             <i className="bx bx-lock-open font-size-16 align-middle me-1" />
             {props.t("Change Password")}
-          </DropdownItem>
+          </DropdownItem> */}
           <div className="dropdown-divider" />
           <DropdownItem onClick={logout} className="dropdown-item">
             <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />

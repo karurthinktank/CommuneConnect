@@ -516,7 +516,40 @@ function AddUser() {
                                                         ) : null}
 
                                                     </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
+                                                        <Input
+                                                            id="profile_image"
+                                                            name="profile_image"
+                                                            className="form-control"
+                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.profile_image}
+                                                            onChange={handleFiles}
+                                                            invalid={addUserForm.touched.profile_image && addUserForm.errors.profile_image ? true : false}
 
+                                                        />
+                                                        {addUserForm.touched.profile_image && addUserForm.errors.profile_image ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.profile_image}</FormFeedback>
+                                                        ) : null}
+                                                        {profileImage && (
+                                                            <>
+                                                            <div className="preview-container">
+                                                                <img src={URL.createObjectURL(profileImage)}
+                                                                    alt="Selected File"
+                                                                    className="preview-image">
+                                                                </img>
+                                                               
+
+
+                                                            </div>
+                                                             <small className="help-text">இந்த படம் பயன்பாட்டின் அட்டவணையின் மேல் காட்டப்படும்.</small>
+                                                             </>
+                                                        )
+                                                        }
+                                                    </div>
 
                                                 </div>
                                                 <div className="col-md-6">
@@ -626,36 +659,7 @@ function AddUser() {
                                                         ) : null}
 
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
-                                                        <Input
-                                                            id="profile_image"
-                                                            name="profile_image"
-                                                            className="form-control"
-                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
-                                                            type="file"
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.profile_image}
-                                                            onChange={handleFiles}
-                                                            invalid={addUserForm.touched.profile_image && addUserForm.errors.profile_image ? true : false}
-
-                                                        />
-                                                        {addUserForm.touched.profile_image && addUserForm.errors.profile_image ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.profile_image}</FormFeedback>
-                                                        ) : null}
-                                                        {profileImage && (
-                                                            <div className="preview-container">
-                                                                <img src={URL.createObjectURL(profileImage)}
-                                                                    alt="Selected File"
-                                                                    className="preview-image">
-                                                                </img>
-
-
-                                                            </div>
-
-                                                        )
-                                                        }
-                                                    </div>
+                                                    
                                                     {addUserForm.values.country !== "இந்தியா" && (<><div className="mb-3">
                                                         <Label className="form-label">International Country Code</Label>
                                                         <Input

@@ -141,7 +141,7 @@ function Login() {
                     <div class="d-flex align-items-center"><input name="" type="checkbox" value="" /> <span class="pl-2 font-weight-bold">Remember Me</span></div>
                   </div> */}
                   <div class="pb-2">
-                    <button type="submit" class="btn btn-dark w-100 font-weight-bold mt-2">Submit</button>
+                    <button type="submit" class="btn btn-dark w-100 font-weight-bold mt-2">உள்நுழைய</button>
                   </div>
                 </form>
 

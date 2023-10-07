@@ -108,7 +108,7 @@ function UsersListTable() {
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column>
-                                <Column field="actions" sortable header="Action" alignFrozen="right" frozen body={actionItems}></Column>
+                                <Column field="actions" sortable header="Action" alignFrozen="right" className="custom-border" frozen body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />

@@ -102,7 +102,7 @@ body{
   }
   .preview-container {
     margin-top: 20px;
-    border: 2px solid #c9ccd1;
+    border: 1px solid #c9ccd1;
     padding: 10px;
     border-radius: 4px;
     background-color: #f9f9f9;
@@ -111,7 +111,7 @@ body{
   /* Style for the previewed image */
   .preview-image {
     max-width: 100%;
-    max-height: 200px; /* Adjust the maximum height as needed */
-    display: block;
+    max-height: 90px; /* Adjust the maximum height as needed */
+    display: inline-block;
     margin: 10px 0;
   }

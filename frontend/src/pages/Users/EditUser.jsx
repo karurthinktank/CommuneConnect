@@ -59,6 +59,7 @@ function EditUser() {
             name: data?.name,
             father_or_husband: data?.father_or_husband,
             member_id: data?.member_id,
+            gender: data?.gender,
             mobile_number: data?.mobile_number,
             receipt_no: data?.receipt_no,
             receipt_date: data?.receipt_date,
@@ -97,19 +98,20 @@ function EditUser() {
             district: Yup.string().required("This field is required!"),
             mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
             secondary_mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
+            std_code: Yup.number().nullable(true),
             members: Yup.array().of(
                 Yup.object({
                     name: Yup.string().required("This field is required!"),
                     mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
                     gender: Yup.string().required("This field is required!"),
                     relationship: Yup.string(),
-                    aadhar_no: Yup.string(),
-                    date_of_birth: Yup.string(),
+                    aadhar_no: Yup.string().nullable(true),
+                    date_of_birth: Yup.string().nullable(true),
                     martial_status: Yup.string(),
                     occupation: Yup.string(),
-                    career_reference: Yup.string(),
+                    career_reference: Yup.string().nullable(true),
                     blood_group: Yup.string(),
-                    card_details: Yup.string(),
+                    card_details: Yup.string().nullable(true),
                 })
             )
                 .required('Must have Family Members')
@@ -120,8 +122,11 @@ function EditUser() {
                 formData.append("profile_image", profileImage);
             values['files'] = formData;
             values['deleted_members'] = deletedMembers;
+            values['profile_image'] = "";
+            console.log(values)
             formData.append("form_data", JSON.stringify(values));
             let url = USER_URL + id + "/";
+
             var res = await UPDATE_UPLOAD(url, formData);
             console.log(res);
             if (res.status === 200 || res.status === 201) {
@@ -205,22 +210,18 @@ function EditUser() {
                     <div className="col-md-12">
                         <Breadcrumb title="Home" breadcrumbItem="Edit User" />
                         <Card className="usercard">
-                            <CardHeader className="d-flex">
-                                <h5></h5>
-                                <div className="ms-auto">
-                                    <FormGroup switch>
-
-                                        <Input
-                                            type="switch"
-                                            onClick={chooseLanguage}
-                                            checked={language}
-                                            className="fs-4"
-                                            defaultValue={true}
-                                        />
-                                        <Label check>{language ? "Tamil" : "English"}  </Label>
-                                    </FormGroup>
-
-                                </div>
+                        <CardHeader className="position-sticky top-0">
+                                <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
+                                    <Label className="m-0 fw-bold">மொழியை தேர்ந்தெடுங்கள்</Label>
+                                    <Input
+                                        type="switch"
+                                        onClick={chooseLanguage}
+                                        checked={language}
+                                        className="fs-2 ms-1"
+                                        defaultValue={true}
+                                    />
+                                    <Label check>{language ? "தமிழ்" : "English"}  </Label>
+                                </FormGroup>
                             </CardHeader>
                             <CardBody>
                                 <FormikProvider value={editUserForm}>
@@ -229,8 +230,8 @@ function EditUser() {
                                         onSubmit={(e) => {
                                             e.preventDefault();
                                             console.log(editUserForm)
+                                            editUserForm.isValid ? editUserForm.handleSubmit() : CustomToast("Please fill all the required fields.", "error");
                                             editUserForm.handleSubmit();
-                                            // editUserForm.isValid ? editUserForm.handleSubmit() : CustomToast("Please fill all the required fields.", "error");;
                                             return false;
                                         }}
                                     >
@@ -274,6 +275,27 @@ function EditUser() {
                                                         />
                                                         {editUserForm.touched.father_or_husband && editUserForm.errors.father_or_husband ? (
                                                             <FormFeedback type="invalid">{editUserForm.errors.father_or_husband}
+                                                            </FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">பாலினம்</Label>
+                                                        <Input
+                                                            id="gender"
+                                                            name="gender"
+                                                            className="form-control"
+                                                            placeholder="Select Gender"
+                                                            type="select"
+                                                            onChange={editUserForm.handleChange}
+                                                            value={editUserForm.gender}
+                                                            invalid={editUserForm.touched.gender && editUserForm.errors.gender ? true : false}
+                                                        >
+                                                            <option value="" disabled defaultValue="" selected>பாலினத்தைத் தேர்ந்தெடுக்கவும்</option>
+                                                            {GENDER.map((code) => (<option key={code} value={code}>{code}</option>))}
+
+                                                        </Input>
+                                                        {editUserForm.touched.gender && editUserForm.errors.gender ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.gender}
                                                             </FormFeedback>
                                                         ) : null}
                                                     </div>

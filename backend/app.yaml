@@ -1,0 +1,5 @@
+runtime: python311 # or another supported version
+instance_class: F2
+service:backend
+
+entrypoit: gunicorn -b :8080 tms.wsgi:application

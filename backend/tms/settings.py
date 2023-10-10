@@ -87,17 +87,33 @@ WSGI_APPLICATION = 'tms.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+CLOUDSQL_CONNECTION_NAME = "thinktank-tms-dev-env:asia-south1:tms"
+CLOUDSQL_DB_USER = "app_user"
+CLOUDSQL_DB_PWD = "A12mX0XZOS|m8'K."
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tms_dev',
-        'USER': 'root',
-        'PASSWORD': 'Ranjith123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if os.getenv('GAE_APPLICATION', None):
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'tms',
+            'USER': CLOUDSQL_DB_USER,
+            'PASSWORD': CLOUDSQL_DB_PWD,
+            'HOST': '/cloudsql/{}'.format(CLOUDSQL_CONNECTION_NAME),
+            'CONN_MAX_AGE': 30
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'tms_dev',
+            'USER': 'root',
+            'PASSWORD': 'Ranjith123',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation

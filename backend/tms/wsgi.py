@@ -1,5 +1,5 @@
 """
-WSGI config for elawfirm project.
+WSGI config for temple-management-system project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

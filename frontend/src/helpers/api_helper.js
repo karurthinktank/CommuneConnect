@@ -3,8 +3,10 @@ import { getToken } from "./jwt-token-access/accessToken";
 
 const token = getToken();
 console.log(token);
+
 //apply base url for axios
-const API_URL = "http://localhost:8000/";
+//const API_URL = "http://localhost:8000/api/";
+const API_URL = "https://backend-dot-thinktank-tms-dev-env.as.r.appspot.com/api/";
 
 const axiosApi = axios.create({
   baseURL: API_URL,

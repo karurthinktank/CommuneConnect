@@ -1,23 +1,27 @@
-import React from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
 
-function CustomToast(message, type, customOption = undefined)  {
+function CustomToast(message, type)  {
     const toastOptions = {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        }
-    var options = customOption ? customOption : toastOptions;
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      }
+     
+    // var options = customOption ? customOption : toastOptions;
   if(type=="success"){
-    toast.success(message, {options})
+    toast.success(message, toastOptions)
   }
   if(type=="error"){
-    toast.error(message, {options})
+    toast.error(message, toastOptions);
+  }
+  if(type=="info"){
+    toast.info(message, toastOptions)
   }
   
 };

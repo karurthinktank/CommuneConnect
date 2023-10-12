@@ -31,7 +31,7 @@ const INIT_STATE = {
   leftSideBarTheme: leftSideBarThemeTypes.DARK,
   leftSideBarThemeImage: leftBarThemeImageTypes.NONE,
   leftSideBarType: leftSidebarTypes.DEFAULT,
-  topbarTheme: topBarThemeTypes.LIGHT,
+  topbarTheme: topBarThemeTypes.COLORED,
   isPreloader: false,
   showRightSidebar: false,
   isMobile: false,

@@ -19,14 +19,16 @@ import logo from "assets/images/logo.svg";
 import bgbanner from "assets/images/login.jpeg"
 import { GET, POST } from "../../helpers/api_helper";
 import { LOGIN_URL, USER } from "../../helpers/url_helper";
+import { ToastContainer } from 'react-toastify';
+import CustomToast from "components/Common/Toast";
+
 // import { setUser } from "../../helpers/jwt-token-access/accessToken";
 
 function Login() {
   const navigate = useNavigate();
   //meta title
   document.title = "Login | Temple";
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [is_loading, setLoading] = useState(false);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -47,12 +49,15 @@ function Login() {
       if (res.status == 200) {
         localStorage.setItem("access_token", res.data.access);
         setLoading(false);
-        setError('');
         get_user(res.data.access);
+      }
+      else if(res.status == 401){
+        CustomToast("Invalid Login Credentials!", "error");
+        setLoading(false);
       }
       else {
         setLoading(false);
-        setError(res.message);
+        CustomToast("Internal Server Error!", "error");
       }
     }
   });
@@ -62,46 +67,49 @@ function Login() {
     if (res.status == 200) {
       localStorage.setItem("auth_user", JSON.stringify(res.data));
       navigate('/home');
+      setLoading(false);
     }
     else {
       // toast msg
+      setLoading(false);
+      CustomToast("Internal Server Error!", "error");
     }
   }
 
   return (
     <>
+
+    <div className="page-content">
+      <div className="row">
+        <div className="col-md-12">
     
-
-      <div className="account-pages my-5 pt-sm-5">
-
-        <div class="container">
-          <div class="row m-5 no-gutters shadow-lg m-0">
+          <div class="row  shadow-lg">
             <div class="col-md-8 d-none d-md-block">
-              {/* <img src="https://images.unsplash.com/photo-1566888596782-c7f41cc184c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=2134&q=80" class="img-fluid"/> */}
+              
               <img src={bgbanner} class="img-fluid" style={{ minHeight: "100%" }} />
 
             </div>
             <div class="col-md-4 bg-white p-5">
-               <div className="text-center text-warning mb-3">
+              <div className="text-center text-warning mb-3">
                 <h5>
                   Welcome
                 </h5>
                 <h5>
-                  To 
+                  To
                 </h5>
                 <h5>
-                Temple Management System
+                  Temple Management System
                 </h5>
-               </div>
-              <div class="form-style">
-                <form  className="form-horizontal"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
-                      }}>
+              </div>
+              <div className="form-style mt-5">
+                <form className="form-horizontal"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    validation.handleSubmit();
+                    return false;
+                  }}>
 
-                  <div className="mb-3">
+                  <div className="mb-4">
                     <Label className="form-label">Username</Label>
                     <Input
                       name="username"
@@ -120,7 +128,7 @@ function Login() {
                     ) : null}
                   </div>
 
-                  <div className="mb-3">
+                  <div className="mb-4">
                     <Label className="form-label">Password</Label>
                     <Input
                       name="password"
@@ -137,26 +145,28 @@ function Login() {
                       <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
                     ) : null}
                   </div>
-                  {/* <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center"><input name="" type="checkbox" value="" /> <span class="pl-2 font-weight-bold">Remember Me</span></div>
-                  </div> */}
+                 
                   <div class="pb-2">
-                    <button type="submit" class="btn btn-dark w-100 font-weight-bold mt-2">உள்நுழைய</button>
+                    {!is_loading ? (<button type="submit" class="btn btn-dark  w-100 font-weight-bold mt-2">உள்நுழைய</button>)
+                    :(
+                    <button type="button" class="btn btn-light w-100 waves-effect" disabled>
+                      <i class="bx bx-hourglass bx-spin font-size-16 align-middle me-2"></i> Loading
+                    </button>
+                    )}
                   </div>
                 </form>
-
-              
                 <div>
-
                 </div>
-                
               </div>
-
             </div>
           </div>
         </div>
-      
+
       </div>
+     
+      
+      </div>  
+      <ToastContainer/>
     </>
   );
 };

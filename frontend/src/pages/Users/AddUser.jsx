@@ -537,7 +537,7 @@ function AddUser() {
                                                         ) : null}
                                                         {profileImage && (
                                                             <>
-                                                            <div className="preview-container">
+                                                            <div className="preview-container text-center col-md-6">
                                                                 <img src={URL.createObjectURL(profileImage)}
                                                                     alt="Selected File"
                                                                     className="preview-image">

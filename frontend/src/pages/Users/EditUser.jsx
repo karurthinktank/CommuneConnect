@@ -553,7 +553,7 @@ function EditUser() {
                                                     </div>
                                                     {profileImage ?( 
                                                         <>
-                                                        <div className="preview-container">
+                                                        <div className="preview-container text-center col-md-6">
                                                           <img src={URL.createObjectURL(profileImage)}
                                                           className="preview-image"
                                                           alt="selected-file"
@@ -561,7 +561,7 @@ function EditUser() {
                                                         </div>
                                                         </>
                                                     ): (
-                                                        <div className="preview-container">
+                                                        <div className="preview-container text-center col-md-6">
                                                         <img src={profile}
                                                         className="preview-image"
                                                         alt="selected-file"

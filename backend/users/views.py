@@ -98,6 +98,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
 
         """
         response = dict()
+        response['error'] = None
         data = dict()
         try:
             profile_image = request.FILES.get('profile_image')
@@ -107,9 +108,13 @@ class PeopleViewSet(viewsets.ModelViewSet):
             if profile_image:
                 profile_image = profile_image.read()
                 data['profile_image'] = base64.b64encode(profile_image).decode()
+            if data['profile_image'] and data['mobile_number'] and data['current_address']:
+                data['is_profile_completed'] = True
 
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
+                serializer.validated_data['member_id'] = data['member_id']
+                serializer.validated_data['code'] = data['code']
                 serializer.save()
                 for member in data['members']:
                     member['name'] = member['member_name']
@@ -118,33 +123,37 @@ class PeopleViewSet(viewsets.ModelViewSet):
                     member['people_id'] = serializer.data['id']
                     member['created_by'] = request.user.first_name
                     people = People.objects.filter(id=serializer.data['id']).first()
-                    member['people'] = people
+                    member['people'] = serializer.data['id']
                     if not member['date_of_birth']:
                         member['date_of_birth'] = None
 
                     member_serializer = FamilyMembersSerializer(data=member)
                     if member_serializer.is_valid():
-                        member_serializer.validated_data['people_id'] = serializer.data['id']
+                        # member_serializer.validated_data['people_id'] = serializer.data['id']
                         member_serializer.save()
                     else:
                         response['message'] = "Bad Request!"
                         response['code'] = 400
+                        response['error'] = member_serializer.errors
                         return Response(response, status=status.HTTP_400_BAD_REQUEST)
             else:
                 response['message'] = "Bad Request!"
+                response['error'] = serializer.errors
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             response['message'] = "Created Successfully!"
             response['code'] = 201
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
-            response['message'] = str(e)
+            response['message'] = "Internal Server Error!"
+            response['error'] = str(e)
             response['code'] = 500
             logging.error(str(e))
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def update(self, request, *args, **kwargs):
         response = dict()
+        response['error'] = None
         data = dict()
         try:
             data = json.loads(request.POST.get("form_data"))
@@ -166,6 +175,14 @@ class PeopleViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
                 serializer.update(people, serializer.validated_data)
+                # updated instance
+                people = People.objects.filter(member_id=slug).first()
+                # check profile is completed
+                if people.mobile_number and people.profile_image and people.current_address:
+                    people.is_profile_completed = True
+                else:
+                    people.is_profile_completed = False
+                people.save()
                 logging.info({"Member Id": data['member_id'], "message": "Updated Successfully!"})
                 for member in data['members']:
                     existing_member = FamilyMembers.objects.filter(code=member['code'], people=people).first()
@@ -196,6 +213,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
                         else:
                             response['message'] = "Bad Request!"
                             response['code'] = 400
+                            response['error'] = member_serializer.errors
                             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
                 # soft delete members
@@ -207,12 +225,14 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 logging.info({"Member ID": data['member_id'], "message": serializer.errors})
                 response['message'] = "Bad Request!"
                 response['code'] = 400
+                response['error'] = serializer.errors
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             response['message'] = "Updated Successfully!"
             response['code'] = 200
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            response['message'] = str(e)
+            response['message'] = "Internal Server Error!"
+            response['error'] = str(e)
             response['code'] = 500
             logging.error({"Member ID": data['member_id'], "message": str(e)})
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

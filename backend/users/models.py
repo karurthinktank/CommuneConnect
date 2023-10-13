@@ -40,7 +40,7 @@ class People(models.Model):
     secondary_mobile_number = models.CharField(max_length=10, null=True, blank=True)
     country_code = models.CharField(max_length=10, null=True, blank=True)
     international_mobile_number = models.CharField(max_length=15, null=True, blank=True)
-    std_code = models.IntegerField(null=True)
+    std_code = models.CharField(max_length=10, null=True, blank=True)
     phone_number = models.CharField(max_length=10, null=True, blank=True)
     profile_image = models.TextField(null=True, blank=True)
     is_profile_completed = models.BooleanField(default=False)

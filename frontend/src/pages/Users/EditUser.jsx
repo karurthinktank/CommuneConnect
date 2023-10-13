@@ -19,6 +19,7 @@ import {
     DISTRICT_LIST, STATE_LIST, COUNTRY_LIST, RECEIPT_BOOK_NO, RELATIONSHIP, OCCUPATION,
     GENDER, MARTIAL_STATUS
 } from "constants/constants";
+import noprofile from '../../assets/images/noprofile.jpg'; 
 
 import Sanscript from "@indic-transliteration/sanscript";
 
@@ -32,6 +33,7 @@ function EditUser() {
     const [deletedMembers, setDeletedMembers] = useState([]);
     const { id } = useParams();
     const [data, setData] = useState({});
+    const [profile, setProfile] = useState('');
     const addressvalue = (event) => {
         setAddress(event.target.checked);
     }
@@ -45,6 +47,10 @@ function EditUser() {
         const response = await GET(url);
         if (response.status === 200) {
             setData(response.data.data);
+            if(response.data.data?.profile_image)
+                setProfile("data:image/png;base64," + response.data.data?.profile_image);
+            else
+            setProfile(noprofile);
         }
         else {
             CustomToast(response.data.message, "error");
@@ -545,7 +551,7 @@ function EditUser() {
                                                             <FormFeedback type="invalid">{editUserForm.errors.profile_image}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                    {profileImage &&( 
+                                                    {profileImage ?( 
                                                         <>
                                                         <div className="preview-container">
                                                           <img src={URL.createObjectURL(profileImage)}
@@ -554,6 +560,13 @@ function EditUser() {
                                                           ></img>
                                                         </div>
                                                         </>
+                                                    ): (
+                                                        <div className="preview-container">
+                                                        <img src={profile}
+                                                        className="preview-image"
+                                                        alt="selected-file"
+                                                        ></img>
+                                                      </div> 
                                                     )
                                                 }
 

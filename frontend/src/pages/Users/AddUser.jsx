@@ -20,8 +20,7 @@ import {
 } from "constants/constants";
 import "../../App.css";
 import Sanscript from "@indic-transliteration/sanscript";
-import { FileUpload } from 'primereact/fileupload';
-import Loader from "components/Common/Loader";
+
 function AddUser() {
 
     const [isSameAddress, setAddress] = useState(false);
@@ -965,7 +964,6 @@ function AddUser() {
 
                             </CardBody>
                         </Card>
-                        <Loader/>
                         <ToastContainer />
                     </div>
                 </div>

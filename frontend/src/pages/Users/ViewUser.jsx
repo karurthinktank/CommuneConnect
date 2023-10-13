@@ -9,33 +9,41 @@ import classnames from "classnames";
 import { Accordion, AccordionTab } from 'primereact/accordion'
 import { Row, CardBody, Card, Col, Container, Label, CardText, Badge, CardHeader } from "reactstrap";
 import "../../assets/scss/_listview.scss";
-import noprofile from '../../assets/images/noprofile.jpg'
+import noprofile from '../../assets/images/noprofile.jpg';
+import Loader from "components/Common/Loader";
+
 
 function ViewUser() {
 
 
     const { id } = useParams();
     const [data, setData] = useState({});
+    const [showLoader, setShowLoader] = useState(false);
+
 
     useEffect(() => {
          fetchUser();
     }, []);
 
     const fetchUser = async () => {
+        setShowLoader(true);
         let url = USER_URL + id + '/';
         const response = await GET(url);
         if (response.status === 200) {
             console.log(response)
             setData(response.data.data);
+            setShowLoader(false);
         }
         else {
             CustomToast(response.data.message, "error");
+            setShowLoader(false);
         }
     }
 
 
     return (
         <>
+              {showLoader && <Loader/>}
             <div className="page-content">
                 <Breadcrumb title="User" breadcrumbItem="Family Members" />
                 <Container fluid>

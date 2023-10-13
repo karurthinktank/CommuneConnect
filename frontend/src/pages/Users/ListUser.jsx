@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "components/Common/Breadcrumb";
 import { Link } from "react-router-dom";
-import 'react-toastify/dist/ReactToastify.css';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Paginator } from 'primereact/paginator';
@@ -9,6 +8,10 @@ import { GET } from "helpers/api_helper";
 import { USER_URL } from "helpers/url_helper";
 import "../../assets/scss/_listusers.scss";
 import noprofile from '../../assets/images/noprofile.jpg';
+import Loader from "components/Common/Loader";
+import CustomToast from "components/Common/Toast";
+import { ToastContainer } from "react-toastify";
+
 
 function UsersListTable() {
     const [users, setUsers] = useState([]);
@@ -16,9 +19,9 @@ function UsersListTable() {
     const [rows, setRows] = useState(25);
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showLoader, setShowLoader] = useState(false);
 
     const actionItems = (row) => {
-        console.log("called");
         return (
             <>
                 <div className="fs-2 d-flex gap-2">
@@ -37,6 +40,7 @@ function UsersListTable() {
     }, []);
 
     const fetchUsers = async (page, count = rows, additiotal_params = {}) => {
+        setShowLoader(true);
         let query_params = {
             page: page,
             count: count
@@ -44,13 +48,14 @@ function UsersListTable() {
         query_params = { ...query_params, ...additiotal_params }
         let url = USER_URL + "?" + new URLSearchParams(query_params).toString();
         const response = await GET(url);
-        console.log(response);
         if (response.status === 200) {
             setUsers(response.data.data);
             setTotalRows(response.total_count);
+            setShowLoader(false);
         }
         else {
-            // setLoading(false);
+            setShowLoader(false);
+            CustomToast(response.data.message, "error");
         }
     }
 
@@ -78,6 +83,7 @@ function UsersListTable() {
 
     return (
         <>
+            {showLoader && <Loader/>}
             <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
@@ -117,6 +123,7 @@ function UsersListTable() {
                     </div>
                 </div>
             </div>
+            <ToastContainer/>
         </>
     )
 }

@@ -65,8 +65,9 @@ function Login() {
     var res = await GET(USER, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status == 200) {
       localStorage.setItem("auth_user", JSON.stringify(res.data));
-      navigate('/home');
       setLoading(false);
+      navigate('/home');
+      window.location.reload();
     }
     else {
       // toast msg

@@ -110,6 +110,8 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 data['profile_image'] = base64.b64encode(profile_image).decode()
             if data['profile_image'] and data['mobile_number'] and data['current_address']:
                 data['is_profile_completed'] = True
+            if not data['receipt_date']:
+                data['receipt_date'] = None
 
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
@@ -172,6 +174,8 @@ class PeopleViewSet(viewsets.ModelViewSet):
             if profile_image:
                 profile_image = profile_image.read()
                 data['profile_image'] = base64.b64encode(profile_image).decode()
+            if not data['receipt_date']:
+                data['receipt_date'] = None
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
                 serializer.update(people, serializer.validated_data)

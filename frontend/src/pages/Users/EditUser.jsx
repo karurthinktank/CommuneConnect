@@ -22,6 +22,8 @@ import {
 import noprofile from '../../assets/images/noprofile.jpg'; 
 
 import Sanscript from "@indic-transliteration/sanscript";
+import Loader from "components/Common/Loader";
+
 
 function EditUser() {
 
@@ -37,23 +39,27 @@ function EditUser() {
     const addressvalue = (event) => {
         setAddress(event.target.checked);
     }
+    const [showLoader, setShowLoader] = useState(false);
 
     useEffect(() => {
         fetchUser();
     }, []);
 
     const fetchUser = async () => {
+        setShowLoader(true);
         let url = USER_URL + id + '/';
         const response = await GET(url);
         if (response.status === 200) {
             setData(response.data.data);
+            setShowLoader(false);
             if(response.data.data?.profile_image)
                 setProfile("data:image/png;base64," + response.data.data?.profile_image);
             else
             setProfile(noprofile);
         }
         else {
-            CustomToast(response.data.message, "error");
+            setShowLoader(false);
+            CustomToast("Internal Server Error", "error");
         }
     }
 
@@ -105,6 +111,7 @@ function EditUser() {
             mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
             secondary_mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
             std_code: Yup.number().nullable(true),
+            receipt_date: Yup.string().nullable(true),
             members: Yup.array().of(
                 Yup.object({
                     name: Yup.string().required("This field is required!"),
@@ -123,6 +130,7 @@ function EditUser() {
                 .required('Must have Family Members')
         }),
         onSubmit: async (values) => {
+            setShowLoader(true);
             const formData = new FormData();
             if (profileImage)
                 formData.append("profile_image", profileImage);
@@ -136,10 +144,12 @@ function EditUser() {
             var res = await UPDATE_UPLOAD(url, formData);
             console.log(res);
             if (res.status === 200 || res.status === 201) {
+                setShowLoader(false);
                 CustomToast(res.data.message, "success");
                 navigate('/users');
             }
             else {
+                setShowLoader(false);
                 CustomToast(res.data.message, "error");
             }
         },
@@ -210,6 +220,9 @@ function EditUser() {
 
 
     return (
+        <>      {
+        showLoader && <Loader/>}
+        
         <div className="page-content">
             <div className="container-fluid">
                 <div className="row">
@@ -236,7 +249,7 @@ function EditUser() {
                                         onSubmit={(e) => {
                                             e.preventDefault();
                                             console.log(editUserForm)
-                                            editUserForm.isValid ? editUserForm.handleSubmit() : CustomToast("Please fill all the required fields.", "error");
+                                            editUserForm.isValid ? CustomToast() : CustomToast("Please fill all the required fields.", "error");
                                             editUserForm.handleSubmit();
                                             return false;
                                         }}
@@ -984,11 +997,13 @@ function EditUser() {
                             </CardBody>
                         </Card>
 
-                        <ToastContainer />
                     </div>
                 </div>
             </div>
         </div>
+        <ToastContainer />
+
+        </>
     )
 }
 export default EditUser;

@@ -51,20 +51,10 @@ const fetchData = async () => {
    }
 }
 
-  const reports = [
-    { title: "குடும்பங்கள்", iconClass: "mdi-family-tree", description: "100" },
-    { title: "குடிப்பாடுக்காரர்கள் ", iconClass: "mdi-timelapse", description: "40" },
-    { title: "ஆண்கள்", iconClass: "mdi-human-male", description: "30" },
-    { title: "பெண்கள் ", iconClass: "mdi-human-female", description: "30" },
-    { title: "மணியன்  ", iconClass: "mdi-human-male", description: "30" },
-    { title: "கண்ணந்தை  ", iconClass: "mdi-human-female", description: "30" },
-    { title: "அடையாள அட்டை  ", iconClass: "mdi-card-account-details", description: "30" },
-   
-  ];
-
   return (
     <React.Fragment>
       {showLoader && <Loader/>}
+      {data && 
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumb */}
@@ -171,6 +161,7 @@ const fetchData = async () => {
           </div>
           </Container>
           </div>
+          }
     </React.Fragment>
   );
 };

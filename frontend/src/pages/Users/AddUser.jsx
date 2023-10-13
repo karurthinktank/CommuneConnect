@@ -20,6 +20,8 @@ import {
 } from "constants/constants";
 import "../../App.css";
 import Sanscript from "@indic-transliteration/sanscript";
+import Loader from "components/Common/Loader";
+
 
 function AddUser() {
 
@@ -27,8 +29,7 @@ function AddUser() {
     const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState()
     const [language, setLanguage] = useState(true);
-    const [inputs, setInputs] = useState({});
-    const [input2, setInput2] = useState({});
+    const [showLoader, setShowLoader] = useState(false);
     const addressvalue = (event) => {
         setAddress(event.target.checked);
     }
@@ -102,18 +103,20 @@ function AddUser() {
                 .required('Must have Family Members')
         }),
         onSubmit: async (values) => {
+            setShowLoader(true);
             const formData = new FormData();
             if (profileImage)
                 formData.append("profile_image", profileImage);
             values['files'] = formData;
             formData.append("form_data", JSON.stringify(values));
             var res = await UPLOAD(USER_URL, formData);
-            console.log(res);
             if (res.status === 200 || res.status === 201) {
+                setShowLoader(false);
                 CustomToast(res.data.message, "success");
                 navigate('/users');
             }
             else {
+                setShowLoader(false);
                 CustomToast(res.data.message, "error");
             }
         },
@@ -194,6 +197,8 @@ function AddUser() {
 
 
     return (
+        <>
+              {showLoader && <Loader/>}
         <div className="page-content">
             <div className="container-fluid">
                 <div className="row">
@@ -969,6 +974,7 @@ function AddUser() {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 export default AddUser;

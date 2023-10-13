@@ -21,7 +21,11 @@ import "./assets/scss/theme.scss";
 import "primereact/resources/themes/lara-light-indigo/theme.css";     
     
 //core
-import "primereact/resources/primereact.min.css";                                       
+import "primereact/resources/primereact.min.css";
+//toast message
+
+import 'react-toastify/dist/ReactToastify.css';
+
         
 const getLayout = (layoutType) => {
   let Layout = VerticalLayout;

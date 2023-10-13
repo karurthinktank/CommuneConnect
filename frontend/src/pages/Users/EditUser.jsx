@@ -527,7 +527,35 @@ function EditUser() {
                                                         ) : null}
 
                                                     </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
+                                                        <Input
+                                                            id="profile_image"
+                                                            name="profile_image"
+                                                            className="form-control"
+                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
+                                                            type="file"
+                                                            onBlur={editUserForm.handleBlur}
+                                                            value={editUserForm.values.profile_image}
+                                                            onChange={handleFiles}
+                                                            invalid={editUserForm.touched.profile_image && editUserForm.errors.profile_image ? true : false}
 
+                                                        />
+                                                        {editUserForm.touched.profile_image && editUserForm.errors.profile_image ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.profile_image}</FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    {profileImage &&( 
+                                                        <>
+                                                        <div className="preview-container">
+                                                          <img src={URL.createObjectURL(profileImage)}
+                                                          className="preview-image"
+                                                          alt="selected-file"
+                                                          ></img>
+                                                        </div>
+                                                        </>
+                                                    )
+                                                }
 
                                                 </div>
                                                 <div className="col-md-6">
@@ -637,24 +665,7 @@ function EditUser() {
                                                         ) : null}
 
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
-                                                        <Input
-                                                            id="profile_image"
-                                                            name="profile_image"
-                                                            className="form-control"
-                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
-                                                            type="file"
-                                                            onBlur={editUserForm.handleBlur}
-                                                            value={editUserForm.values.profile_image}
-                                                            onChange={handleFiles}
-                                                            invalid={editUserForm.touched.profile_image && editUserForm.errors.profile_image ? true : false}
-
-                                                        />
-                                                        {editUserForm.touched.profile_image && editUserForm.errors.profile_image ? (
-                                                            <FormFeedback type="invalid">{editUserForm.errors.profile_image}</FormFeedback>
-                                                        ) : null}
-                                                    </div>
+                                                  
                                                     {editUserForm.values.country !== "இந்தியா" && (<><div className="mb-3">
                                                         <Label className="form-label">International Country Code</Label>
                                                         <Input

@@ -86,9 +86,9 @@ body{
       text-align: center;
     color:#ccc;
   }
-  button{
+  /* button{
   height:50px;	
-  }
+  } */
   .sideline:before,
   .sideline:after {
       content: '';

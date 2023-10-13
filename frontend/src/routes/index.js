@@ -15,7 +15,7 @@ import UsersListTable from "pages/Users/ListUser"
 import AddUser from "pages/Users/AddUser"
 import ViewUser from "pages/Users/ViewUser"
 import EditUser from "pages/Users/EditUser"
-
+import UseridCard from "pages/Users/IdCard"
 
 const authProtectedRoutes = [
   { path: "/home", component: <Dashboard/> },
@@ -23,7 +23,7 @@ const authProtectedRoutes = [
   {path:"/users/view/:id", component:<ViewUser/>},
   {path:"/users/edit/:id", component:<EditUser/>},
   {path:"/users/add", component:<AddUser/>},
-  
+   {path:"/users/idcard/:id", component:<UseridCard/>},
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

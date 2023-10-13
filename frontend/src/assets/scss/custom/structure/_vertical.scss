@@ -425,7 +425,7 @@ body[data-sidebar="dark"] {
   }
   // Enlarge menu
   &.vertical-collpsed {
-    min-height: $layout-collapsed-min-height;
+    // min-height: $layout-collapsed-min-height;
 
     // Side menu
     .vertical-menu {

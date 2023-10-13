@@ -23,25 +23,31 @@ import { DASHBOARD } from "helpers/url_helper";
 import { GET } from "helpers/api_helper";
 import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
+import Loader from "components/Common/Loader";
+
 
 const Dashboard = props => {
 
   //meta title
   document.title = "Home | TMS";
   const [data, setData] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     fetchData();
 }, []);
 
 const fetchData = async () => {
+  setShowLoader(true);
    const response = await GET(DASHBOARD);
    if (response.status === 200) {
        console.log(response)
        setData(response.data);
+       setShowLoader(false);
    }
    else {
        CustomToast(response.data.message, "error");
+       setShowLoader(false);
    }
 }
 
@@ -58,6 +64,7 @@ const fetchData = async () => {
 
   return (
     <React.Fragment>
+      {showLoader && <Loader/>}
       <div className="page-content">
         <Container fluid>
           {/* Render Breadcrumb */}

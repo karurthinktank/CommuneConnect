@@ -21,7 +21,6 @@ import { GET, POST } from "../../helpers/api_helper";
 import { LOGIN_URL, USER } from "../../helpers/url_helper";
 import { ToastContainer } from 'react-toastify';
 import CustomToast from "components/Common/Toast";
-
 // import { setUser } from "../../helpers/jwt-token-access/accessToken";
 
 function Login() {
@@ -78,7 +77,6 @@ function Login() {
 
   return (
     <>
-
     <div>
        {/* <div className="row">
         <div className="col-md-12">

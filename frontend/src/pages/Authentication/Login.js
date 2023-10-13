@@ -15,8 +15,8 @@ import { useFormik } from "formik";
 // import css
 import "../../assets/scss/_login.scss"
 // import images
-import logo from "assets/images/logo.svg";
-import bgbanner from "assets/images/login.jpeg"
+import logo from "assets/images/temple-right-logo.png";
+import bgbanner from "assets/images/login.jpeg";
 import { GET, POST } from "../../helpers/api_helper";
 import { LOGIN_URL, USER } from "../../helpers/url_helper";
 import { ToastContainer } from 'react-toastify';
@@ -79,8 +79,8 @@ function Login() {
   return (
     <>
 
-    <div className="page-content">
-      <div className="row">
+    <div>
+       {/* <div className="row">
         <div className="col-md-12">
     
           <div class="row  shadow-lg">
@@ -162,8 +162,97 @@ function Login() {
           </div>
         </div>
 
+      </div>  */}
+      <div className="container-fluid">
+        <div className="row  vh-100 m-0"> 
+           <div className="col-md-8 d-none d-md-block">
+           <img src={bgbanner} class="img-fluid" style={{ minHeight: "100%" }} />
+           </div>
+           <div class="col-md-4 shadow-lg bg-white  p-5">
+              
+              <div className="form-style row">
+                <div className="col-md-12">
+              <div className="text-center text-dark mb-3">
+                <div>
+                  <img src={logo} className="img-thumbnail bg-white rounded-circle" style={{width: "60%"}} ></img>
+                </div>
+                {/* <h3>
+                  Welcome
+                </h3>
+                <h3>
+                  To
+                </h3>
+                <h3>
+                  Temple Management System
+                </h3> */}
+              </div>
+                <form className="form-horizontal"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    validation.handleSubmit();
+                    return false;
+                  }}>
+                    <div>
+                  <div>
+                  <h4 className="text-secondary text-center mb-3">Login In To Your Account<span className="mdi mdi-login "></span></h4>
+                    <Label className="form-label fs-5">Username</Label>
+                    <Input
+                      name="username"
+                      className="form-control"
+                      placeholder="Enter username"
+                      type="text"
+                      onChange={validation.handleChange}
+                      onBlur={validation.handleBlur}
+                      value={validation.values.username || ""}
+                      invalid={
+                        validation.touched.username && validation.errors.username ? true : false
+                      }
+                    />
+                    {validation.touched.username && validation.errors.username ? (
+                      <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                    ) : null}
+                  </div>
+
+                  <div className="mb-4">
+                    <Label className="form-label fs-5">Password</Label>
+                    <Input
+                      name="password"
+                      value={validation.values.password || ""}
+                      type="password"
+                      placeholder="Enter Password"
+                      onChange={validation.handleChange}
+                      onBlur={validation.handleBlur}
+                      invalid={
+                        validation.touched.password && validation.errors.password ? true : false
+                      }
+                    />
+                    {validation.touched.password && validation.errors.password ? (
+                      <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                    ) : null}
+                  </div>
+                 
+                  <div class="pb-2">
+                    {!is_loading ? (<button type="submit" class="btn btn-dark  w-100 font-weight-bold mt-2">உள்நுழைய</button>)
+                    :(
+                    <button type="button" class="btn btn-light w-100 waves-effect" disabled>
+                      <i class="bx bx-hourglass bx-spin font-size-16 align-middle me-2"></i> Loading
+                    </button>
+                    )}
+                  </div>
+                  </div>
+                </form>
+                <div>
+                </div>
+              </div>
+              <div>
+              </div>
+              </div>
+              <div>
+
+              </div>
+            </div>
+        </div>
       </div>
-     
       
       </div>  
       <ToastContainer/>

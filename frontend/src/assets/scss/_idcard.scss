@@ -1,0 +1,84 @@
+
+	.id-cover{
+		position:relative;
+	}
+	.vertical-front-img , .vertical-back-img{
+        width: 400px !important;
+	}
+	.id-vertical .user-content {
+		width: 400px;
+		height: 650px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.id-horizontal .user-content { 
+		width: 636px;
+		height: 395px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.horizontal-front-img , .horizontal-back-img {
+		width:636px;
+	}
+	.id-photo, .id-name, .id-reg-no, .id-address, .id-phone-no {
+		position: absolute;
+		color: #f4342e;
+		font-weight: 800;
+	}
+	.id-vertical .id-photo {
+		width: 115px;
+		height: 115px;
+		bottom: 86px;
+		left: 143px;
+		border: 3px solid #9e005e;
+	}
+	.id-vertical .id-name {
+	    bottom: 42px;
+		left: 155px;
+	} 
+	.id-vertical .id-reg-no {
+		bottom: 10px;
+		left: 195px;
+	}
+	.id-vertical .id-address {
+		bottom: 172px;
+		left: 132px;
+		width: 260px;
+		font-size: 14px;
+	}
+	.id-vertical .id-phone-no{
+		bottom: 88px;
+		left: 225px;
+		font-size: 16px;
+	}
+	/* ID horizontal */
+	.id-horizontal .id-photo {
+		width: 115px;
+		height: 115px;
+		bottom: 102px;
+		right: 104px;
+		border: 4px solid #aa196b;
+	}
+	.id-horizontal .id-name {
+		bottom: 57px;
+		left: 427px;
+		font-size: 14px;
+	} 
+	.id-horizontal .id-reg-no {
+		bottom: 26px;
+		left: 465px;
+	}
+	.id-horizontal .id-address {
+		bottom: 250px;
+		left: 355px;
+		width: 260px;
+		font-size: 14px;
+	}
+	.id-horizontal .id-phone-no{
+		bottom: 133px;
+		left: 380px;
+		font-size: 18px;
+	}
+

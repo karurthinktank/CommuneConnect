@@ -103,6 +103,12 @@ class PeopleViewSet(viewsets.ModelViewSet):
         try:
             profile_image = request.FILES.get('profile_image')
             data = json.loads(request.POST.get("form_data"))
+            existing_instance = People.objects.filter(member_id=data['member_id']).first()
+            if existing_instance:
+                response['message'] = "Member Id already exist! Kindly update correct Member ID"
+                response['code'] = 400
+                response['error'] = "Member Id already exist! Kindly update correct Member ID"
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
             data['created_by'] = request.user.first_name
             data['code'] = get_random_string(10)
             if profile_image:
@@ -134,6 +140,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
                         # member_serializer.validated_data['people_id'] = serializer.data['id']
                         member_serializer.save()
                     else:
+                        people.delete()
                         response['message'] = "Bad Request!"
                         response['code'] = 400
                         response['error'] = member_serializer.errors
@@ -195,7 +202,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
                             member['date_of_birth'] = None
                         member_serializer = FamilyMembersSerializer(data=member)
                         if member_serializer.is_valid():
-                            member_serializer.validated_data['people_id'] = people.id
+                            # member_serializer.validated_data['people_id'] = people.id
                             serializer.update(existing_member, member_serializer.validated_data)
                         else:
                             response['message'] = "Bad Request!"
@@ -203,15 +210,14 @@ class PeopleViewSet(viewsets.ModelViewSet):
                             return Response(response, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         member['code'] = get_random_string(10)
-                        member['people_id'] = people.id
+                        member['people'] = people.id
                         member['created_by'] = request.user.first_name
-                        member['people'] = people
                         if not member['date_of_birth']:
                             member['date_of_birth'] = None
 
                         member_serializer = FamilyMembersSerializer(data=member)
                         if member_serializer.is_valid():
-                            member_serializer.validated_data['people_id'] = people.id
+                            # member_serializer.validated_data['people_id'] = people.id
                             member_serializer.validated_data['code'] = get_random_string(10)
                             member_serializer.save()
                         else:

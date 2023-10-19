@@ -4,7 +4,7 @@ import { useState } from 'react';
 function CustomToast(message, type)  {
     const toastOptions = {
       position: "top-right",
-      autoClose: 1000,
+      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: false,

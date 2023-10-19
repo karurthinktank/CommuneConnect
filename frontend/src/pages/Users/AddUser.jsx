@@ -33,6 +33,7 @@ function AddUser() {
     const addressvalue = (event) => {
         setAddress(event.target.checked);
     }
+    const [fieldValue, setFieldValue] = useState({});
 
 
     const addUserForm = useFormik({
@@ -144,11 +145,12 @@ function AddUser() {
     // }
 
     const handleChange = (event) => {
+        console.log(event)
         let name = event.target.name;
         let value = event.target.value;
         let translate = "";
         let current_value = ""
-
+        let previousValue = ""
         if(language){
             // if (inputs[name]) {
                             //     if (event.nativeEvent.data != null)
@@ -164,18 +166,52 @@ function AddUser() {
             // if(!event.target.value)
             //     current_value = "";
             // setInputs(values => ({ ...values, [name]: current_value }));
-            if (event.nativeEvent.data != null)
-                current_value = event.nativeEvent.data;
+            previousValue = fieldValue[name]
+            if(previousValue){
+                if(event.nativeEvent.data == null)
+                previousValue = previousValue.slice(0,-1)
+                else if(!event.nativeEvent.data.replace(/\s/g, ""))
+                previousValue = "";
+                else if(event.nativeEvent.data)
+                    previousValue += event.nativeEvent.data
+                
+            }
+            else{
+                if(event.nativeEvent.data != null && !event.nativeEvent.data.replace(/\s/g, ""))
+                previousValue = "";
+                else if(event.nativeEvent.data)
+                    previousValue = event.nativeEvent.data
+            }
+            console.log(previousValue)
+            setFieldValue(values => ({ ...values, [name]:previousValue }))
+
+            // if (event.nativeEvent.data != null)
+            //     current_value = event.nativeEvent.data;
             // else{
             //     let value = inputs[name].slice(0, -1)
             //     current_value += value;
             // }
         }
-        if(current_value){
-            translate = Sanscript.t(current_value, "itrans", "tamil");
+        else{
+            setFieldValue(values => ({ ...values, [name]:"" }))
+        }
+        if(previousValue){
+            translate = Sanscript.t(previousValue, "itrans", "tamil");
         // value = value.replace(current_value, translate);
-        value = value.slice(0, -1);
-        value += translate;
+            let splitBySpace = value.split(/\s/g);
+            let no_char_remv = 0;
+            if(splitBySpace.length <= 1){
+                no_char_remv = "-" + previousValue.length;
+                value = value.slice(0, parseInt(no_char_remv));
+                value = translate;
+            }
+            else 
+            {
+                no_char_remv = "-" + splitBySpace[splitBySpace.length -1].length;
+                let trans = (splitBySpace[splitBySpace.length -1], translate);
+                splitBySpace[splitBySpace.length -1] = trans;
+                value = splitBySpace.join(" ");
+            }
         }
         addUserForm.setFieldValue(name, value);
         // addUserForm.setFieldValue(name, event.target.value);
@@ -193,6 +229,10 @@ function AddUser() {
         let files = event.target.files[0];
         setProfileImage(files);
         addUserForm.setFieldValue('profile_image', event.target.value);
+    }
+
+    const errorSubmit = () => {
+        console.log("error")
     }
 
 
@@ -226,7 +266,7 @@ function AddUser() {
                                             e.preventDefault();
                                             console.log(addUserForm)
                                             addUserForm.handleSubmit();
-                                            // addUserForm.isValid ? addUserForm.handleSubmit() : CustomToast("Please fill all the required fields.", "error");;
+                                            addUserForm.isValid ? errorSubmit() : CustomToast(JSON.stringify(addUserForm.errors), "error");;
                                             return false;
                                         }}
                                     >
@@ -569,6 +609,10 @@ function AddUser() {
                                                                 value={addUserForm.values.receipt_date}
                                                             >
                                                             </Input>
+                                                            {addUserForm.touched.receipt_date && addUserForm.errors.receipt_date ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_date}
+                                                            </FormFeedback>
+                                                        ) : null}
                                                         </FormGroup>
                                                     </div>
 
@@ -745,9 +789,6 @@ function AddUser() {
                                                                         date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: '',
                                                                     })}
                                                                 />
-
-
-
                                                             </div>
                                                             {addUserForm.values.members.map((member, index) => (
                                                                 <div key={index} className=" p-3 mb-3 rounded" style={{ border: "1px solid #D3D3D3" }}>

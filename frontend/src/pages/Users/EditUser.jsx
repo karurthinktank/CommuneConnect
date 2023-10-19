@@ -40,6 +40,7 @@ function EditUser() {
         setAddress(event.target.checked);
     }
     const [showLoader, setShowLoader] = useState(false);
+    const [fieldValue, setFieldValue] = useState({});
 
     useEffect(() => {
         fetchUser();
@@ -181,15 +182,49 @@ function EditUser() {
         let value = event.target.value;
         let translate = "";
         let current_value = ""
+        let previousValue = ""
 
         if(language){
-            if (event.nativeEvent.data != null)
-                current_value = event.nativeEvent.data;
+            previousValue = fieldValue[name]
+            if(previousValue){
+                if(event.nativeEvent.data == null)
+                previousValue = previousValue.slice(0,-1)
+                else if(!event.nativeEvent.data.replace(/\s/g, ""))
+                previousValue = "";
+                else if(event.nativeEvent.data)
+                    previousValue += event.nativeEvent.data
+                
+            }
+            else{
+                if(event.nativeEvent.data != null && !event.nativeEvent.data.replace(/\s/g, ""))
+                previousValue = "";
+                else if(event.nativeEvent.data)
+                    previousValue = event.nativeEvent.data
+            }
+            console.log(previousValue)
+            setFieldValue(values => ({ ...values, [name]:previousValue }))
+            // if (event.nativeEvent.data != null)
+            //     current_value = event.nativeEvent.data;
         }
-        if(current_value){
-            translate = Sanscript.t(current_value, "itrans", "tamil");
-        value = value.slice(0, -1);
-        value += translate;
+        else{
+            setFieldValue(values => ({ ...values, [name]:"" }))
+        }
+        if(previousValue){
+            translate = Sanscript.t(previousValue, "itrans", "tamil");
+            let splitBySpace = value.split(/\s/g);
+            let no_char_remv = 0;
+            if(splitBySpace.length <= 1){
+                no_char_remv = "-" + previousValue.length;
+                value = value.slice(0, parseInt(no_char_remv));
+                value = translate;
+            }
+            else 
+            {
+                no_char_remv = "-" + splitBySpace[splitBySpace.length -1].length;
+                let trans = (splitBySpace[splitBySpace.length -1], translate);
+                splitBySpace[splitBySpace.length -1] = trans;
+                value = splitBySpace.join(" ");
+            }
         }
         editUserForm.setFieldValue(name, value);
     }

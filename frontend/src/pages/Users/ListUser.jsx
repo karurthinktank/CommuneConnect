@@ -28,7 +28,7 @@ function UsersListTable() {
 
                     <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle fs-1" /></Link>
                     <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle fs-1 text-secondary" /></Link>
-                    <Link><i className="mdi mdi-card-account-details text-success fs-1" /></Link>
+                    <Link to={"/users/idcard/" + row?.member_id}><i className="mdi mdi-card-account-details text-success fs-1" /></Link>
                 </div>
             </>
         );
@@ -66,8 +66,11 @@ function UsersListTable() {
         setCurrentPage(page);
         fetchUsers(page, event.rows)
     };
-    const getImage = ()=>{
-        return<img src={noprofile} className="shadow-2 border-round" style={{width:"80px"}}/>
+    const getImage = (row)=>{
+        if(row.profile_image)
+            return<img src={"data:image/png;base64," + row?.profile_image} className="shadow-2 border-round" style={{width:"80px"}}/>
+        else
+            return<img src={noprofile} className="shadow-2 border-round" style={{width:"80px"}}/>
     }
 
     const header = (
@@ -93,7 +96,8 @@ function UsersListTable() {
                                 value={users}
                                 header={header}
                                 scrollable>
-                                <Column field="image" sortable body={getImage}header="குடும்ப தலைவர் புகைப்படம்" ></Column>
+                                <Column field="image" sortable body={(rowData) => getImage(rowData)} 
+                                header="குடும்ப தலைவர் புகைப்படம்" ></Column>
                                 <Column
                                     field="name"
                                     header="குடும்ப தலைவர் பெயர் "

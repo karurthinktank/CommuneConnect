@@ -13,8 +13,9 @@ import profilepicture from "../../assets/images/id-photo-square.png";
 import noprofile from '../../assets/images/noprofile.jpg';
 import "../../assets/scss/_idcard.scss";
 import { date } from "yup";
+
 function UseridCard() {
-    const [idcardvalue, setCardvalue] = useState(false);
+    const [data, setCardvalue] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
     const { id } = useParams();
     useEffect(()=>{
@@ -27,7 +28,7 @@ function UseridCard() {
          if(response.status === 200){
             setCardvalue(response.data.data);
             setShowLoader(false);
-            console.log(idcardvalue);
+            console.log(data);
          }
          else{
             CustomToast(response.data.message,"error")
@@ -45,21 +46,25 @@ function UseridCard() {
                             <div className="id-cover">
                                 <img src={verticalfront} className="vertical-front-img" />
                                 <div className="user-content">
-                                {profilepicture?.profile_image ? (<img className="id-photo" src={"profilepicture:image/png;base64," + noprofile?.profile_image} alt="User Avatar" />)
+                                {data?.profile_image ? (<img className="id-photo" src={"data:image/png;base64," + data?.profile_image} alt="User Avatar" />)
                                                 : <img className="id-photo" src={noprofile} alt="User Profie" />}
-                                    <p className="id-name">{idcardvalue?.name}</p>
-                                    <p className="id-reg-no">{idcardvalue?.receipt_no}</p>
+                                    <p className="id-name">{data?.name}</p>
+                                    <p className="id-reg-no">{data?.receipt_no}</p>
                                 </div>
                             </div>
+                        </div>
+                        <div lassName="col-sm-2">
+
                         </div>
                         <div className="col-sm-4">
                             <div className="id-cover">
                                 <img src={verticalback} className="vertical-back-img" />
                                 <div className="user-content">
                                     <p className="id-address">
-                                        {idcardvalue?.current_address}
+                                    (தபெ/கபெ) {data?.father_or_husband} <br/>
+                                            {data?.current_address}
                                     </p>
-                                    <p className="id-phone-no">{idcardvalue?.phone_number}</p>
+                                    <p className="id-phone-no">{data?.phone_number}</p>
                                 </div>
                             </div>
                         </div>
@@ -73,10 +78,10 @@ function UseridCard() {
                                     <img src={horizontalfront} className="horizontal-front-img" />
                                     <div className="user-content">
                                         {/* <img src={profilepicture} className="id-photo" /> */}
-                                        {profilepicture?.profile_image ? (<img className="id-photo" src={"profilepicture:image/png;base64," + noprofile?.profile_image} alt="User Avatar" />)
+                                        {data?.profile_image ? (<img className="id-photo" src={"data:image/png;base64," + data?.profile_image} alt="User Avatar" />)
                                                 : <img className="id-photo" src={noprofile} alt="User Profie" />}
-                                        <p className="id-name">{idcardvalue?.name}</p>
-                                        <p className="id-reg-no">{idcardvalue?.receipt_no}</p>
+                                        <p className="id-name">{data?.name}</p>
+                                        <p className="id-reg-no">{data?.receipt_no}</p>
                                     </div>
                                 </div>
                             </div>
@@ -84,10 +89,11 @@ function UseridCard() {
                                 <div className="id-cover">
                                     <img src={horizontalback} className="horizontal-back-img" />
                                     <div className="user-content">
-                                        <p className="id-address">
-                                            {idcardvalue?.current_address}
+                                        <p className="id-address justify-content-center">
+                                        (தபெ/கபெ) {data?.father_or_husband} <br/>
+                                            {data?.current_address}
                                         </p>
-                                        <p className="id-phone-no">{idcardvalue?.phone_number}</p>
+                                        <p className="id-phone-no">{data?.phone_number}</p>
                                     </div>
                                 </div>
                             </div>

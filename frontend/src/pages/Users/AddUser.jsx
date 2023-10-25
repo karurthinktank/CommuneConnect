@@ -243,11 +243,11 @@ function AddUser() {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
-                        <Breadcrumb title="Home" breadcrumbItem="Add User" />
+                        <Breadcrumb title="குடும்பங்கள்" breadcrumbItem="புதிய சேர்க்கை" />
                         <Card className="usercard">
                             <CardHeader className="position-sticky top-0">
                                 <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
-                                    <Label className="m-0 fw-bold">மொழியை தேர்ந்தெடுங்கள்</Label>
+                                    <Label className="m-0 fw-bold">மொழி</Label>
                                     <Input
                                         type="switch"
                                         onClick={chooseLanguage}
@@ -335,7 +335,7 @@ function AddUser() {
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label>Member ID <span className="text-danger">*</span> </Label>
+                                                        <Label>பதிவு எண்<span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="member_id"
                                                             name="member_id"
@@ -617,12 +617,12 @@ function AddUser() {
                                                     </div>
 
                                                     <div className="mb-3">
-                                                        <Label className="form-label">வட்டம்</Label>
+                                                        <Label className="form-label">வட்டம்/தாலுகா</Label>
                                                         <Input
                                                             id="taluk"
                                                             name="taluk"
                                                             className="form-control"
-                                                            placeholder="வட்டத்தை தேர்ந்தெடுக்கவும்"
+                                                            placeholder="வட்டம்/தாலுகாவை தேர்ந்தெடுக்கவும்"
                                                             type="text"
                                                             onChange={handleChange}
                                                             onBlur={addUserForm.handleBlur}
@@ -631,12 +631,12 @@ function AddUser() {
 
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label className="form-label">பஞ்சாயத்து</Label>
+                                                        <Label className="form-label">பஞ்சாயத்து/ஊராட்சி</Label>
                                                         <Input
                                                             id="panchayat"
                                                             name="panchayat"
                                                             className="form-control"
-                                                            placeholder="பஞ்சாயத்து  தேர்ந்தெடுக்கவும்"
+                                                            placeholder="பஞ்சாயத்து/ஊராட்சியை  தேர்ந்தெடுக்கவும்"
                                                             type="text"
                                                             onChange={handleChange}
                                                             onBlur={addUserForm.handleBlur}
@@ -866,6 +866,7 @@ function AddUser() {
                                                                                         id={`members.${index}.date_of_birth`}
                                                                                         onChange={addUserForm.handleChange}
                                                                                         value={addUserForm.values.members[index].date_of_birth}
+                                                                                        placeholder="DD/MMM/YYYY"
                                                                                     >
                                                                                     </Input>
                                                                                 </FormGroup>

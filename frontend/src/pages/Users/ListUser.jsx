@@ -77,7 +77,7 @@ function UsersListTable() {
         <div className="d-flex flex-wrap align-items-center  gap-2">
             <span className="text-xl text-900 font-bold"></span>
             <Link to={`/users/add`} className="ms-auto">
-                <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>குடும்ப சேரக்கை</button>
+                <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
             </Link>
 
         </div>
@@ -90,7 +90,7 @@ function UsersListTable() {
             <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
-                        <Breadcrumb title="User" breadcrumbItem="Family Members" />
+                        <Breadcrumb title="User" breadcrumbItem="குடும்பங்கள்" />
                         <div className="card">
                             <DataTable
                                 value={users}
@@ -118,7 +118,7 @@ function UsersListTable() {
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column>
-                                <Column field="actions" sortable header="Action" alignFrozen="right" className="custom-border" frozen body={actionItems}></Column>
+                                <Column field="actions" sortable header="Action"  frozen body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />

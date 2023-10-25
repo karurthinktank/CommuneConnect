@@ -24,7 +24,7 @@ function UsersListTable() {
     const actionItems = (row) => {
         return (
             <>
-                <div className="fs-2 d-flex gap-2">
+                <div className="fs-2 d-block gap-2">
 
                     <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle fs-1" /></Link>
                     <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle fs-1 text-secondary" /></Link>
@@ -74,7 +74,7 @@ function UsersListTable() {
     }
 
     const header = (
-        <div className="d-flex flex-wrap align-items-center  gap-2">
+        <div className=" d-flex flex-wrap align-items-center  gap-2">
             <span className="text-xl text-900 font-bold"></span>
             <Link to={`/users/add`} className="ms-auto">
                 <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
@@ -82,6 +82,12 @@ function UsersListTable() {
 
         </div>
     );
+    function dateFormat(rowData, column){
+        return rowData['receipt_date'].toLocaleDateString();
+
+    }
+       
+    
 
 
     return (
@@ -90,7 +96,7 @@ function UsersListTable() {
             <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
-                        <Breadcrumb title="User" breadcrumbItem="குடும்பங்கள்" />
+                        <Breadcrumb title="முகப்பு" breadcrumbItem="குடும்பங்கள்" />
                         <div className="card">
                             <DataTable
                                 value={users}
@@ -106,18 +112,26 @@ function UsersListTable() {
                                             {rowData.name}
                                         </td>
                                     )}
+                                    alignFrozen="left" 
+                                    frozen
                                 ></Column>
-                                <Column field="father_or_husband" sortable header="தபெ/கபெ பெயர் " ></Column>
-                                <Column field="member_id" sortable header="Member ID " ></Column>
+                                <Column field="father_or_husband" sortable header="த/க பெயர் " ></Column>
+                                <Column field="member_id" sortable header="உறுப்பினர் எண்"  ></Column>
                                 <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
-                                <Column field="receipt_date" sortable header="இரசீது தேதி "></Column>
-                                <Column field="mobile_number" sortable header=" அலைபேசி எண்" alignFrozen="right" frozen></Column>
+                                <Column field="receipt_date" sortable header="இரசீது தேதி " 
+                                  body={ (rowData) => {
+                                    const originalDate = new Date(rowData.receipt_date);
+                                    const formattedDate = `${originalDate.getMonth() + 1}/${originalDate.getDate()}/${originalDate.getFullYear()}`;
+                                    return formattedDate;
+                                  }}
+                                ></Column>
+                                <Column field="mobile_number" sortable header=" அலைபேசி எண்" ></Column>
                                 <Column field="current_address" sortable header=" முகவரி"></Column>
-                                <Column field="country" sortable header=" நாடு"></Column>
+                                {/* <Column field="country" sortable header=" நாடு"></Column>
                                 <Column field="state" sortable header=" மாநிலம்"></Column>
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
-                                <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column>
+                                <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column> */}
                                 <Column field="actions" sortable header="Action"  frozen body={actionItems}></Column>
                             </DataTable>
                             <div className="card">

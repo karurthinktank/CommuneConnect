@@ -92,7 +92,9 @@ function AddUser() {
                     member_mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
                     gender: Yup.string().required("This field is required!"),
                     relationship: Yup.string(),
-                    aadhar_no: Yup.string(),
+                    // aadhar_no: Yup.number().min(12, 'Too Short!'),
+                    aadhar_no : Yup.string().matches(/^\d{12}$/, 'Aadhar number must be 12 digits'),
+
                     date_of_birth: Yup.string(),
                     martial_status: Yup.string(),
                     occupation: Yup.string(),
@@ -296,7 +298,7 @@ function AddUser() {
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label>தபெ/கபெ பெயர் <span className="text-danger">*</span> </Label>
+                                                        <Label>த/க பெயர்<span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="father_or_husband"
                                                             name="father_or_husband"
@@ -524,77 +526,7 @@ function AddUser() {
                                                             <FormFeedback type="invalid">{addUserForm.errors.district}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
-                                                        <Input
-                                                            id="receipt_book_no"
-                                                            name="receipt_book_no"
-                                                            className="form-control"
-                                                            type="select"
-                                                            onChange={addUserForm.handleChange}
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.receipt_book_no || ''}
-                                                            invalid={addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? true : false}
-                                                        >
-                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
-                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
-                                                        </Input>
-                                                        {addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_book_no}</FormFeedback>
-                                                        ) : null}
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
-                                                        <Input
-                                                            id="receipt_no"
-                                                            name="receipt_no"
-                                                            className="form-control"
-                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
-                                                            type="number"
-                                                            onChange={addUserForm.handleChange}
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.receipt_no}
-                                                            invalid={addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? true : false}
-                                                        />
-                                                        {addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_no}</FormFeedback>
-                                                        ) : null}
-
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
-                                                        <Input
-                                                            id="profile_image"
-                                                            name="profile_image"
-                                                            className="form-control"
-                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
-                                                            type="file"
-                                                            accept="image/*"
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.profile_image}
-                                                            onChange={handleFiles}
-                                                            invalid={addUserForm.touched.profile_image && addUserForm.errors.profile_image ? true : false}
-
-                                                        />
-                                                        {addUserForm.touched.profile_image && addUserForm.errors.profile_image ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.profile_image}</FormFeedback>
-                                                        ) : null}
-                                                        {profileImage && (
-                                                            <>
-                                                            <div className="preview-container text-center col-md-6">
-                                                                <img src={URL.createObjectURL(profileImage)}
-                                                                    alt="Selected File"
-                                                                    className="preview-image">
-                                                                </img>
-                                                               
-
-
-                                                            </div>
-                                                             <small className="help-text">இந்த படம் பயன்பாட்டின் அட்டவணையின் மேல் காட்டப்படும்.</small>
-                                                             </>
-                                                        )
-                                                        }
-                                                    </div>
+                                                   
 
                                                 </div>
                                                 <div className="col-md-6">
@@ -765,6 +697,77 @@ function AddUser() {
                                                             value={addUserForm.values.phone_number}
                                                         />
 
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
+                                                        <Input
+                                                            id="receipt_book_no"
+                                                            name="receipt_book_no"
+                                                            className="form-control"
+                                                            type="select"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.receipt_book_no || ''}
+                                                            invalid={addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? true : false}
+                                                        >
+                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
+                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
+                                                        </Input>
+                                                        {addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_book_no}</FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
+                                                        <Input
+                                                            id="receipt_no"
+                                                            name="receipt_no"
+                                                            className="form-control"
+                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
+                                                            type="number"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.receipt_no}
+                                                            invalid={addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? true : false}
+                                                        />
+                                                        {addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_no}</FormFeedback>
+                                                        ) : null}
+
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
+                                                        <Input
+                                                            id="profile_image"
+                                                            name="profile_image"
+                                                            className="form-control"
+                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.profile_image}
+                                                            onChange={handleFiles}
+                                                            invalid={addUserForm.touched.profile_image && addUserForm.errors.profile_image ? true : false}
+
+                                                        />
+                                                        {addUserForm.touched.profile_image && addUserForm.errors.profile_image ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.profile_image}</FormFeedback>
+                                                        ) : null}
+                                                        {profileImage && (
+                                                            <>
+                                                            <div className="preview-container text-center col-md-6">
+                                                                <img src={URL.createObjectURL(profileImage)}
+                                                                    alt="Selected File"
+                                                                    className="preview-image">
+                                                                </img>
+                                                               
+
+
+                                                            </div>
+                                                             <small className="help-text">இந்த படம் பயன்பாட்டின் அட்டவணையின் மேல் காட்டப்படும்.</small>
+                                                             </>
+                                                        )
+                                                        }
                                                     </div>
 
                                                 </div>

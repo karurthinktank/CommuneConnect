@@ -315,7 +315,7 @@ function EditUser() {
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label>தபெ/கபெ பெயர் <span className="text-danger">*</span> </Label>
+                                                        <Label>த/க பெயர்<span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="father_or_husband"
                                                             name="father_or_husband"
@@ -544,80 +544,7 @@ function EditUser() {
                                                             <FormFeedback type="invalid">{editUserForm.errors.district}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
-                                                        <Input
-                                                            id="receipt_book_no"
-                                                            name="receipt_book_no"
-                                                            className="form-control"
-                                                            type="select"
-                                                            onChange={editUserForm.handleChange}
-                                                            onBlur={editUserForm.handleBlur}
-                                                            value={editUserForm.values.receipt_book_no || ''}
-                                                            invalid={editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? true : false}
-                                                        >
-                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
-                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
-                                                        </Input>
-                                                        {editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? (
-                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_book_no}</FormFeedback>
-                                                        ) : null}
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
-                                                        <Input
-                                                            id="receipt_no"
-                                                            name="receipt_no"
-                                                            className="form-control"
-                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
-                                                            type="number"
-                                                            onChange={editUserForm.handleChange}
-                                                            onBlur={editUserForm.handleBlur}
-                                                            value={editUserForm.values.receipt_no}
-                                                            invalid={editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? true : false}
-                                                        />
-                                                        {editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? (
-                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_no}</FormFeedback>
-                                                        ) : null}
-
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
-                                                        <Input
-                                                            id="profile_image"
-                                                            name="profile_image"
-                                                            className="form-control"
-                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
-                                                            type="file"
-                                                            onBlur={editUserForm.handleBlur}
-                                                            value={editUserForm.values.profile_image}
-                                                            onChange={handleFiles}
-                                                            invalid={editUserForm.touched.profile_image && editUserForm.errors.profile_image ? true : false}
-
-                                                        />
-                                                        {editUserForm.touched.profile_image && editUserForm.errors.profile_image ? (
-                                                            <FormFeedback type="invalid">{editUserForm.errors.profile_image}</FormFeedback>
-                                                        ) : null}
-                                                    </div>
-                                                    {profileImage ?( 
-                                                        <>
-                                                        <div className="preview-container text-center col-md-6">
-                                                          <img src={URL.createObjectURL(profileImage)}
-                                                          className="preview-image"
-                                                          alt="selected-file"
-                                                          ></img>
-                                                        </div>
-                                                        </>
-                                                    ): (
-                                                        <div className="preview-container text-center col-md-6">
-                                                        <img src={profile}
-                                                        className="preview-image"
-                                                        alt="selected-file"
-                                                        ></img>
-                                                      </div> 
-                                                    )
-                                                }
-
+                                                   
                                                 </div>
                                                 <div className="col-md-6">
                                                     <div className="mb-3">
@@ -784,6 +711,79 @@ function EditUser() {
                                                         />
 
                                                     </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
+                                                        <Input
+                                                            id="receipt_book_no"
+                                                            name="receipt_book_no"
+                                                            className="form-control"
+                                                            type="select"
+                                                            onChange={editUserForm.handleChange}
+                                                            onBlur={editUserForm.handleBlur}
+                                                            value={editUserForm.values.receipt_book_no || ''}
+                                                            invalid={editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? true : false}
+                                                        >
+                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
+                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
+                                                        </Input>
+                                                        {editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_book_no}</FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
+                                                        <Input
+                                                            id="receipt_no"
+                                                            name="receipt_no"
+                                                            className="form-control"
+                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
+                                                            type="number"
+                                                            onChange={editUserForm.handleChange}
+                                                            onBlur={editUserForm.handleBlur}
+                                                            value={editUserForm.values.receipt_no}
+                                                            invalid={editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? true : false}
+                                                        />
+                                                        {editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_no}</FormFeedback>
+                                                        ) : null}
+
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
+                                                        <Input
+                                                            id="profile_image"
+                                                            name="profile_image"
+                                                            className="form-control"
+                                                            placeholder="குடும்ப தலைவரின் புகைப்படத்தை பதிவேற்றவும் "
+                                                            type="file"
+                                                            onBlur={editUserForm.handleBlur}
+                                                            value={editUserForm.values.profile_image}
+                                                            onChange={handleFiles}
+                                                            invalid={editUserForm.touched.profile_image && editUserForm.errors.profile_image ? true : false}
+
+                                                        />
+                                                        {editUserForm.touched.profile_image && editUserForm.errors.profile_image ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.profile_image}</FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    {profileImage ?( 
+                                                        <>
+                                                        <div className="preview-container text-center col-md-6">
+                                                          <img src={URL.createObjectURL(profileImage)}
+                                                          className="preview-image"
+                                                          alt="selected-file"
+                                                          ></img>
+                                                        </div>
+                                                        </>
+                                                    ): (
+                                                        <div className="preview-container text-center col-md-6">
+                                                        <img src={profile}
+                                                        className="preview-image"
+                                                        alt="selected-file"
+                                                        ></img>
+                                                      </div> 
+                                                    )
+                                                }
 
                                                 </div>
                                             </div>

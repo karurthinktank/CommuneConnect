@@ -63,7 +63,7 @@ function ViewUser() {
                                                 
                                         </div>
                                         <div className="mt-1 text-center">
-                                                <Badge className="rounded-pill d-inlineflex p-2" color="secondary">Member ID<span>
+                                                <Badge className="rounded-pill d-inlineflex p-2" color="secondary"> உறுப்பினர் பதிவு எண்<span>
                                                     <Badge color="success" className="rounded-pill ms-2 fs-7">{data?.member_id}</Badge></span></Badge>
                                             </div>
 

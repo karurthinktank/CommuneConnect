@@ -119,7 +119,7 @@ function EditUser() {
                     mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
                     gender: Yup.string().required("This field is required!"),
                     relationship: Yup.string(),
-                    aadhar_no: Yup.string().nullable(true),
+                    aadhar_no : Yup.string().matches(/^\d{12}$/, 'Aadhar number must be 12 digits'),
                     date_of_birth: Yup.string().nullable(true),
                     martial_status: Yup.string(),
                     occupation: Yup.string(),

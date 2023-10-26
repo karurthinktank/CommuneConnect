@@ -169,7 +169,7 @@ function EditUser() {
         let name = event.target.name;
 
         if (inputs[name]) {
-            translate = Sanscript.t(inputs[name], "itrans", "tamil");
+            translate = Sanscript.t(inputs[name], "itrans_dravidian", "tamil");
         }
         value = value.replace(inputs[name], translate);
         setInputs(values => ({ ...values, [name]: '' }));
@@ -210,7 +210,7 @@ function EditUser() {
             setFieldValue(values => ({ ...values, [name]:"" }))
         }
         if(previousValue){
-            translate = Sanscript.t(previousValue, "itrans", "tamil");
+            translate = Sanscript.t(previousValue, "itrans_dravidian", "tamil");
             let splitBySpace = value.split(/\s/g);
             let no_char_remv = 0;
             if(splitBySpace.length <= 1){

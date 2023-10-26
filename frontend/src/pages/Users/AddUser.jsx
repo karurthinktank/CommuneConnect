@@ -198,7 +198,7 @@ function AddUser() {
             setFieldValue(values => ({ ...values, [name]:"" }))
         }
         if(previousValue){
-            translate = Sanscript.t(previousValue, "itrans", "tamil");
+            translate = Sanscript.t(previousValue, "itrans_dravidian", "tamil");
         // value = value.replace(current_value, translate);
             let splitBySpace = value.split(/\s/g);
             let no_char_remv = 0;

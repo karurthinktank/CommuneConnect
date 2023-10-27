@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "thinktank-tms-dev-env",
+  "private_key_id": "026f3a0146a1c1166b148957e9079a32c257a0b7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCbWBRMEA1Rwr9K\nxERHcp89Hte7Yvynism3VTR6/QSnT3hPA645IXany6Y3ioitBXhP2sO9MDmOgIbG\nYr3AowfiBRAaBvefv+Qc0g3wT/p5Xg/H2DAr10ydNWpPPlJAU3w7PVm2ftgJAvJ8\nIku9/ysMb2Fg+zsJw4dQmbk/v8nrOGoPgp13suxvdOPMi/NYDJg1frMtlLMs2jIM\nBCudKqHl2F+WEuJoXJBnwRrG+uRkM2iwicNUi9iBXwxYWEYkMTw0ctcRQhRvK8/Z\nAQaNXsFaR3oKSvEDiYQnVN/UHWADvcMKqqYZgX8DWvXxknBMOefMp6AV+XQnbMDD\nbdosBrY7AgMBAAECggEAAVaqXaMREOcNoMwBFefQWVSX4aOW1QfsLYKV+LWPxaUP\nTb0cQzSVq4IdP11FDHTZ9mzGfzy2b21Ru/p4L6GwdzqT8HhME1gT8e9k8x4XqIqm\n8oLTyVCvujKV+69oJCXBMAzIOR0p+56Z8MMttrkpUvmit4YJP/WzHjNiEm5Q3ibt\nrGrxdcFgOHds5561tvsaHoHUJKCuv2uJvX8qaYS8GHcTggw4tFF3j5XaiKxn3Gbr\nLUYEAlEjlz7OMRG6oxM7Ip0dUOph0tiYwfTwdGsxpdfvuqFdojGAmI5248M+xpsS\nMk/60CDsv2pnowKBGrYRbyZu0vg8Z+4+QWwJo6RgAQKBgQDR/CUz2BQaZWWsQijH\nKGMG/TqQTELn/Jvg06ctpBA70EkxPCbz5ynwwD+OXcpP8+1ynZktiY4GaGa8xI8u\np5AnWRcsSbmXgrVFBGzaTVK53wa3e7+q+huBAaZk0zyFKjVD2Zwq6AyFYguzMlMN\nyZCryx2J3DjmKBaIPHeI3lmyoQKBgQC9YqidXDOT+jhNToI/Xcx7XsvlEsIu+14B\nLX/OhCgRKrwZkzeyhtOjcaNccEioVszD9dAA8uXPJmPtEvfWlsThI/3VDyL6xFNq\nUBOBm56cxWouMXYIsKXr0Fj4try3qfnW/bkryLjzgKCLLCTF5/Fhv0DD4hJUv6ER\n2jBzJ7/XWwKBgGdxfG4+yyB5xQ2IBgieZ7JAu0Hsn6Ui9zNZcOj2Ap1ErVnY1SOg\nRDP6sRSUNZ8PfnDRHG2nbtTPR5VEi3ijSUtpAxZpN0lhNaVLWchtAQzZxrhK+Q/k\nZ/o0cuEGgrDjKxxCrkEg0VJAC516dBm9q0xGIkYQu+L96qOwjf5Z8vwhAoGAVqA/\nEiNvcDte73V+vC9SbgfxaamH6ueNmypNsI/gp+GNQoGFU4K6YaOEHq85fM6fQO86\nIoT4OyWLRZCMjrpN+dF1tLQEwwF0SkewdHNTPNBL/i8fl1/9tPyLBdDIR5ZXMlDC\nF1Xry23FgYNCmse6MITDwhWxXtR8f2b3DGVdKcsCgYEAnMIwkLkyyLbqpOYlIPuc\nm01arF0iVIW8sHRRKcLrFzGAamEPkivYZC3XerLee2Ux0FrRywlra95/acfN+/CQ\nLPD1aY1wtIoECReaRo9SN7mH/57TTjRZMDK1B95DubEfsUuFBrSlFoSCyHlnVrqM\nw3gjqbRA813JfOIjfkEqwIU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "thinktank-tms-dev-env@appspot.gserviceaccount.com",
+  "client_id": "117609260524835344519",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thinktank-tms-dev-env%40appspot.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

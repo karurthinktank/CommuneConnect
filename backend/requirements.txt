@@ -8,3 +8,4 @@ requests
 Pillow
 sendgrid
 sendgrid-mail
+google-cloud-storage

@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from rest_framework.response import Response
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.base_user import get_random_string
+from django.conf import settings
 
 from django.db.models import Q
 from rest_framework.views import APIView
@@ -19,6 +20,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.serializers import TokenVerifySerializer
 import datetime
 from rest_framework.decorators import action
+from utils.google_ import upload_from_string
 
 
 """
@@ -102,6 +104,8 @@ class PeopleViewSet(viewsets.ModelViewSet):
         data = dict()
         try:
             profile_image = request.FILES.get('profile_image')
+            if profile_image:
+                data['profile_image'] = self.upload_images(profile_image, "profile", data['member_id'])
             data = json.loads(request.POST.get("form_data"))
             existing_instance = People.objects.filter(member_id=data['member_id']).first()
             if existing_instance:
@@ -179,8 +183,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
             data['code'] = people.code
             data['created_by'] = people.created_by
             if profile_image:
-                profile_image = profile_image.read()
-                data['profile_image'] = base64.b64encode(profile_image).decode()
+                data['profile_image'] = self.upload_images(profile_image, "profile", data['member_id'])
             if not data['receipt_date']:
                 data['receipt_date'] = None
             serializer = self.serializer_class(data=data)
@@ -247,6 +250,34 @@ class PeopleViewSet(viewsets.ModelViewSet):
             logging.error({"Member ID": data['member_id'], "message": str(e)})
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @staticmethod
+    def upload_images(attachment, folder, member_id):
+        try:
+            obj = dict()
+            # attachment = request.FILES.get(file)
+            file_content = attachment.read()
+            content_type = attachment.content_type
+            extension = attachment.name.split(".")[-1]
+            name = "{}-profile".format(str(member_id))
+            file_name = "{}/{}{}".format(folder, name, extension)
+            blob = upload_from_string(
+                file_content,
+                content_type,
+                file_name,
+                settings.BUCKET_NAME)
+            if blob:
+                obj = {
+                    "bucket_name": blob.bucket.name,
+                    "file_path": blob.name,
+                    "name": attachment.name,
+                    "public_url": blob.public_url,
+                    "media_link": blob.media_link
+                }
+            return obj
+        except Exception as e:
+            logging.error(str(e))
+            raise e
+
     def retrieve(self, request, *args, **kwargs):
         response = dict()
         try:
@@ -296,6 +327,25 @@ class PeopleViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user, context={'request': request})
         data = serializer.data
         return Response(data)
+
+    @action(methods=['post'], detail=True, url_path='card-map')
+    def card_map(self, request, pk):
+        response = dict()
+        try:
+            data = request.data
+            people = People.objects.filter(member_id=pk).first()
+            people.modified_by = request.user.first_name
+            people.modified_at = timezone.now()
+            people.is_card_mapped = True
+            people.id_card_no = data['card_no']
+            people.save()
+            response['message'] = "Card Mapped Successfully!"
+            response['code'] = 200
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as e:
+            response['message'] = str(e)
+            response['code'] = 500
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class DashboardViewSet(viewsets.ModelViewSet):

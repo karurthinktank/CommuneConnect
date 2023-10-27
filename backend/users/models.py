@@ -42,7 +42,7 @@ class People(models.Model):
     international_mobile_number = models.CharField(max_length=15, null=True, blank=True)
     std_code = models.CharField(max_length=10, null=True, blank=True)
     phone_number = models.CharField(max_length=10, null=True, blank=True)
-    profile_image = models.TextField(null=True, blank=True)
+    profile_image = models.JSONField(null=True)
     is_profile_completed = models.BooleanField(default=False)
     is_card_mapped = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

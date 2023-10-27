@@ -68,7 +68,7 @@ function UsersListTable() {
     };
     const getImage = (row)=>{
         if(row.profile_image)
-            return<img src={"data:image/png;base64," + row?.profile_image} className="shadow-2 border-round" style={{width:"80px"}}/>
+            return<img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"80px"}}/>
         else
             return<img src={noprofile} className="shadow-2 border-round" style={{width:"80px"}}/>
     }
@@ -82,6 +82,7 @@ function UsersListTable() {
 
         </div>
     );
+
     function dateFormat(rowData, column){
         return rowData['receipt_date'].toLocaleDateString();
 

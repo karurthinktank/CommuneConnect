@@ -185,3 +185,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SENDGRID_API_KEY = 'sg7d69ba1825115dbfb3d4b23d09bc606f'
 DOMAIN_NAME = "tms.com"
 SERVER_URL = ""
+GOOGLE_APPLICATION_CREDENTIALS = "thinktank-tms-dev-env-026f3a0146a1.json"
+BUCKET_NAME = "tms-dev-media"

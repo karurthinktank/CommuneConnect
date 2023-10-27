@@ -107,11 +107,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'tms_dev',
-            'USER': 'root',
-            'PASSWORD': 'Ranjith123',
+            'NAME': 'tms',
+            'USER': CLOUDSQL_DB_USER,
+            'PASSWORD': CLOUDSQL_DB_PWD,
             'HOST': 'localhost',
-            'PORT': '5432',
+            'PORT': '5433',
         }
     }
 

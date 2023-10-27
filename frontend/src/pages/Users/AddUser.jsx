@@ -375,7 +375,7 @@ function AddUser() {
                                                             <FormFeedback type="invalid">{addUserForm.errors.is_charity_member}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                    {addUserForm.values.is_charity_member && (<div className="mb-3">
+                                                    {addUserForm.values.is_charity_member == "true" && (<div className="mb-3">
                                                         <Label>உறுப்பினர் பதிவு எண் <span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="charity_registration_number"

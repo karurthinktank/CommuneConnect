@@ -11,6 +11,7 @@ import noprofile from '../../assets/images/noprofile.jpg';
 import Loader from "components/Common/Loader";
 import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
+import moment from 'moment/moment';
 
 
 function UsersListTable() {
@@ -20,6 +21,8 @@ function UsersListTable() {
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [showLoader, setShowLoader] = useState(false);
+    const [filter, setFilter] = useState();
+
 
     const actionItems = (row) => {
         return (
@@ -28,7 +31,7 @@ function UsersListTable() {
 
                     <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle fs-1" /></Link>
                     <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle fs-1 text-secondary" /></Link>
-                    <Link to={"/users/idcard/" + row?.member_id}><i className="mdi mdi-card-account-details text-success fs-1" /></Link>
+                    {row.is_profile_completed && <Link to={"/users/idcard/" + row?.member_id}><i className="mdi mdi-card-account-details text-success fs-1" /></Link> }
                 </div>
             </>
         );
@@ -66,30 +69,48 @@ function UsersListTable() {
         setCurrentPage(page);
         fetchUsers(page, event.rows)
     };
+
     const getImage = (row)=>{
-        if(row.profile_image)
-            return<img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"80px"}}/>
+        let _border = row.is_profile_completed ? "2px solid green" : "2px solid red";
+        console.log(_border)
+        if(row.profile_image){
+            if(row.is_profile_completed)
+                return<img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid green", borderRadius: "50%" }}/>
+            else
+                return<img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid red", borderRadius: "50%" }}/>
+        }
         else
-            return<img src={noprofile} className="shadow-2 border-round" style={{width:"80px"}}/>
+            return<img src={noprofile} className="shadow-2 border-round" style={{width:"60px", border: "3px solid red", borderRadius: "50%"}}/>
+    }
+
+    const handleFilter = event => {
+        setFilter(event.target.value);
+    }
+
+    const handleSearch = () => {
+        fetchUsers(currentPage, rows, {"search":filter});
+    }
+
+    const handleClear = () => {
+        setFilter("");
+        fetchUsers(currentPage, rows);
     }
 
     const header = (
         <div className=" d-flex flex-wrap align-items-center  gap-2">
             <span className="text-xl text-900 font-bold"></span>
+            <div>
+                <input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id"/>
+                <button type="button" onClick={handleSearch}>Search</button>
+                <button type="button" onClick={handleClear}>X</button>
+            </div>
             <Link to={`/users/add`} className="ms-auto">
                 <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
             </Link>
 
         </div>
-    );
-
-    function dateFormat(rowData, column){
-        return rowData['receipt_date'].toLocaleDateString();
-
-    }
-       
+    );       
     
-
 
     return (
         <>
@@ -103,37 +124,37 @@ function UsersListTable() {
                                 value={users}
                                 header={header}
                                 scrollable>
-                                <Column field="image" sortable body={(rowData) => getImage(rowData)} 
+                                <Column field="image"  body={(rowData) => getImage(rowData)} 
                                 header="குடும்ப தலைவர் புகைப்படம்" ></Column>
                                 <Column
                                     field="name"
                                     header="குடும்ப தலைவர் பெயர் "
-                                    body={(rowData) => (
-                                        <td className={rowData.is_card_mapped ? 'green-cell' : 'red-cell'}>
-                                            {rowData.name}
-                                        </td>
-                                    )}
-                                    alignFrozen="left" 
-                                    frozen
+                                    sortable
+                                    // body={(rowData) => (
+                                    //     <td className={rowData.is_card_mapped ? 'green-cell' : 'red-cell'}>
+                                    //         {rowData.name}
+                                    //     </td>
+                                    // )}
+                                    // alignFrozen="left" 
+                                    // frozen
                                 ></Column>
                                 <Column field="father_or_husband" sortable header="த/க பெயர் " ></Column>
                                 <Column field="member_id" sortable header="உறுப்பினர் எண்"  ></Column>
                                 <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
-                                <Column field="receipt_date" sortable header="இரசீது தேதி " 
+                                <Column field="receipt_date" header="இரசீது தேதி " 
                                   body={ (rowData) => {
-                                    const originalDate = new Date(rowData.receipt_date);
-                                    const formattedDate = `${originalDate.getMonth() + 1}/${originalDate.getDate()}/${originalDate.getFullYear()}`;
+                                    const formattedDate = rowData.receipt_date ? moment(rowData.receipt_date).format("DD/MM/YYYY") : "";
                                     return formattedDate;
                                   }}
                                 ></Column>
                                 <Column field="mobile_number" sortable header=" அலைபேசி எண்" ></Column>
-                                <Column field="current_address" sortable header=" முகவரி"></Column>
+                                <Column field="current_address"  header=" முகவரி"></Column>
                                 {/* <Column field="country" sortable header=" நாடு"></Column>
                                 <Column field="state" sortable header=" மாநிலம்"></Column>
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column> */}
-                                <Column field="actions" sortable header="Action"  frozen body={actionItems}></Column>
+                                <Column field="actions" header="Action"  frozen body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />

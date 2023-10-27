@@ -58,7 +58,7 @@ function ViewUser() {
                                 <div className="row p-3 gap-5">
                                     <div className="col-md-4  p-3 member-details" >
                                         <div className="d-flex justify-content-center">
-                                            {data?.profile_image ? (<img className="photo" src={"data:image/png;base64," + data?.profile_image} alt="User Avatar" />)
+                                            {data?.profile_image ? (<img className="photo" src={data?.profile_image.public_url} alt="User Avatar" />)
                                                 : <img className="photo" src={noprofile} alt="User Profie" />}
                                                 
                                         </div>

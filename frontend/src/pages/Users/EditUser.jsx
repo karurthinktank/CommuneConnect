@@ -54,7 +54,7 @@ function EditUser() {
             setData(response.data.data);
             setShowLoader(false);
             if(response.data.data?.profile_image)
-                setProfile("data:image/png;base64," + response.data.data?.profile_image);
+                setProfile(response.data.data?.profile_image.public_url);
             else
             setProfile(noprofile);
         }
@@ -394,7 +394,7 @@ function EditUser() {
                                                             <FormFeedback type="invalid">{editUserForm.errors.is_charity_member}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                    {editUserForm.values.is_charity_member && (<div className="mb-3">
+                                                    {editUserForm.values.is_charity_member  == "true" && (<div className="mb-3">
                                                         <Label>உறுப்பினர் பதிவு எண் <span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="charity_registration_number"

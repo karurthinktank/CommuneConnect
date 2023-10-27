@@ -46,7 +46,7 @@ function UseridCard() {
                             <div className="id-cover">
                                 <img src={verticalfront} className="vertical-front-img" />
                                 <div className="user-content">
-                                {data?.profile_image ? (<img className="id-photo" src={"data:image/png;base64," + data?.profile_image} alt="User Avatar" />)
+                                {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
                                                 : <img className="id-photo" src={noprofile} alt="User Profie" />}
                                     <p className="id-name">{data?.name}</p>
                                     <p className="id-reg-no">{data?.receipt_no}</p>
@@ -61,7 +61,7 @@ function UseridCard() {
                                 <img src={verticalback} className="vertical-back-img" />
                                 <div className="user-content">
                                     <p className="id-address">
-                                    (தபெ/கபெ) {data?.father_or_husband} <br/>
+                                    த/க பெ: {data?.father_or_husband} <br/>
                                             {data?.current_address}
                                     </p>
                                     <p className="id-phone-no">{data?.phone_number}</p>
@@ -78,7 +78,7 @@ function UseridCard() {
                                     <img src={horizontalfront} className="horizontal-front-img" />
                                     <div className="user-content">
                                         {/* <img src={profilepicture} className="id-photo" /> */}
-                                        {data?.profile_image ? (<img className="id-photo" src={"data:image/png;base64," + data?.profile_image} alt="User Avatar" />)
+                                        {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
                                                 : <img className="id-photo" src={noprofile} alt="User Profie" />}
                                         <p className="id-name">{data?.name}</p>
                                         <p className="id-reg-no">{data?.receipt_no}</p>
@@ -90,7 +90,7 @@ function UseridCard() {
                                     <img src={horizontalback} className="horizontal-back-img" />
                                     <div className="user-content">
                                         <p className="id-address justify-content-center">
-                                        (தபெ/கபெ) {data?.father_or_husband} <br/>
+                                        த/க பெ: {data?.father_or_husband} <br/>
                                             {data?.current_address}
                                         </p>
                                         <p className="id-phone-no">{data?.phone_number}</p>

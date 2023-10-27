@@ -51,8 +51,13 @@ class PeopleViewSet(viewsets.ModelViewSet):
             search_text = query_params.get("search", None)
             sort_by = query_params.get("sort_by", "id")
             order_by = query_params.get("order_by", None)
+            q_object = Q()
             if order_by and order_by == "asc":
                 sort_by = "-" + sort_by
+
+            if search_text:
+                q_object.add(Q(name__icontains=search_text) | Q(mobile_number__icontains=search_text) |
+                          Q(member_id__icontains=search_text), Q.OR)
             try:
                 count = int(count)
                 count = 200 if count > 200 else count
@@ -63,8 +68,8 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 page = int(page)
             except Exception:
                 page = 1
-            case_list = People.objects.filter(deleted=False).order_by(sort_by)
-            paginator = Paginator(case_list, count)
+            user_list = People.objects.filter(q_object, deleted=False).order_by(sort_by)
+            paginator = Paginator(user_list, count)
             try:
                 resource = paginator.page(page)
             except PageNotAnInteger:
@@ -76,7 +81,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
             payload = {
                 "data": data,
                 "current_page": resource.number,
-                "total_count": case_list.count(),
+                "total_count": user_list.count(),
                 "has_next": resource.has_next(),
                 "has_previous": resource.has_previous(),
                 "count": count,

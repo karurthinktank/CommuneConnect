@@ -13,7 +13,7 @@ import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
 import moment from 'moment/moment';
 import MemberModal from "pages/Users/MemberModal";
-import { Badge } from "reactstrap";
+import { Badge ,Input,Button} from "reactstrap";
 function UsersListTable() {
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
@@ -39,11 +39,11 @@ function UsersListTable() {
     
     useEffect(() => {
         fetchUsers(currentPage);
-        
-    }, []);
-    useEffect(()=>{
         handleSearch();
-    },[filter])
+    }, []);
+    // useEffect(()=>{
+       
+    // },[filter])
 
     const fetchUsers = async (page, count = rows, additiotal_params = {}) => {
         setShowLoader(true);
@@ -125,12 +125,17 @@ function UsersListTable() {
         <div className=" d-flex flex-wrap ">
             <span className="text-xl text-900 font-bold"></span>
             <div className="ms-auto d-flex align-items-center  gap-2">
-            {/* <div>
-                <input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id"/>
-                <button type="button" onClick={handleSearch}>Search</button>
-                <button type="button" onClick={handleClear}>X</button>
-            </div> */}
+            <div className="d-flex align-items-center gap-3">
             <form className="app-search d-none d-lg-block">
+                <div className="position-relative">
+                  <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id"/>
+                  <span onClick={handleClear}>x</span>                
+                </div>
+                </form>
+                <Button type="button" onClick={handleSearch}>Search</Button>
+                
+            </div>
+            {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input
                   type="text"
@@ -141,7 +146,7 @@ function UsersListTable() {
                 />
                 <span className="bx bx-search-alt" />
               </div>
-            </form>
+            </form> */}
             <Link to={`/users/add`} className="">
                 <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
             </Link>

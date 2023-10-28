@@ -12,8 +12,8 @@ import Loader from "components/Common/Loader";
 import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
 import moment from 'moment/moment';
-
-
+import MemberModal from "pages/Users/MemberModal";
+import { Badge } from "reactstrap";
 function UsersListTable() {
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
@@ -41,6 +41,9 @@ function UsersListTable() {
         fetchUsers(currentPage);
         
     }, []);
+    useEffect(()=>{
+        handleSearch();
+    },[filter])
 
     const fetchUsers = async (page, count = rows, additiotal_params = {}) => {
         setShowLoader(true);
@@ -55,7 +58,9 @@ function UsersListTable() {
             setUsers(response.data.data);
             setTotalRows(response.total_count);
             setShowLoader(false);
+            console.log(users);
         }
+     
         else {
             setShowLoader(false);
             CustomToast(response.data.message, "error");
@@ -71,16 +76,36 @@ function UsersListTable() {
     };
 
     const getImage = (row)=>{
-        let _border = row.is_profile_completed ? "2px solid green" : "2px solid red";
+        let _border = row.is_profile_completed ? "2px solid green" : "1px solid red";
         console.log(_border)
         if(row.profile_image){
-            if(row.is_profile_completed)
-                return<img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid green", borderRadius: "50%" }}/>
-            else
-                return<img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid red", borderRadius: "50%" }}/>
+            if(row.is_profile_completed && row.is_card_mapped){
+                <div>
+                   <Badge color="success" className="rounded-pill ms-2 fs-7">Mapped</Badge>
+                <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid green", borderRadius: "50%" }}/>
+                 </div>
+            return
+            }
+                   
+                
+            else{
+                
+                return (
+                    <div>
+                     <Badge color="success" className="rounded-pill ms-2 fs-7">
+                       Mapped
+                     </Badge>
+                    <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid #FFCC00", borderRadius: "50%" }}/>
+                    </div>
+                
+                )
+                
+            }
+             
+               
         }
         else
-            return<img src={noprofile} className="shadow-2 border-round" style={{width:"60px", border: "3px solid red", borderRadius: "50%"}}/>
+            return<img src={noprofile} className="shadow-2 border-round" style={{width:"60px", border: "2px solid #FFCC00", borderRadius: "50%"}}/>
     }
 
     const handleFilter = event => {
@@ -97,16 +122,31 @@ function UsersListTable() {
     }
 
     const header = (
-        <div className=" d-flex flex-wrap align-items-center  gap-2">
+        <div className=" d-flex flex-wrap ">
             <span className="text-xl text-900 font-bold"></span>
-            <div>
+            <div className="ms-auto d-flex align-items-center  gap-2">
+            {/* <div>
                 <input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id"/>
                 <button type="button" onClick={handleSearch}>Search</button>
                 <button type="button" onClick={handleClear}>X</button>
-            </div>
-            <Link to={`/users/add`} className="ms-auto">
+            </div> */}
+            <form className="app-search d-none d-lg-block">
+              <div className="position-relative">
+                <input
+                  type="text"
+                  className="form-control bg-white"
+                  onChange={handleFilter} 
+                  value={filter}
+                  placeholder="Filter by Name, Mobille Number or Member Id"
+                />
+                <span className="bx bx-search-alt" />
+              </div>
+            </form>
+            <Link to={`/users/add`} className="">
                 <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
             </Link>
+            </div>
+            
 
         </div>
     );       

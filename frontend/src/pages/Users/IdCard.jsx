@@ -18,87 +18,134 @@ function UseridCard() {
     const [data, setCardvalue] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
     const { id } = useParams();
-    useEffect(()=>{
+    useEffect(() => {
         fetchUser();
-    },[])
-    const fetchUser = async()=>{
+    }, [])
+    const fetchUser = async () => {
         setShowLoader(true);
         let url = USER_URL + id + '/';
-         const response = await GET(url);
-         if(response.status === 200){
+        const response = await GET(url);
+        if (response.status === 200) {
             setCardvalue(response.data.data);
             setShowLoader(false);
             console.log(data);
-         }
-         else{
-            CustomToast(response.data.message,"error")
+        }
+        else {
+            CustomToast(response.data.message, "error")
             setShowLoader(false);
-         }
+        }
     }
     return (
         <>
             {showLoader && <Loader />}
             <div className="page-content">
                 <div className="container-fluid">
-                    <div className="id-vertical mb-5">
-                    <div className="row justify-content-center gap-5">
-                        <div className="col-sm-4">
-                            <div className="id-cover">
-                                <img src={verticalfront} className="vertical-front-img" />
-                                <div className="user-content">
-                                {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
-                                                : <img className="id-photo" src={noprofile} alt="User Profie" />}
-                                    <p className="id-name">{data?.name}</p>
-                                    <p className="id-reg-no">{data?.receipt_no}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div lassName="col-sm-2">
+                    {(() => {
+                        if (data?.is_charity_member) {
+                            
+                            return(
+                            <>
+                                <div className="id-vertical mb-5">
+                                    <div className="row justify-content-center gap-5">
+                                        <div className="col-sm-4">
+                                            <div className="id-cover">
+                                                <img src={verticalfront} className="vertical-front-img" />
+                                                <div className="user-content">
+                                                    {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
+                                                        : <img className="id-photo" src={noprofile} alt="User Profie" />}
+                                                    <p className="id-name">{data?.name}</p>
+                                                    <p className="id-reg-no">{data?.receipt_no}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div lassName="col-sm-2">
 
-                        </div>
-                        <div className="col-sm-4">
-                            <div className="id-cover">
-                                <img src={verticalback} className="vertical-back-img" />
-                                <div className="user-content">
-                                    <p className="id-address">
-                                    த/க பெ: {data?.father_or_husband} <br/>
-                                            {data?.current_address}
-                                    </p>
-                                    <p className="id-phone-no">{data?.phone_number}</p>
-                                </div>
-                            </div>
-                        </div>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="id-cover">
+                                                <img src={verticalback} className="vertical-back-img" />
+                                                <div className="user-content">
+                                                    <p className="id-address">
+                                                        த/க பெ: {data?.father_or_husband} <br />
+                                                        {data?.current_address}
+                                                    </p>
+                                                    <p className="id-phone-no">{data?.phone_number}</p>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    </div>
-                    </div>
-                    <div className="id-horizontal ">
-                        <div className="row justify-content-center d-block">
-                            <div className="col-sm-6 mb-3  m-auto">
-                                <div className="id-cover">
-                                    <img src={horizontalfront} className="horizontal-front-img" />
-                                    <div className="user-content">
-                                        {/* <img src={profilepicture} className="id-photo" /> */}
-                                        {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
-                                                : <img className="id-photo" src={noprofile} alt="User Profie" />}
-                                        <p className="id-name">{data?.name}</p>
-                                        <p className="id-reg-no">{data?.receipt_no}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-sm-6 m-auto">
-                                <div className="id-cover">
-                                    <img src={horizontalback} className="horizontal-back-img" />
-                                    <div className="user-content">
-                                        <p className="id-address justify-content-center">
-                                        த/க பெ: {data?.father_or_husband} <br/>
-                                            {data?.current_address}
-                                        </p>
-                                        <p className="id-phone-no">{data?.phone_number}</p>
+                                <div className="id-horizontal ">
+                                    <div className="row justify-content-center d-block">
+                                        <div className="col-sm-6 mb-3  m-auto">
+                                            <div className="id-cover">
+                                                <img src={horizontalfront} className="horizontal-front-img" />
+                                                <div className="user-content">
+                                                    {/* <img src={profilepicture} className="id-photo" /> */}
+                                                    {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
+                                                        : <img className="id-photo" src={noprofile} alt="User Profie" />}
+                                                    <p className="id-name">{data?.name}</p>
+                                                    <p className="id-reg-no">{data?.receipt_no}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6 m-auto">
+                                            <div className="id-cover">
+                                                <img src={horizontalback} className="horizontal-back-img" />
+                                                <div className="user-content">
+                                                    <p className="id-address justify-content-center">
+                                                        த/க பெ: {data?.father_or_husband} <br />
+                                                        {data?.current_address}
+                                                    </p>
+                                                    <p className="id-phone-no">{data?.phone_number}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </>
+                        )}
+                        else {
+                            console.log("rjrjrj")
+                            return(
+                                <>
+                                 <div className="id-horizontal ">
+                                    <div className="row justify-content-center d-block">
+                                        <div className="col-sm-6 mb-3  m-auto">
+                                            <div className="id-cover">
+                                                <img src={horizontalfront} className="horizontal-front-img" />
+                                                <div className="user-content">
+                                                    {/* <img src={profilepicture} className="id-photo" /> */}
+                                                    {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
+                                                        : <img className="id-photo" src={noprofile} alt="User Profie" />}
+                                                    <p className="id-name">{data?.name}</p>
+                                                    <p className="id-reg-no">{data?.receipt_no}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6 m-auto">
+                                            <div className="id-cover">
+                                                <img src={horizontalback} className="horizontal-back-img" />
+                                                <div className="user-content">
+                                                    <p className="id-address justify-content-center">
+                                                        த/க பெ: {data?.father_or_husband} <br />
+                                                        {data?.current_address}
+                                                    </p>
+                                                    <p className="id-phone-no">{data?.phone_number}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </>
+                            )
+                        }
+
+                    })}
+
+
+
                 </div>
             </div>
             <ToastContainer />

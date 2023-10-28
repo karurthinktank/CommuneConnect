@@ -78,18 +78,30 @@ function UsersListTable() {
         if(row.profile_image){
             if(row.is_profile_completed){
                 return (
-                    <div>
-                        {row.is_card_mapped && <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> }
-                        <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "2px solid green", borderRadius: "50%" }}/>
-                     </div>
+                    <div className="user-profile">
+                        
+                       <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid green" }}/>
+                       {row.is_card_mapped && 
+                        // <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> 
+                       
+                             <i className="mdi mdi-check-circle d-flex justify-content-center mt-2 fs-4 text-success"></i>
+                        
+                        
+                       }
+                     
+                        </div>
                 )    
             }
             else
-                return <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "2px solid red", borderRadius: "50%" }}/>
+                return <div className="user-profile">
+                <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid red"}}/></div>
         }
         else
-            return <img src={noprofile} className="shadow-2 border-round" style={{width:"60px", border: "2px solid red", borderRadius: "50%"}}/>
-    }
+            return <div className="user-profile">
+                 <img src={noprofile} className="rounded-circle header-profile-user" style={{ border: "2px solid red"}}/>
+   
+                </div>
+                 }
 
     const handleFilter = event => {
         setFilter(event.target.value);

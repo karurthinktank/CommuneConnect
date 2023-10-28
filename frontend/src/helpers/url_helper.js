@@ -5,6 +5,7 @@ export const PEOPLE_DETAIL = "people/:slug/";
 export const USER = "people/get-user/";
 export const DASHBOARD = "dashboard/";
 export const IDCARD="people/";
+export const CARD_MAP = "people/:slug/card-map/";
 
 //LOGIN
 export const LOGIN_URL = "api-token-auth/";

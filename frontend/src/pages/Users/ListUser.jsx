@@ -39,7 +39,6 @@ function UsersListTable() {
     
     useEffect(() => {
         fetchUsers(currentPage);
-        handleSearch();
     }, []);
     // useEffect(()=>{
        
@@ -76,36 +75,20 @@ function UsersListTable() {
     };
 
     const getImage = (row)=>{
-        let _border = row.is_profile_completed ? "2px solid green" : "1px solid red";
-        console.log(_border)
         if(row.profile_image){
-            if(row.is_profile_completed && row.is_card_mapped){
-                <div>
-                   <Badge color="success" className="rounded-pill ms-2 fs-7">Mapped</Badge>
-                <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid green", borderRadius: "50%" }}/>
-                 </div>
-            return
-            }
-                   
-                
-            else{
-                
+            if(row.is_profile_completed){
                 return (
                     <div>
-                     <Badge color="success" className="rounded-pill ms-2 fs-7">
-                       Mapped
-                     </Badge>
-                    <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "3px solid #FFCC00", borderRadius: "50%" }}/>
-                    </div>
-                
-                )
-                
+                        {row.is_card_mapped && <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> }
+                        <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "2px solid green", borderRadius: "50%" }}/>
+                     </div>
+                )    
             }
-             
-               
+            else
+                return <img src={row.profile_image.public_url} className="shadow-2 border-round" style={{width:"60px", border: "2px solid red", borderRadius: "50%" }}/>
         }
         else
-            return<img src={noprofile} className="shadow-2 border-round" style={{width:"60px", border: "2px solid #FFCC00", borderRadius: "50%"}}/>
+            return <img src={noprofile} className="shadow-2 border-round" style={{width:"60px", border: "2px solid red", borderRadius: "50%"}}/>
     }
 
     const handleFilter = event => {

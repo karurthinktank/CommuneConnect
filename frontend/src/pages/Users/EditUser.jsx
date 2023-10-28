@@ -27,6 +27,8 @@ import Loader from "components/Common/Loader";
 
 function EditUser() {
 
+    const IMAGE_MAX_SIZE = 2e+6; //2Mb
+    const IMAGE_EXTENSIONS = ['image/jpg', 'image/png', 'image/jpeg', 'image/svg', 'image/webp'];
     const [isSameAddress, setAddress] = useState(false);
     const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState()
@@ -41,6 +43,7 @@ function EditUser() {
     }
     const [showLoader, setShowLoader] = useState(false);
     const [fieldValue, setFieldValue] = useState({});
+    
 
     useEffect(() => {
         fetchUser();
@@ -239,8 +242,18 @@ function EditUser() {
 
     const handleFiles = (event) => {
         let files = event.target.files[0];
-        setProfileImage(files);
-        editUserForm.setFieldValue('profile_image', event.target.value);
+        if(!IMAGE_EXTENSIONS.includes(files.type)){
+            CustomToast("Invalid File Format: " + IMAGE_EXTENSIONS.join(','), "error");
+            editUserForm.setFieldValue('profile_image', "");
+        }
+        else if(files.size > IMAGE_MAX_SIZE){
+            CustomToast("File size too large!, Maximum allowed size is 2Mb", "error");
+            editUserForm.setFieldValue('profile_image', "");
+        }
+        else{
+            setProfileImage(files);
+            editUserForm.setFieldValue('profile_image', event.target.value);
+        }
     }
 
     const handleRemove = (arrayHelpers, index, member) => {

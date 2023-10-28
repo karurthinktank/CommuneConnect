@@ -19,6 +19,7 @@ function ViewUser() {
     const { id } = useParams();
     const [data, setData] = useState({});
     const [showLoader, setShowLoader] = useState(false);
+    const [showAddButton , setShowAddButton] = useState(false);
 
 
     useEffect(() => {
@@ -32,6 +33,8 @@ function ViewUser() {
         if (response.status === 200) {
             console.log(response)
             setData(response.data.data);
+            if(response.data.data.is_profile_completed && !response.data.data.is_card_mapped)
+                setShowAddButton(true);
             setShowLoader(false);
         }
         else {
@@ -62,6 +65,21 @@ function ViewUser() {
                                                 : <img className="photo" src={noprofile} alt="User Profie" />}
 
                                         </div>
+                                        <div className="mt-1 text-center">
+                                            <Badge className="rounded-pill d-inlineflex p-2" color="secondary"> உறுப்பினர் பதிவு எண்<span>
+                                                <Badge color="success" className="rounded-pill ms-2 fs-7">{data?.member_id}</Badge></span></Badge>
+                                        </div>
+                                            {showAddButton && (<div className="d-flex align-items-center justify-content-center" >
+                                                <Label className="mb-0">Add Number</Label>
+                                                <MemberModal props={id}/>
+                                            </div>)
+                                            }
+                                            {data?.is_card_mapped && (<div className="d-flex align-items-center justify-content-center" >
+                                                <Label className="mb-0">Crad Mapped</Label>
+                                                <span class="mdi mdi-checkbox-marked-circle-outline text-success fs-1"></span>
+                                            </div>)}
+                                                
+
                                         <div className="profile-info">
                                             <div className="row text-center">
                                                 {/* <div className="col-5">
@@ -99,18 +117,13 @@ function ViewUser() {
                                                     <strong>{data?.receipt_no} / {data?.receipt_book_no}</strong>
                                                 </div>
                                             </div>
-                                            <div className="d-flex gap-2">
+                                            {/* <div className="d-flex gap-2">
                                                 {data?.is_card_mapped && <div className="mt-1 ">
                                                     <Badge className="rounded-pill p-2 d-inline-flex align-items-center" color="success">
                                                         <span className="mdi mdi-check fs-5"></span>Cardmapped
                                                     </Badge>
                                                 </div>}
-                                                {/* <div className="mt-1 ">
-                                                <Badge className="rounded-pill p-2 d-inline-flex align-items-center"  color="danger">
-                                                    <span className="mdi mdi-close fs-5"></span>Card NotMapped
-                                                </Badge>
                                             </div> */}
-                                            </div>
 
                                             <div>
 
@@ -119,54 +132,25 @@ function ViewUser() {
                                                 <span>Not Mapped</span> */}
 
                                             </div>
-
+                                            
                                             <div>
-                                                <div className="mt-1 mb-3  text-center">
-                                                    <Badge className="rounded-pill d-inlineflex p-2" color="secondary"> உறுப்பினர் பதிவு எண்<span>
-                                                        <Badge color="success" className="rounded-pill ms-2 fs-7">{data?.member_id}</Badge></span></Badge>
+                                            {data?.is_profile_completed ? (<>
+                                                <span className="">Profile completed</span>
+                                                <div class="progress bg-transparent progress-sm">
+
+                                                    <div class="progress-bar bg-success rounded" role="progressbar" style={{ width: "100%" }} aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
-                                                {data?.is_profile_completed ? (<>
-                                                    <span className="">Profile completed</span>
+                                            </>) : (
+                                                <>
+
                                                     <div class="progress bg-transparent progress-sm">
-
-                                                        <div class="progress-bar bg-success rounded" role="progressbar" style={{ width: "100%" }} aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        <div class="progress-bar bg-danger rounded" role="progressbar" style={{ width: "100%" }} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                </>) : (
-                                                    <>
-
-                                                        <div class="progress bg-transparent progress-sm">
-                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style={{ width: "100%" }} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                        <span className="text-muted">Profile Not completed</span>
-                                                    </>)}
-                                            </div>
-
-                                        </div>
-
-                                        <div className="d-flex align-items-center justify-content-center" >
-                                            <Label className="mb-0">Add Number</Label>
-                                            <MemberModal />
-                                        </div>
-                                        {/* <div className="d-flex align-items-center justify-content-center" >
-                                                <Label className="mb-0">Added</Label>
-                                                <span class="mdi mdi-checkbox-marked-circle-outline text-success fs-1"></span>
-                                            </div> */}
-                                        <div className="row">
-                                            <div className="col-md-3">
-                                                <div className="d-flex align-items-center justify-content-center">
-                                                    <span className="mdi mdi-checkbox-marked-circle-outline text-success fs-1 me-2"></span>
-                                                    <Label className="mb-0">Added</Label>
+                                                    <span className="text-muted">Profile Not completed</span>
+                                                </>)}
                                                 </div>
-                                            </div>
-                                           
+
                                         </div>
-                                       
-
-
-
-
-
-
 
                                     </div>
                                     <div className="col-md-7  p-3 member-details">

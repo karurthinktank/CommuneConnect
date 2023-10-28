@@ -10,8 +10,8 @@ import SidebarContent from "./SidebarContent";
 import { Link } from "react-router-dom";
 
 // import logo from "../../assets/images/logo.svg";
-import logo from "../../assets/images/150 X 150/logo.png"
-import logolog from "../../assets/images/256 X 256/2.png"
+import logo from "../../assets/images/small-logo/logo.png"
+import logolog from "../../assets/images/large-logo/2.png"
 import logoLightPng from "../../assets/images/logo-light.png";
 import logoLightSvg from "../../assets/images/logo-light.svg";
 import logoDark from "../../assets/images/logo-dark.png";

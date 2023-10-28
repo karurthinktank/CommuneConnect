@@ -12,7 +12,7 @@ import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
 
 import logo from "../../assets/images/logo.svg";
 import logoLightSvg from "../../assets/images/logo-light.svg";
-import logosm from "../../assets/images/150 X 150/1.png"
+import logosm from "../../assets/images/small-logo/1.png"
 
 //i18n
 import { withTranslation } from "react-i18next";

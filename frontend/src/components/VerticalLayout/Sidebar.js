@@ -36,7 +36,7 @@ const Sidebar = props => {
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
               {/* <img src={logoLightSvg} alt="" height="22" /> */}
-              <img src={logo} alt="" height="22"/>
+              {/* <img src={logo} alt="" height="22"/> */}
             </span>
             <span className="logo-lg">
                <img src={logo} alt="" height="80" className="rounded-circle"/>

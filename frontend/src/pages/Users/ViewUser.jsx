@@ -75,7 +75,7 @@ function ViewUser() {
                                             </div>)
                                             }
                                             {data?.is_card_mapped && (<div className="d-flex align-items-center justify-content-center" >
-                                                <Label className="mb-0">Crad Mapped</Label>
+                                                <Label className="mb-0 text-success">Card Mapped</Label>
                                                 <span class="mdi mdi-checkbox-marked-circle-outline text-success fs-1"></span>
                                             </div>)}
                                                 

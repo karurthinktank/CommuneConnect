@@ -85,7 +85,7 @@ function UsersListTable() {
                         {row.is_card_mapped &&
                             // <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> 
 
-                            <i className="mdi mdi-check-circle d-flex justify-content-center mt-2 fs-4 text-success"></i>
+                            <i className="mdi mdi-checkbox-marked-circle-outline d-flex justify-content-center  fs-2 text-success"></i>
 
 
                         }

@@ -11,8 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PeopleSerializer(serializers.ModelSerializer):
     member_id = serializers.CharField(required=False, read_only=True)
-    code = serializers.CharField(required=False, read_only=True)
-
     def to_representation(self, instance):
 
         """ Serialize GenericForeignKey field """
@@ -42,8 +40,6 @@ class PeopleSerializer(serializers.ModelSerializer):
 
 class FamilyMembersSerializer(serializers.ModelSerializer):
     # people = PeopleSerializer(read_only=True)
-    code = serializers.CharField(required=False, read_only=True)
-
     class Meta:
         model = FamilyMembers
         fields = "__all__"

@@ -260,7 +260,7 @@ function EditUser() {
         arrayHelpers.remove(index);
         let deleted = deletedMembers;
         console.log(member)
-        if(member.code)
+        if(member.id)
             deleted.push(member);
         setDeletedMembers(deleted);
 
@@ -817,7 +817,7 @@ function EditUser() {
                                                                     value="Add Member"
                                                                     onClick={() => arrayHelpers.push({
                                                                         name: '', aadhar_no: '', mobile_number: '', gender: '', relationship: '',
-                                                                        date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: '', code: ''
+                                                                        date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: ''
                                                                     })}
                                                                 />
 
@@ -1016,7 +1016,7 @@ function EditUser() {
                                                                             className="btn btn-success"
                                                                             value="Add Another Member"
                                                                             onClick={() => arrayHelpers.push({
-                                                                                name: '', aadhar_no: '', mobile_number: '', gender: '', relationship: '', code: '', 
+                                                                                name: '', aadhar_no: '', mobile_number: '', gender: '', relationship: '', 
                                                                                 date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: '',
                                                                             })}
                                                                         />

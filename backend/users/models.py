@@ -19,7 +19,6 @@ class People(models.Model):
     father_or_husband = models.CharField(max_length=250, null=True, blank=True)
     member_id = models.IntegerField(unique=True)
     id_card_no = models.CharField(max_length=100, null=True, blank=True, unique=True)
-    code = models.CharField(max_length=100, unique=True)
     mobile_number = models.CharField(max_length=10, null=True, blank=True)
     deleted = models.BooleanField(default=0)
     receipt_no = models.CharField(max_length=100)
@@ -56,7 +55,6 @@ class People(models.Model):
 
 class FamilyMembers(models.Model):
     people = models.ForeignKey(People, on_delete=models.CASCADE)
-    code = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=50)
     aadhar_no = models.CharField(max_length=20, null=True, blank=True)
     mobile_number = models.CharField(max_length=10, null=True, blank=True)

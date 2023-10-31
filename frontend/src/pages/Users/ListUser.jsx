@@ -13,7 +13,7 @@ import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
 import moment from 'moment/moment';
 import MemberModal from "pages/Users/MemberModal";
-import { Badge ,Input,Button} from "reactstrap";
+import { Badge, Input, Button,Label , FormGroup } from "reactstrap";
 function UsersListTable() {
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
@@ -22,8 +22,7 @@ function UsersListTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [showLoader, setShowLoader] = useState(false);
     const [filter, setFilter] = useState();
-
-
+    const [language, setLanguage] = useState(false);
     const actionItems = (row) => {
         return (
             <>
@@ -31,17 +30,17 @@ function UsersListTable() {
 
                     <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle fs-1" /></Link>
                     <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle fs-1 text-secondary" /></Link>
-                    {row.is_profile_completed && <Link to={"/users/idcard/" + row?.member_id}><i className="mdi mdi-card-account-details text-success fs-1" /></Link> }
+                    {row.is_profile_completed && <Link to={"/users/idcard/" + row?.member_id}><i className="mdi mdi-card-account-details text-success fs-1" /></Link>}
                 </div>
             </>
         );
     };
-    
+
     useEffect(() => {
         fetchUsers(currentPage);
     }, []);
     // useEffect(()=>{
-       
+
     // },[filter])
 
     const fetchUsers = async (page, count = rows, additiotal_params = {}) => {
@@ -59,13 +58,15 @@ function UsersListTable() {
             setShowLoader(false);
             console.log(users);
         }
-     
+
         else {
             setShowLoader(false);
             CustomToast(response.data.message, "error");
         }
     }
-
+    const selectLanguage = () =>{
+        setLanguage(!language);
+    }
     const handlePageChange = (event) => {
         let page = event.page + 1;
         setFirst(event.first);
@@ -74,41 +75,41 @@ function UsersListTable() {
         fetchUsers(page, event.rows)
     };
 
-    const getImage = (row)=>{
-        if(row.profile_image){
-            if(row.is_profile_completed){
+    const getImage = (row) => {
+        if (row.profile_image) {
+            if (row.is_profile_completed) {
                 return (
                     <div className="user-profile">
-                        
-                       <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid green" }}/>
-                       {row.is_card_mapped && 
-                        // <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> 
-                       
-                             <i className="mdi mdi-check-circle d-flex justify-content-center mt-2 fs-4 text-success"></i>
-                        
-                        
-                       }
-                     
-                        </div>
-                )    
+
+                        <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid green" }} />
+                        {row.is_card_mapped &&
+                            // <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> 
+
+                            <i className="mdi mdi-check-circle d-flex justify-content-center mt-2 fs-4 text-success"></i>
+
+
+                        }
+
+                    </div>
+                )
             }
             else
                 return <div className="user-profile">
-                <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid red"}}/></div>
+                    <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid red" }} /></div>
         }
         else
             return <div className="user-profile">
-                 <img src={noprofile} className="rounded-circle header-profile-user" style={{ border: "2px solid red"}}/>
-   
-                </div>
-                 }
+                <img src={noprofile} className="rounded-circle header-profile-user" style={{ border: "2px solid red" }} />
+
+            </div>
+    }
 
     const handleFilter = event => {
         setFilter(event.target.value);
     }
 
     const handleSearch = () => {
-        fetchUsers(currentPage, rows, {"search":filter});
+        fetchUsers(currentPage, rows, { "search": filter });
     }
 
     const handleClear = () => {
@@ -117,20 +118,43 @@ function UsersListTable() {
     }
 
     const header = (
-        <div className=" d-flex flex-wrap ">
-            <span className="text-xl text-900 font-bold"></span>
-            <div className="ms-auto d-flex align-items-center  gap-2">
-            <div className="d-flex align-items-center gap-3">
-            <form className="app-search d-none d-lg-block">
-                <div className="position-relative">
-                  <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id"/>
-                  <span onClick={handleClear}>x</span>                
+        <>
+        <div className="row p-2 align-items-center">
+        <div className="col-md-2">
+        <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
+                                    <Label className="m-0 fw-bold">தமிழ்</Label>
+                                    <Input
+                                        type="switch"
+                                        onClick={selectLanguage}
+                                        checked={language}
+                                        className="fs-2 ms-1"
+                                        defaultValue={true}
+                                    />
+                                   
+                                </FormGroup>
+        </div>
+            <div className="col-md-7">
+            <div className=" row align-items-center ps-1">
+                <div className="col-md-6">
+                    <form className="d-none d-lg-block">
+                        <div className="">
+                            <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id" />
+                                   
+                        </div>
+                    </form>
                 </div>
-                </form>
-                <Button type="button" onClick={handleSearch}>Search</Button>
-                
+                <div className="col-md-3">
+                <Button type="button" onClick={handleSearch} className="btn-success"><span className="mdi mdi-magnify"></span></Button>
+                <Button type="button" onClick={handleClear} className="btn-secondary ms-1"><span className="mdi mdi-close"></span></Button>
             </div>
-            {/* <form className="app-search d-none d-lg-block">
+        </div>
+            </div>
+            <div className="col-md-3">
+            <div className=" d-flex flex-wrap ">
+            
+            <div className="ms-auto d-flex align-items-center  gap-2">
+
+                {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input
                   type="text"
@@ -142,59 +166,64 @@ function UsersListTable() {
                 <span className="bx bx-search-alt" />
               </div>
             </form> */}
-            <Link to={`/users/add`} className="">
-                <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
-            </Link>
+                <Link to={`/users/add`} className="">
+                    <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
+                </Link>
             </div>
-            
-
         </div>
-    );       
-    
+            </div>
+      
+        </div>
+        </>
+    );
+
 
     return (
         <>
-            {showLoader && <Loader/>}
+            {showLoader && <Loader />}
             <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
                         <Breadcrumb title="முகப்பு" breadcrumbItem="குடும்பங்கள்" />
-                        <div className="card">
+                        <div className="card datatable-container">
                             <DataTable
                                 value={users}
                                 header={header}
-                                scrollable>
-                                <Column field="image"  body={(rowData) => getImage(rowData)} 
-                                header="குடும்ப தலைவர் புகைப்படம்" ></Column>
+                                // scrollable
+                                // minHeight="600px"
+                                className=""
+                            >
+                                <Column field="image" body={(rowData) => getImage(rowData)}
+                                    header="குடும்ப தலைவர் புகைப்படம்" ></Column>
                                 <Column
                                     field="name"
                                     header="குடும்ப தலைவர் பெயர் "
                                     sortable
-                                    // body={(rowData) => (
-                                    //     <td className={rowData.is_card_mapped ? 'green-cell' : 'red-cell'}>
-                                    //         {rowData.name}
-                                    //     </td>
-                                    // )}
-                                    // alignFrozen="left" 
-                                    // frozen
+                                // body={(rowData) => (
+                                //     <td className={rowData.is_card_mapped ? 'green-cell' : 'red-cell'}>
+                                //         {rowData.name}
+                                //     </td>
+                                // )}
+                                // alignFrozen="left" 
+                                // frozen
                                 ></Column>
                                 <Column field="father_or_husband" sortable header="த/க பெயர் " ></Column>
                                 <Column field="member_id" sortable header="உறுப்பினர் எண்"  ></Column>
                                 <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
-                                <Column field="receipt_date" header="இரசீது தேதி " 
-                                  body={ (rowData) => {
-                                    const formattedDate = rowData.receipt_date ? moment(rowData.receipt_date).format("DD/MM/YYYY") : "";
-                                    return formattedDate;
-                                  }}
+                                <Column field="receipt_date" header="இரசீது தேதி "
+                                    body={(rowData) => {
+                                        const formattedDate = rowData.receipt_date ? moment(rowData.receipt_date).format("DD/MM/YYYY") : "";
+                                        return formattedDate;
+                                    }}
                                 ></Column>
                                 <Column field="mobile_number" sortable header=" அலைபேசி எண்" ></Column>
-                                <Column field="current_address"  header=" முகவரி"></Column>
+                                <Column field="current_address" header=" முகவரி"></Column>
                                 {/* <Column field="country" sortable header=" நாடு"></Column>
                                 <Column field="state" sortable header=" மாநிலம்"></Column>
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column> */}
-                                <Column field="actions" header="Action"  frozen body={actionItems}></Column>
+                                <Column field="actions" header="Action" frozen body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />
@@ -203,7 +232,7 @@ function UsersListTable() {
                     </div>
                 </div>
             </div>
-            <ToastContainer/>
+            <ToastContainer />
         </>
     )
 }

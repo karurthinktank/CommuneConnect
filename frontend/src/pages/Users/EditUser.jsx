@@ -63,7 +63,7 @@ function EditUser() {
         }
         else {
             setShowLoader(false);
-            CustomToast("Internal Server Error", "error");
+            CustomToast("This user does not exist", "error");
         }
     }
 
@@ -121,7 +121,7 @@ function EditUser() {
                     name: Yup.string().required("This field is required!"),
                     mobile_number: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
                     gender: Yup.string().required("This field is required!"),
-                    relationship: Yup.string(),
+                    relationship: Yup.string().required('Must have Family Members'),
                     aadhar_no : Yup.string().matches(/^\d{12}$/, 'Aadhar number must be 12 digits'),
                     date_of_birth: Yup.string().nullable(true),
                     martial_status: Yup.string(),
@@ -131,7 +131,7 @@ function EditUser() {
                     card_details: Yup.string().nullable(true),
                 })
             )
-                .required('Must have Family Members')
+               
         }),
         onSubmit: async (values) => {
             setShowLoader(true);
@@ -894,7 +894,7 @@ function EditUser() {
 
                                                                             <div className="mb-3">
                                                                                 <FormGroup>
-                                                                                    <Label className="form-label">பிறந்த தேதி </Label>
+                                                                                    <Label className="form-label">பிறந்த தேதி</Label>
                                                                                     <Input type="date"
                                                                                         name={`members.${index}.date_of_birth`}
                                                                                         id={`members.${index}.date_of_birth`}

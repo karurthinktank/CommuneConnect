@@ -185,12 +185,14 @@ function UsersListTable() {
                 <div className="container-fluid">
                     <div className="row">
                         <Breadcrumb title="முகப்பு" breadcrumbItem="குடும்பங்கள்" />
-                        <div className="card datatable-container">
+                        <div className="card ">
                             <DataTable
                                 value={users}
                                 header={header}
                                 // scrollable
                                 // minHeight="600px"
+                                // datatable-container
+                                scrollable scrollHeight="600px" style={{ minWidth: '50rem' }}
                                 className=""
                             >
                                 <Column field="image" body={(rowData) => getImage(rowData)}

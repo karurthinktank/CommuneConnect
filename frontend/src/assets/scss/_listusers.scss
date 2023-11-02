@@ -29,7 +29,7 @@
 //   // max-width: 100% !important;  
 //   //  height: 200px !important; 
 //   // overflow-x:scroll ;
-//  max-width: 100% !important; 
+//   width: 100% !important; 
 //   // overflow-x: scroll;
 //   // white-space: nowrap;
 //   // width: 100% !important; 
@@ -37,6 +37,13 @@
 //   // overflow-x: scroll !important;
 // }
 
+@media (max-width: 380px) {
+  .center-button {
+    justify-content:center !important;
+    align-items: center !important;
+    background-color: red !important;
+  }
+}
 
 
 

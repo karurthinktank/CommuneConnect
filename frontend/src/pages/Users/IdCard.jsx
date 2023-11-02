@@ -14,7 +14,7 @@ import noprofile from '../../assets/images/noprofile.jpg';
 import "../../assets/scss/_idcard.scss";
 import { date } from "yup";
 import { Button } from "reactstrap";
-import { toPng } from 'html-to-image';
+import { toPng , toJpeg} from 'html-to-image';
 function UseridCard() {
     const [data, setCardvalue] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
@@ -30,11 +30,9 @@ function UseridCard() {
                 .then(function (dataUrl) {
 
                     const link = document.createElement('a');
-
-                    link.download = 'toPng';
-
+                    const filename =`${data?.member_id}_Frontside.jpeg`;
+                    link.download = filename;
                     link.href = dataUrl;
-
                     link.click();
                 })
                 .catch(function (error) {
@@ -46,7 +44,8 @@ function UseridCard() {
             toPng(verticalBackside.current)
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
-                    link.download = 'toPng';
+                    const filename =`${data?.member_id}_Backside.jpeg`;
+                    link.download = filename;
                     link.href = dataUrl;
                     link.click();
                 })
@@ -60,13 +59,10 @@ function UseridCard() {
         if (horizontalFront.current) {
             toPng(horizontalFront.current)
                 .then(function (dataUrl) {
-
                     const link = document.createElement('a');
-
-                    link.download = 'toPng';
-
+                    const filename =`${data?.member_id}_Frontside.jpeg`;
+                    link.download = filename;
                     link.href = dataUrl;
-
                     link.click();
                 })
                 .catch(function (error) {
@@ -76,10 +72,11 @@ function UseridCard() {
         }
         if (horizontalBackside.current) {
             console.log("backk")
-            toPng(horizontalBackside.current)
+            toJpeg(horizontalBackside.current)
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
-                    link.download = 'toPng';
+                    const filename =`${data?.member_id}_Backside.jpeg`;
+                    link.download = filename;
                     link.href = dataUrl;
                     link.click();
                 })
@@ -197,9 +194,9 @@ function UseridCard() {
                                     <span className="mdi mdi-download-circle fs-2"></span>Download
                                 </Button>
                             </div>
-                            <div className="row justify-content-center d-block">
-                                <div className="col-sm-6 mb-3  m-auto">
-                                    <div className="id-cover" ref={horizontalFront}>
+                            <div className="row justify-content-center d-block " ref={horizontalFront}>
+                                <div className="col-sm-6 mb-3  m-auto" >
+                                    <div className="id-cover" >
                                         <img src={horizontalfront} className="horizontal-front-img" />
                                         <div className="user-content">
                                             {/* <img src={profilepicture} className="id-photo" /> */}

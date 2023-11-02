@@ -115,3 +115,6 @@ body{
     display: inline-block;
     margin: 10px 0;
   }
+  .header-logo h3{
+    border-radius: 20px !important;
+  }

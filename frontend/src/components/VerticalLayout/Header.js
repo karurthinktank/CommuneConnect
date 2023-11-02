@@ -88,7 +88,7 @@ const Header = props => {
                 </span>
               </Link>
             </div>
-
+            <div className='d-flex align-items-center'>
             <button
               type="button"
               onClick={() => {
@@ -99,7 +99,10 @@ const Header = props => {
             >
               <i className="fa fa-fw fa-bars" />
             </button>
-
+              <div className='header-logo'>
+                <h3 className='mb-0 text-success fw-bold  p-2 ' >ஸ்ரீ புது வாங்கலம்மன் </h3>
+              </div>
+              </div>
             {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input
@@ -261,7 +264,8 @@ const Header = props => {
               </DropdownMenu>
             </Dropdown> */}
           </div>
-          <div className="d-flex">
+          <ProfileMenu />
+          {/* <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
               <button
                 onClick={() => {
@@ -314,23 +318,10 @@ const Header = props => {
               </button>
             </div>
 
-            {/* <NotificationDropdown /> */}
-            <ProfileMenu />
+            
 
-            {/* <div
-               onClick={() => {
-                props.showRightSidebarAction(!props.showRightSidebar);
-              }}
-              className="dropdown d-inline-block"
-            >
-              <button
-                type="button"
-                className="btn header-item noti-icon right-bar-toggle "
-              >
-                <i className="bx bx-cog bx-spin" />
-              </button>
-            </div> */}
-          </div>
+          
+          </div> */}
         </div>
       </header>
     </React.Fragment>

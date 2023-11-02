@@ -120,60 +120,42 @@ function UsersListTable() {
     const header = (
         <>
         <div className="row p-2 align-items-center">
-        <div className="col-md-2">
-        <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
-                                    <Label className="m-0 fw-bold">தமிழ்</Label>
-                                    <Input
-                                        type="switch"
-                                        onClick={selectLanguage}
-                                        checked={language}
-                                        className="fs-2 ms-1"
-                                        defaultValue={true}
-                                    />
-                                   
-                                </FormGroup>
-        </div>
-            <div className="col-md-7">
-            <div className=" row align-items-center ps-1">
-                <div className="col-md-6">
-                    <form className="d-none d-lg-block">
-                        <div className="">
-                            <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobille Number or Member Id" />
-                                   
-                        </div>
-                    </form>
-                </div>
-                <div className="col-md-3">
-                <Button type="button" onClick={handleSearch} className="btn-success"><span className="mdi mdi-magnify"></span></Button>
-                <Button type="button" onClick={handleClear} className="btn-secondary ms-1"><span className="mdi mdi-close"></span></Button>
-            </div>
-        </div>
-            </div>
-            <div className="col-md-3">
-            <div className=" d-flex flex-wrap ">
-            
-            <div className="ms-auto d-flex align-items-center  gap-2">
+  <div className="col-12 col-md-2">
+    <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
+      <Label className="m-0 fw-bold">தமிழ்</Label>
+      <Input
+        type="switch"
+        onClick={selectLanguage}
+        checked={language}
+        className="fs-2 ms-1"
+        defaultValue={true}
+      />
+    </FormGroup>
+  </div>
+  <div className="col-12 col-md-7 ">
+    <div className="row align-items-center ps-1 mt-2">
+      <div className="col-8 col-md-6">
+        <form className="">
+          <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobile Number, or Member Id" />
+        </form>
+      </div>
+      <div className="col-4 col-md-6  d-sm-flex text-end">
+        <Button type="button" onClick={handleSearch} className="btn-success"><span className="mdi mdi-magnify"></span></Button>
+        <Button type="button" onClick={handleClear} className="btn-secondary ms-1"><span className="mdi mdi-close"></span></Button>
+      </div>
+    </div>
+  </div>
+  <div className="col-12 col-md-3">
+    <div className="d-flex ">
+      <div className="ms-auto d-flex align-items-center gap-2 center-button">
+        <Link to={`/users/add`} className="">
+          <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
+        </Link>
+      </div>
+    </div>
+  </div>
+</div>
 
-                {/* <form className="app-search d-none d-lg-block">
-              <div className="position-relative">
-                <input
-                  type="text"
-                  className="form-control bg-white"
-                  onChange={handleFilter} 
-                  value={filter}
-                  placeholder="Filter by Name, Mobille Number or Member Id"
-                />
-                <span className="bx bx-search-alt" />
-              </div>
-            </form> */}
-                <Link to={`/users/add`} className="">
-                    <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
-                </Link>
-            </div>
-        </div>
-            </div>
-      
-        </div>
         </>
     );
 
@@ -185,14 +167,14 @@ function UsersListTable() {
                 <div className="container-fluid">
                     <div className="row">
                         <Breadcrumb title="முகப்பு" breadcrumbItem="குடும்பங்கள்" />
-                        <div className="card ">
+                        <div className="card atatable-container">
                             <DataTable
                                 value={users}
                                 header={header}
                                 // scrollable
                                 // minHeight="600px"
-                                // datatable-container
-                                scrollable scrollHeight="600px" style={{ minWidth: '50rem' }}
+                                // d
+                                scrollable scrollHeight="600px" 
                                 className=""
                             >
                                 <Column field="image" body={(rowData) => getImage(rowData)}
@@ -225,7 +207,7 @@ function UsersListTable() {
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column> */}
-                                <Column field="actions" header="Action" frozen body={actionItems}></Column>
+                                <Column field="actions" header="Action"  body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />

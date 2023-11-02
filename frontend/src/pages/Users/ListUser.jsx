@@ -14,6 +14,8 @@ import { ToastContainer } from "react-toastify";
 import moment from 'moment/moment';
 import MemberModal from "pages/Users/MemberModal";
 import { Badge, Input, Button,Label , FormGroup } from "reactstrap";
+import Sanscript from "@indic-transliteration/sanscript";
+
 function UsersListTable() {
     const [users, setUsers] = useState([]);
     const [first, setFirst] = useState(0);
@@ -22,6 +24,7 @@ function UsersListTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [showLoader, setShowLoader] = useState(false);
     const [filter, setFilter] = useState();
+    const [previous, setPreviousValue] = useState();
     const [language, setLanguage] = useState(false);
     const actionItems = (row) => {
         return (
@@ -86,8 +89,6 @@ function UsersListTable() {
                             // <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> 
 
                             <i className="mdi mdi-checkbox-marked-circle-outline d-flex justify-content-center  fs-2 text-success"></i>
-
-
                         }
 
                     </div>
@@ -105,7 +106,50 @@ function UsersListTable() {
     }
 
     const handleFilter = event => {
-        setFilter(event.target.value);
+        let value = event.target.value;
+        let translate = "";
+        let previousValue = ""
+
+        if(language){
+            previousValue = previous;
+            if(previousValue){
+                if(event.nativeEvent.data == null)
+                previousValue = previousValue.slice(0,-1)
+                else if(!event.nativeEvent.data.replace(/\s/g, ""))
+                previousValue = "";
+                else if(event.nativeEvent.data)
+                    previousValue += event.nativeEvent.data
+                
+            }
+            else{
+                if(event.nativeEvent.data != null && !event.nativeEvent.data.replace(/\s/g, ""))
+                previousValue = "";
+                else if(event.nativeEvent.data)
+                    previousValue = event.nativeEvent.data
+            }
+            setPreviousValue(previousValue);
+        }
+        else{
+            setPreviousValue("");
+        }
+        if(previousValue){
+            translate = Sanscript.t(previousValue, "itrans_dravidian", "tamil");
+            let splitBySpace = value.split(/\s/g);
+            let no_char_remv = 0;
+            if(splitBySpace.length <= 1){
+                no_char_remv = "-" + previousValue.length;
+                value = value.slice(0, parseInt(no_char_remv));
+                value = translate;
+            }
+            else 
+            {
+                no_char_remv = "-" + splitBySpace[splitBySpace.length -1].length;
+                let trans = (splitBySpace[splitBySpace.length -1], translate);
+                splitBySpace[splitBySpace.length -1] = trans;
+                value = splitBySpace.join(" ");
+            }
+        }
+        setFilter(value);
     }
 
     const handleSearch = () => {

@@ -119,7 +119,6 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 response['error'] = "Member Id already exist! Kindly update correct Member ID"
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             data['created_by'] = request.user.first_name
-            data['code'] = get_random_string(10)
             if profile_image:
                 profile_image = profile_image.read()
                 data['profile_image'] = base64.b64encode(profile_image).decode()
@@ -131,11 +130,9 @@ class PeopleViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(data=data)
             if serializer.is_valid():
                 serializer.validated_data['member_id'] = data['member_id']
-                serializer.validated_data['code'] = data['code']
                 serializer.save()
                 for member in data['members']:
                     member['name'] = member['member_name']
-                    member['code'] = get_random_string(10)
                     member['mobile_number'] = member['member_mobile_number']
                     member['people_id'] = serializer.data['id']
                     member['created_by'] = request.user.first_name
@@ -185,7 +182,6 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             profile_image = request.FILES.get('profile_image')
-            data['code'] = people.code
             data['created_by'] = people.created_by
             if profile_image:
                 data['profile_image'] = self.upload_images(profile_image, "profile", data['member_id'])
@@ -204,7 +200,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 people.save()
                 logging.info({"Member Id": data['member_id'], "message": "Updated Successfully!"})
                 for member in data['members']:
-                    existing_member = FamilyMembers.objects.filter(code=member['code'], people=people).first()
+                    existing_member = FamilyMembers.objects.filter(id=member['id'], people=people).first()
                     if existing_member:
                         if not member['date_of_birth']:
                             member['date_of_birth'] = None
@@ -217,7 +213,6 @@ class PeopleViewSet(viewsets.ModelViewSet):
                             response['code'] = 400
                             return Response(response, status=status.HTTP_400_BAD_REQUEST)
                     else:
-                        member['code'] = get_random_string(10)
                         member['people'] = people.id
                         member['created_by'] = request.user.first_name
                         if not member['date_of_birth']:
@@ -226,7 +221,6 @@ class PeopleViewSet(viewsets.ModelViewSet):
                         member_serializer = FamilyMembersSerializer(data=member)
                         if member_serializer.is_valid():
                             # member_serializer.validated_data['people_id'] = people.id
-                            member_serializer.validated_data['code'] = get_random_string(10)
                             member_serializer.save()
                         else:
                             response['message'] = "Bad Request!"
@@ -236,7 +230,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
 
                 # soft delete members
                 for deleted in data['deleted_members']:
-                    member_instance = FamilyMembers.objects.filter(code=deleted['code'], people=people).first()
+                    member_instance = FamilyMembers.objects.filter(id=deleted['id'], people=people).first()
                     member_instance.deleted = True
                     member_instance.save()
             else:

@@ -87,9 +87,11 @@ function UsersListTable() {
                         <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: "2px solid green" }} />
                         {row.is_card_mapped &&
                             // <Badge color="success" className="rounded-pill ms-2 fs-7">Card Mapped</Badge> 
-
-                            <i className="mdi mdi-checkbox-marked-circle-outline d-flex justify-content-center  fs-2 text-success"></i>
-                        }
+                            <div className="ms-4">
+                                <i className="mdi mdi-checkbox-marked-circle-outline fs-2 text-success"></i>
+                        
+                                </div>
+                            }
 
                     </div>
                 )

@@ -73,7 +73,7 @@ function UseridCard() {
 
         }
         if (horizontalBackside.current) {
-            toJpeg(horizontalBackside.current, { width: 650 })
+            toJpeg(horizontalBackside.current, { width: 630 })
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
                     const filename =`${data?.member_id}_Backside.jpeg`;
@@ -110,8 +110,9 @@ function UseridCard() {
         <>
             {showLoader && <Loader />}
             <div className="page-content">
+                <Breadcrumb  title="டேஷ்போர்டு" parentPath="/home" currentPath="/users" breadcrumbItem="குடும்பங்கள்" />
                 <div className="container-fluid">
-                        <Breadcrumb  title="டேஷ்போர்டு" parentPath="/home" currentPath="/users" breadcrumbItem="குடும்பங்கள்" />
+                       
                     {data?.is_charity_member ? (
                         <>
                             <div className="id-vertical card mb-5">

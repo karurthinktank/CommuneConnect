@@ -13,7 +13,7 @@ import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
 import moment from 'moment/moment';
 import MemberModal from "pages/Users/MemberModal";
-import { Badge, Input, Button,Label , FormGroup } from "reactstrap";
+import { Badge, Input, Button, Label, FormGroup } from "reactstrap";
 import Sanscript from "@indic-transliteration/sanscript";
 
 function UsersListTable() {
@@ -67,7 +67,7 @@ function UsersListTable() {
             CustomToast(response.data.message, "error");
         }
     }
-    const selectLanguage = () =>{
+    const selectLanguage = () => {
         setLanguage(!language);
     }
     const handlePageChange = (event) => {
@@ -110,42 +110,41 @@ function UsersListTable() {
         let translate = "";
         let previousValue = ""
 
-        if(language){
+        if (language) {
             previousValue = previous;
-            if(previousValue){
-                if(event.nativeEvent.data == null)
-                previousValue = previousValue.slice(0,-1)
-                else if(!event.nativeEvent.data.replace(/\s/g, ""))
-                previousValue = "";
-                else if(event.nativeEvent.data)
+            if (previousValue) {
+                if (event.nativeEvent.data == null)
+                    previousValue = previousValue.slice(0, -1)
+                else if (!event.nativeEvent.data.replace(/\s/g, ""))
+                    previousValue = "";
+                else if (event.nativeEvent.data)
                     previousValue += event.nativeEvent.data
-                
+
             }
-            else{
-                if(event.nativeEvent.data != null && !event.nativeEvent.data.replace(/\s/g, ""))
-                previousValue = "";
-                else if(event.nativeEvent.data)
+            else {
+                if (event.nativeEvent.data != null && !event.nativeEvent.data.replace(/\s/g, ""))
+                    previousValue = "";
+                else if (event.nativeEvent.data)
                     previousValue = event.nativeEvent.data
             }
             setPreviousValue(previousValue);
         }
-        else{
+        else {
             setPreviousValue("");
         }
-        if(previousValue){
+        if (previousValue) {
             translate = Sanscript.t(previousValue, "itrans_dravidian", "tamil");
             let splitBySpace = value.split(/\s/g);
             let no_char_remv = 0;
-            if(splitBySpace.length <= 1){
+            if (splitBySpace.length <= 1) {
                 no_char_remv = "-" + previousValue.length;
                 value = value.slice(0, parseInt(no_char_remv));
                 value = translate;
             }
-            else 
-            {
-                no_char_remv = "-" + splitBySpace[splitBySpace.length -1].length;
-                let trans = (splitBySpace[splitBySpace.length -1], translate);
-                splitBySpace[splitBySpace.length -1] = trans;
+            else {
+                no_char_remv = "-" + splitBySpace[splitBySpace.length - 1].length;
+                let trans = (splitBySpace[splitBySpace.length - 1], translate);
+                splitBySpace[splitBySpace.length - 1] = trans;
                 value = splitBySpace.join(" ");
             }
         }
@@ -163,42 +162,42 @@ function UsersListTable() {
 
     const header = (
         <>
-        <div className="row p-2 align-items-center">
-  <div className="col-12 col-md-2">
-    <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
-      <Label className="m-0 fw-bold">தமிழ்</Label>
-      <Input
-        type="switch"
-        onClick={selectLanguage}
-        checked={language}
-        className="fs-2 ms-1"
-        defaultValue={true}
-      />
-    </FormGroup>
-  </div>
-  <div className="col-12 col-md-7 ">
-    <div className="row align-items-center ps-1 mt-2">
-      <div className="col-8 col-md-6">
-        <form className="">
-          <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobile Number, or Member Id" />
-        </form>
-      </div>
-      <div className="col-4 col-md-6  d-sm-flex text-end">
-        <Button type="button" onClick={handleSearch} className="btn-success"><span className="mdi mdi-magnify"></span></Button>
-        <Button type="button" onClick={handleClear} className="btn-secondary ms-1"><span className="mdi mdi-close"></span></Button>
-      </div>
-    </div>
-  </div>
-  <div className="col-12 col-md-3">
-    <div className="d-flex ">
-      <div className="ms-auto d-flex align-items-center gap-2 center-button">
-        <Link to={`/users/add`} className="">
-          <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
-        </Link>
-      </div>
-    </div>
-  </div>
-</div>
+            <div className="row p-2 align-items-center">
+                <div className="col-12 col-md-2">
+                    <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
+                        <Label className="m-0 fw-bold">தமிழ்</Label>
+                        <Input
+                            type="switch"
+                            onClick={selectLanguage}
+                            checked={language}
+                            className="fs-2 ms-1"
+                            defaultValue={true}
+                        />
+                    </FormGroup>
+                </div>
+                <div className="col-12 col-md-7 ">
+                    <div className="row align-items-center ps-1 mt-2">
+                        <div className="col-8 col-md-6">
+                            <form className="">
+                                <Input type="text" id="search" name="search" onChange={handleFilter} value={filter} placeholder="Filter by Name, Mobile Number, or Member Id" />
+                            </form>
+                        </div>
+                        <div className="col-4 col-md-6  d-sm-flex text-end">
+                            <Button type="button" onClick={handleSearch} className="btn-success"><span className="mdi mdi-magnify"></span></Button>
+                            <Button type="button" onClick={handleClear} className="btn-secondary ms-1"><span className="mdi mdi-close"></span></Button>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-12 col-md-3">
+                    <div className="d-flex ">
+                        <div className="ms-auto d-flex align-items-center gap-2 center-button">
+                            <Link to={`/users/add`} className="">
+                                <button className="btn btn-primary btn-block ms-auto " type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </>
     );
@@ -210,7 +209,10 @@ function UsersListTable() {
             <div className="page-content">
                 <div className="container-fluid">
                     <div className="row">
-                        <Breadcrumb title="முகப்பு" breadcrumbItem="குடும்பங்கள்" />
+                        <Link>
+                        <Breadcrumb  title="டேஷ்போர்டு" to="/users" breadcrumbItem="குடும்பங்கள்" />
+                        </Link>
+                        
                         <div className="card atatable-container">
                             <DataTable
                                 value={users}
@@ -218,7 +220,7 @@ function UsersListTable() {
                                 // scrollable
                                 // minHeight="600px"
                                 // d
-                                scrollable scrollHeight="600px" 
+                                scrollable scrollHeight="600px"
                                 className=""
                             >
                                 <Column field="image" body={(rowData) => getImage(rowData)}
@@ -251,7 +253,7 @@ function UsersListTable() {
                                 <Column field="district" sortable header=" மாவட்டம்"></Column>
                                 <Column field="taluk" sortable header="வட்டம்"></Column>
                                 <Column field="panchayat" sortable header="பஞ்சாயத்து"></Column> */}
-                                <Column field="actions" header="Action"  body={actionItems}></Column>
+                                <Column field="actions" header="Action" body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
                                 <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />

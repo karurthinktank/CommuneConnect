@@ -12,7 +12,7 @@ import "../../assets/scss/_listview.scss";
 import noprofile from '../../assets/images/noprofile.jpg';
 import Loader from "components/Common/Loader";
 import MemberModal from "./MemberModal";
-
+import { Link } from "react-router-dom";
 function ViewUser() {
 
 
@@ -48,7 +48,9 @@ function ViewUser() {
         <>
             {showLoader && <Loader />}
             <div className="page-content">
-                <Breadcrumb title="User" breadcrumbItem="Family Members" />
+            <Link>
+                        <Breadcrumb  title="டேஷ்போர்டு" to="/users" breadcrumbItem="குடும்பங்கள்" />
+                        </Link>
                 <Container fluid>
                     <Card>
                         <CardHeader className="head-member border">

@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { USER_URL } from "helpers/url_helper";
 import { GET } from "helpers/api_helper";
 import { ToastContainer } from 'react-toastify';
+import { Link } from "react-router-dom";
 import CustomToast from "components/Common/Toast";
 import Loader from "components/Common/Loader";
 import horizontalfront from "../../assets/images/horizontal-front.jpg"
@@ -13,7 +14,7 @@ import profilepicture from "../../assets/images/id-photo-square.png";
 import noprofile from '../../assets/images/noprofile.jpg';
 import "../../assets/scss/_idcard.scss";
 import { date } from "yup";
-import { Button } from "reactstrap";
+import { Button,Breadcrumb } from "reactstrap";
 import { toPng , toJpeg} from 'html-to-image';
 function UseridCard() {
     const [data, setCardvalue] = useState(false);
@@ -72,7 +73,7 @@ function UseridCard() {
         }
         if (horizontalBackside.current) {
             console.log("backk")
-            toJpeg(horizontalBackside.current)
+            toJpeg(horizontalBackside.current, { width: 650 })
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
                     const filename =`${data?.member_id}_Backside.jpeg`;
@@ -109,6 +110,9 @@ function UseridCard() {
             {showLoader && <Loader />}
             <div className="page-content">
                 <div className="container-fluid">
+                <Link>
+                        <Breadcrumb  title="டேஷ்போர்டு" to="/users" breadcrumbItem="குடும்பங்கள்" />
+                        </Link>
                     {data?.is_charity_member ? (
                         <>
                             <div className="id-vertical card mb-5">

@@ -20,7 +20,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.serializers import TokenVerifySerializer
 import datetime
 from rest_framework.decorators import action
-from utils.google_ import upload_from_string
+from utils.google_ import upload_from_string, read_file
 
 
 """
@@ -258,7 +258,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
             content_type = attachment.content_type
             extension = attachment.name.split(".")[-1]
             name = "{}-profile".format(str(member_id))
-            file_name = "{}/{}{}".format(folder, name, extension)
+            file_name = "{}/{}.{}".format(folder, name, extension)
             blob = upload_from_string(
                 file_content,
                 content_type,
@@ -345,6 +345,27 @@ class PeopleViewSet(viewsets.ModelViewSet):
             response['message'] = str(e)
             response['code'] = 500
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(methods=['get'], detail=True, url_path='get-id-card')
+    def get_id_card(self, request, pk):
+        # qs = self.queryset.filter(id=pk, is_superuser=False).first()
+        instance = People.objects.filter(member_id=pk).first()
+        image_type = instance.profile_image['name'].split(".")[-1]
+        b64_content = ""
+        blob = read_file(instance.profile_image['file_path'], instance.profile_image['bucket_name'])
+        if blob:
+            b64_content = base64.b64encode(blob.download_as_bytes()).decode("utf-8")
+        data = {
+            "name": instance.name,
+            "father_or_husband": instance.father_or_husband,
+            "member_id": instance.member_id,
+            "is_charity_member": instance.is_charity_member,
+            "receipt_no": instance.receipt_no,
+            "profile_image": b64_content,
+            "current_address": instance.current_address,
+            "phone_number": instance.phone_number
+        }
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class DashboardViewSet(viewsets.ModelViewSet):

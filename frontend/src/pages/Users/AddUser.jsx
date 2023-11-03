@@ -256,9 +256,7 @@ function AddUser() {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
-                    <Link>
-                        <Breadcrumb  title="டேஷ்போர்டு" to="/users" breadcrumbItem="குடும்பங்கள்" />
-                        </Link>
+                        <Breadcrumb  title="டேஷ்போர்டு" parentPath="/home" currentPath="/users" breadcrumbItem="குடும்பங்கள்" />
                         <Card className="usercard">
                             <CardHeader className="position-sticky top-0">
                                 <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">

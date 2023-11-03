@@ -66,7 +66,7 @@ def read_file(file_name, bucket_name):
     try:
         storage_client = storage.Client()  # GCS Connection
         bucket = storage_client.get_bucket(bucket_name)
-        blob = bucket.blob(file_name)
+        blob = storage.Blob(file_name, bucket)
 
         return blob
     except Exception as e:

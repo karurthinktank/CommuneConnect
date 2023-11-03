@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router';
-import { USER_URL } from "helpers/url_helper";
+import { IDCARD } from "helpers/url_helper";
 import { GET } from "helpers/api_helper";
 import { ToastContainer } from 'react-toastify';
 import { Link } from "react-router-dom";
@@ -24,6 +24,7 @@ function UseridCard() {
     const verticalBackside = useRef(null);
     const horizontalFront = useRef(null);
     const horizontalBackside = useRef(null);
+    const base64Image = "data:image/png;base64,"
 
     const verticalDownloadImage = () => {
         if (verticalFront.current) {
@@ -72,7 +73,6 @@ function UseridCard() {
 
         }
         if (horizontalBackside.current) {
-            console.log("backk")
             toJpeg(horizontalBackside.current, { width: 650 })
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
@@ -93,10 +93,11 @@ function UseridCard() {
     }, [])
     const fetchUser = async () => {
         setShowLoader(true);
-        let url = USER_URL + id + '/';
+        let url = IDCARD.replace(":slug", id);
         const response = await GET(url);
+        console.log(response)
         if (response.status === 200) {
-            setCardvalue(response.data.data);
+            setCardvalue(response.data);
             setShowLoader(false);
             console.log(data);
         }
@@ -110,9 +111,7 @@ function UseridCard() {
             {showLoader && <Loader />}
             <div className="page-content">
                 <div className="container-fluid">
-                <Link>
-                        <Breadcrumb  title="டேஷ்போர்டு" to="/users" breadcrumbItem="குடும்பங்கள்" />
-                        </Link>
+                        <Breadcrumb  title="டேஷ்போர்டு" parentPath="/home" currentPath="/users" breadcrumbItem="குடும்பங்கள்" />
                     {data?.is_charity_member ? (
                         <>
                             <div className="id-vertical card mb-5">
@@ -128,7 +127,7 @@ function UseridCard() {
                                             <div >
                                                 <img src={verticalfront} className="vertical-front-img" />
                                                 <div className="user-content" >
-                                                    {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
+                                                    {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
                                                         : <img className="id-photo" src={noprofile} alt="User Profie" />}
 
                                                     <p className="id-name">{data?.name}</p>
@@ -169,7 +168,7 @@ function UseridCard() {
                                             <img src={horizontalfront} className="horizontal-front-img" />
                                             <div className="user-content">
                                                 {/* <img src={profilepicture} className="id-photo" /> */}
-                                                {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
+                                                {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
                                                     : <img className="id-photo" src={noprofile} alt="User Profie" />}
                                                 <p className="id-name">{data?.name}</p>
                                                 <p className="id-reg-no">{data?.receipt_no}</p>
@@ -198,13 +197,13 @@ function UseridCard() {
                                     <span className="mdi mdi-download-circle fs-2"></span>Download
                                 </Button>
                             </div>
-                            <div className="row justify-content-center d-block " ref={horizontalFront}>
+                            <div className="row justify-content-center d-block ">
                                 <div className="col-sm-6 mb-3  m-auto" >
-                                    <div className="id-cover" >
+                                    <div className="id-cover" ref={horizontalFront}>
                                         <img src={horizontalfront} className="horizontal-front-img" />
                                         <div className="user-content">
                                             {/* <img src={profilepicture} className="id-photo" /> */}
-                                            {data?.profile_image ? (<img className="id-photo" src={data?.profile_image.public_url} alt="User Avatar" />)
+                                            {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
                                                 : <img className="id-photo" src={noprofile} alt="User Profie" />}
                                             <p className="id-name">{data?.name}</p>
                                             <p className="id-reg-no">{data?.receipt_no}</p>

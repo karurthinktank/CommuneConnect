@@ -12,10 +12,10 @@ const Breadcrumb = props => {
           <div className="page-title-right">
             <ol className="breadcrumb m-0">
               <BreadcrumbItem>
-                <Link to="#">{props.title}</Link>
+                <Link to={props.parentPath}>{props.title}</Link>
               </BreadcrumbItem>
               <BreadcrumbItem active>
-                <Link to="#">{props.breadcrumbItem}</Link>
+                <Link to={props.currentPath}>{props.breadcrumbItem}</Link>
               </BreadcrumbItem>
             </ol>
           </div>
@@ -27,7 +27,9 @@ const Breadcrumb = props => {
 
 Breadcrumb.propTypes = {
   breadcrumbItem: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  parentPath: PropTypes.string,
+  currentPath: PropTypes.string
 }
 
 export default Breadcrumb

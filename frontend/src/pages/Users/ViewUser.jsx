@@ -48,9 +48,7 @@ function ViewUser() {
         <>
             {showLoader && <Loader />}
             <div className="page-content">
-            <Link>
-                        <Breadcrumb  title="டேஷ்போர்டு" to="/users" breadcrumbItem="குடும்பங்கள்" />
-                        </Link>
+                        <Breadcrumb  title="டேஷ்போர்டு" parentPath="/home" currentPath="/users" breadcrumbItem="குடும்பங்கள்" />
                 <Container fluid>
                     <Card>
                         <CardHeader className="head-member border">

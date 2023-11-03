@@ -80,7 +80,7 @@ function EditUser() {
             receipt_no: data?.receipt_no,
             receipt_date: data?.receipt_date,
             receipt_book_no: data?.receipt_book_no,
-            is_charity_member: data?.is_charity_member,
+            is_charity_member: String(data?.is_charity_member),
             charity_registration_number: data?.charity_registration_number,
             current_address: data?.current_address,
             permanent_address: data?.permanent_address,

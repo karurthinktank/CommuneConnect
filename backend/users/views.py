@@ -181,10 +181,12 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 response['message'] = "Invalid Member ID"
                 response['code'] = 400
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-            profile_image = request.FILES.get('profile_image')
+            profile_image = request.FILES.get('profile_image', None)
             data['created_by'] = people.created_by
             if profile_image:
                 data['profile_image'] = self.upload_images(profile_image, "profile", data['member_id'])
+            else:
+                del data['profile_image']
             if not data['receipt_date']:
                 data['receipt_date'] = None
             serializer = self.serializer_class(data=data)

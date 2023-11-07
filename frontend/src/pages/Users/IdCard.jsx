@@ -32,7 +32,7 @@ function UseridCard() {
                 .then(function (dataUrl) {
 
                     const link = document.createElement('a');
-                    const filename =`${data?.member_id}_Frontside.jpeg`;
+                    const filename =`${data?.receipt_no}_t_Frontside.jpeg`;
                     link.download = filename;
                     link.href = dataUrl;
                     link.click();
@@ -46,7 +46,7 @@ function UseridCard() {
             toPng(verticalBackside.current)
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
-                    const filename =`${data?.member_id}_Backside.jpeg`;
+                    const filename =`${data?.receipt_no}_t_Backside.jpeg`;
                     link.download = filename;
                     link.href = dataUrl;
                     link.click();
@@ -62,7 +62,7 @@ function UseridCard() {
             toPng(horizontalFront.current)
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
-                    const filename =`${data?.member_id}_Frontside.jpeg`;
+                    const filename =`${data?.receipt_no}_h_Frontside.jpeg`;
                     link.download = filename;
                     link.href = dataUrl;
                     link.click();
@@ -76,7 +76,7 @@ function UseridCard() {
             toJpeg(horizontalBackside.current, { width: 630 })
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
-                    const filename =`${data?.member_id}_Backside.jpeg`;
+                    const filename =`${data?.receipt_no}_h_Backside.jpeg`;
                     link.download = filename;
                     link.href = dataUrl;
                     link.click();

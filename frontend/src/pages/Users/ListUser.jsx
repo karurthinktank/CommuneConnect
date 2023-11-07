@@ -239,13 +239,13 @@ function UsersListTable() {
                                 ></Column>
                                 <Column field="father_or_husband" sortable header="த/க பெயர் " ></Column>
                                 <Column field="member_id" sortable header="உறுப்பினர் எண்"  ></Column>
-                                <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
+                                {/* <Column field="receipt_no" sortable header="இரசீது எண்" ></Column>
                                 <Column field="receipt_date" header="இரசீது தேதி "
                                     body={(rowData) => {
                                         const formattedDate = rowData.receipt_date ? moment(rowData.receipt_date).format("DD/MM/YYYY") : "";
                                         return formattedDate;
                                     }}
-                                ></Column>
+                                ></Column> */}
                                 <Column field="mobile_number" sortable header=" அலைபேசி எண்" ></Column>
                                 <Column field="current_address" header=" முகவரி"></Column>
                                 {/* <Column field="country" sortable header=" நாடு"></Column>

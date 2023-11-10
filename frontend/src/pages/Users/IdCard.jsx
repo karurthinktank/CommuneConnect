@@ -28,7 +28,7 @@ function UseridCard() {
 
     const verticalDownloadImage = () => {
         if (verticalFront.current) {
-            toPng(verticalFront.current)
+            toPng(verticalFront.current,{ width: 400 })
                 .then(function (dataUrl) {
 
                     const link = document.createElement('a');
@@ -42,7 +42,7 @@ function UseridCard() {
                 });
 
         }
-        if (verticalBackside.current) {
+        if (verticalBackside.current,{ width: 650 }) {
             toPng(verticalBackside.current)
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
@@ -59,7 +59,7 @@ function UseridCard() {
 
     const horizontalDownloadImage = () => {
         if (horizontalFront.current) {
-            toPng(horizontalFront.current)
+            toPng(horizontalFront.current,{ width: 630 })
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
                     const filename =`${data?.receipt_no}_h_Frontside.jpeg`;

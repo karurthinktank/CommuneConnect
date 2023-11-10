@@ -44,7 +44,7 @@ function MemberModal(data) {
               name="name"
               className="form-control"
               placeholder="Enter Id Card Number"
-              type="text"
+              type="password"
               onChange={handleChange}
               value={cardvalue}
 

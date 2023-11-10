@@ -968,7 +968,7 @@ function AddUser() {
                                                                                     <option key="AB-" value="AB-">AB-</option>
                                                                                 </Input>
                                                                             </div>
-                                                                            <div className="mb-3">
+                                                                            {/* <div className="mb-3">
                                                                                 <Label className="form-label">Card Details</Label>
                                                                                 <Input
                                                                                     id={`members.${index}.card_details`}
@@ -979,9 +979,7 @@ function AddUser() {
                                                                                     onChange={addUserForm.handleChange}
                                                                                     value={addUserForm.values.members[index].card_details}
                                                                                 />
-
-
-                                                                            </div>
+                                                                            </div> */}
                                                                         </div>
 
                                                                     </div>

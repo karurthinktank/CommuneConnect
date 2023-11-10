@@ -202,7 +202,9 @@ class PeopleViewSet(viewsets.ModelViewSet):
                 people.save()
                 logging.info({"Member Id": data['member_id'], "message": "Updated Successfully!"})
                 for member in data['members']:
-                    existing_member = FamilyMembers.objects.filter(id=member['id'], people=people).first()
+                    existing_member = None
+                    if 'id' in member:
+                        existing_member = FamilyMembers.objects.filter(id=member['id'], people=people).first()
                     if existing_member:
                         if not member['date_of_birth']:
                             member['date_of_birth'] = None

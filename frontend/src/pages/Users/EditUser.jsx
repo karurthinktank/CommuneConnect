@@ -816,7 +816,7 @@ function EditUser() {
                                                                     className="btn btn-success  ms-auto"
                                                                     value="Add Member"
                                                                     onClick={() => arrayHelpers.push({
-                                                                        name: '', aadhar_no: '', mobile_number: '', gender: '', relationship: '',
+                                                                       name: '', aadhar_no: '', mobile_number: '', gender: '', relationship: '',
                                                                         date_of_birth: '', martial_status: '', occupation: '', career_reference: '', blood_group: '', card_details: ''
                                                                     })}
                                                                 />
@@ -987,7 +987,7 @@ function EditUser() {
                                                                                     <option key="AB-" value="AB-">AB-</option>
                                                                                 </Input>
                                                                             </div>
-                                                                            <div className="mb-3">
+                                                                            {/* <div className="mb-3">
                                                                                 <Label className="form-label">Card Details</Label>
                                                                                 <Input
                                                                                     id={`members.${index}.card_details`}
@@ -998,9 +998,7 @@ function EditUser() {
                                                                                     onChange={editUserForm.handleChange}
                                                                                     value={editUserForm.values.members[index].card_details}
                                                                                 />
-
-
-                                                                            </div>
+                                                                            </div> */}
                                                                         </div>
 
                                                                     </div>

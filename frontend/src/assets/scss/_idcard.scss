@@ -82,3 +82,31 @@
 		font-size: 18px;
 	}
 
+	/* Add these styles at the end of your SCSS file */
+
+@media (min-width :600px) and  (max-width: 900px) {
+	.id-horizontal.card {
+	  /* Adjust the styles for smaller screens */
+	  /* For example, you can set a smaller width or adjust margins/paddings */
+	  width: 100%;
+	  margin: 0;
+	 padding: 10px;
+	
+	}
+  
+	// /* You may need to adjust other styles within the card content as well */
+	// .id-horizontal.card .d-flex {
+	//   justify-content: center;
+	// }
+  
+	// .id-horizontal.card .row {
+	//   justify-content: center;
+	// }
+  
+	.id-horizontal.card .col-md-8,
+	.id-horizontal.card .col-sm-4,
+	.id-horizontal.card .col-lg-5 {
+	  width: 100%;
+	}
+  }
+  

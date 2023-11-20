@@ -130,7 +130,7 @@ function UseridCard() {
                                             <span className="mdi mdi-download-circle fs-2"></span>Download
                                         </Button>
                                     </div>
-                                    <div className="row justify-content-center  p-3" >
+                                    <div className="row justify-content-center p-3" >
                                         <div className="col-md-8 col-sm-10 col-lg-6" >
 
                                             <div className="id-cover" ref={verticalFront}>

@@ -290,7 +290,7 @@ function EditUser() {
                                     <Label check>{language ? "தமிழ்" : "English"}  </Label>
                                 </FormGroup>
                             </CardHeader>
-                            <CardBody>
+                            <CardBody style={{maxHeight:"650px",overflow:"scroll"}}>
                                 <FormikProvider value={editUserForm}>
                                     <Form
                                         className="form-horizontal"
@@ -367,7 +367,7 @@ function EditUser() {
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label>Member ID <span className="text-danger">*</span> </Label>
+                                                        <Label>உறுப்பினர் எண்<span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="member_id"
                                                             name="member_id"
@@ -496,8 +496,62 @@ function EditUser() {
                                                     }
 
                                                     )()}
-
                                                     <div className="mb-3">
+                                                        <FormGroup>
+                                                            <Label className="form-label">இரசீது தேதி</Label>
+                                                            <Input type="date"
+                                                                name="receipt_date"
+                                                                id="receipt_date"
+                                                                onChange={editUserForm.handleChange}
+                                                                onBlur={editUserForm.handleBlur}
+                                                                value={editUserForm.values.receipt_date}
+                                                            >
+                                                            </Input>
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
+                                                        <Input
+                                                            id="receipt_book_no"
+                                                            name="receipt_book_no"
+                                                            className="form-control"
+                                                            type="select"
+                                                            onChange={editUserForm.handleChange}
+                                                            onBlur={editUserForm.handleBlur}
+                                                            value={editUserForm.values.receipt_book_no || ''}
+                                                            invalid={editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? true : false}
+                                                        >
+                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
+                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
+                                                        </Input>
+                                                        {editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_book_no}</FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
+                                                        <Input
+                                                            id="receipt_no"
+                                                            name="receipt_no"
+                                                            className="form-control"
+                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
+                                                            type="number"
+                                                            onChange={editUserForm.handleChange}
+                                                            onBlur={editUserForm.handleBlur}
+                                                            value={editUserForm.values.receipt_no}
+                                                            invalid={editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? true : false}
+                                                        />
+                                                        {editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? (
+                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_no}</FormFeedback>
+                                                        ) : null}
+
+                                                    </div>
+                                                   
+                                                   
+                                                </div>
+                                                <div className="col-md-6">
+                                                    
+                                                <div className="mb-3">
                                                         <Label className="form-label">நாடு <span className="text-danger">*</span></Label>
                                                         <Input
                                                             id="country"
@@ -557,23 +611,6 @@ function EditUser() {
                                                             <FormFeedback type="invalid">{editUserForm.errors.district}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                   
-                                                </div>
-                                                <div className="col-md-6">
-                                                    <div className="mb-3">
-                                                        <FormGroup>
-                                                            <Label className="form-label">இரசீது தேதி</Label>
-                                                            <Input type="date"
-                                                                name="receipt_date"
-                                                                id="receipt_date"
-                                                                onChange={editUserForm.handleChange}
-                                                                onBlur={editUserForm.handleBlur}
-                                                                value={editUserForm.values.receipt_date}
-                                                            >
-                                                            </Input>
-                                                        </FormGroup>
-                                                    </div>
-
                                                     <div className="mb-3">
                                                         <Label className="form-label">வட்டம்</Label>
                                                         <Input
@@ -724,43 +761,7 @@ function EditUser() {
                                                         />
 
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
-                                                        <Input
-                                                            id="receipt_book_no"
-                                                            name="receipt_book_no"
-                                                            className="form-control"
-                                                            type="select"
-                                                            onChange={editUserForm.handleChange}
-                                                            onBlur={editUserForm.handleBlur}
-                                                            value={editUserForm.values.receipt_book_no || ''}
-                                                            invalid={editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? true : false}
-                                                        >
-                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
-                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
-                                                        </Input>
-                                                        {editUserForm.touched.receipt_book_no && editUserForm.errors.receipt_book_no ? (
-                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_book_no}</FormFeedback>
-                                                        ) : null}
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
-                                                        <Input
-                                                            id="receipt_no"
-                                                            name="receipt_no"
-                                                            className="form-control"
-                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
-                                                            type="number"
-                                                            onChange={editUserForm.handleChange}
-                                                            onBlur={editUserForm.handleBlur}
-                                                            value={editUserForm.values.receipt_no}
-                                                            invalid={editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? true : false}
-                                                        />
-                                                        {editUserForm.touched.receipt_no && editUserForm.errors.receipt_no ? (
-                                                            <FormFeedback type="invalid">{editUserForm.errors.receipt_no}</FormFeedback>
-                                                        ) : null}
-
-                                                    </div>
+                                                    
                                                     <div className="mb-3">
                                                         <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
                                                         <Input

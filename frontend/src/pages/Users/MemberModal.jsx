@@ -5,8 +5,10 @@ import { POST } from 'helpers/api_helper';
 import { CARD_MAP } from 'helpers/url_helper';
 import CustomToast from "components/Common/Toast";
 
-function MemberModal(data) {
-  console.log(data.props);
+function MemberModal(props) {
+  const {trustid}=props;
+  const {data}=props;
+  console.log("ener",trustid); 
   const [modal, setModal] = useState(false);
   const [cardvalue, setCardvalue] = useState('');
   const toggle = () => setModal(!modal);

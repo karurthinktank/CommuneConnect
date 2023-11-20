@@ -36,14 +36,16 @@ function ViewUser() {
             if (response.data.data.is_profile_completed && !response.data.data.is_card_mapped)
                 setShowAddButton(true);
             setShowLoader(false);
+            
         }
+       
         else {
             CustomToast(response.data.message, "error");
             setShowLoader(false);
         }
     }
-
-
+    const trusidvalues=data?.is_charity_member?'true':'false';
+    console.log(trusidvalues);
     return (
         <>
             {showLoader && <Loader />}
@@ -59,7 +61,7 @@ function ViewUser() {
 
                                 {/* உறுப்பினர் விபரங்கள் */}
                                 <div className="row p-3 gap-5">
-                                    <div className="col-md-4  p-3 member-details" >
+                                    <div className="col-md-5  p-3 member-details" >
                                         <div className="d-flex justify-content-center">
                                             {data?.profile_image ? (<img className="photo" src={data?.profile_image.public_url} alt="User Avatar" />)
                                                 : <img className="photo" src={noprofile} alt="User Profie" />}
@@ -71,7 +73,7 @@ function ViewUser() {
                                         </div>
                                         {showAddButton && (<div className="d-flex align-items-center justify-content-center" >
                                             <Label className="mb-0">Add Number</Label>
-                                            <MemberModal props={id} />
+                                            <MemberModal props={id}  trustid={trusidvalues}/>
                                         </div>)
                                         }
                                         {data?.is_card_mapped && (<div className="d-flex align-items-center justify-content-center" >
@@ -81,39 +83,39 @@ function ViewUser() {
 
 
                                         <div className="profile-info ms-2">
-                                            <div className="row justify-content-center">
-                                                <div className="col-md-6">
+                                            <div className="row justify-content-center p-3 ">
+                                                <div className="col-md-6 mb-3">
                                                     <label>பெயர்</label>
                                                 </div>
 
-                                                <div className="col-md-6">
+                                                <div className="col-md-6 mb-3">
                                                     <strong>{data?.name}</strong>
                                                 </div>
 
 
-                                                <div className="col-md-6">
+                                                <div className="col-md-6 mb-3">
                                                     <label>த/க பெயர்</label>
                                                 </div>
-                                                <div className="col-md-6">
+                                                <div className="col-md-6 mb-3">
                                                     <strong>{data?.father_or_husband}</strong>
                                                 </div>
 
 
-                                                <div className="col-md-6">
-                                                    <label>முகவரி</label>
+                                                <div className="col-md-6 mb-3">
+                                                    <label>தற்போதைய முகவரி</label>
+                                                </div>
+
+                                                <div className="col-md-6 mb-3">
+                                                    <strong>{data?.current_address}</strong>
+                                                </div>
+
+
+                                                <div className="col-md-6 mb-3">
+                                                    <label> அலை பேசி எண்</label>
                                                 </div>
 
                                                 <div className="col-md-6">
                                                     <strong>{data?.mobile_number}</strong>
-                                                </div>
-
-
-                                                <div className="col-md-6">
-                                                    <label>முகவரி</label>
-                                                </div>
-
-                                                <div className="col-md-6">
-                                                    <strong>{data?.receipt_no} / {data?.receipt_book_no}</strong>
                                                 </div>
 
 
@@ -140,7 +142,7 @@ function ViewUser() {
                                         </div>
 
                                     </div>
-                                    <div className="col-md-7  p-3 member-details">
+                                    <div className="col-md-6  p-3 member-details">
                                         <div className="row fs-5">
                                             <div className="col-md-6" key="இரசீது தேதி">
                                                 <Label className="text-muted">இரசீது தேதி:</Label>
@@ -201,6 +203,10 @@ function ViewUser() {
                                                 </p>
                                             </div>
 
+                                            <div className="col-md-6" key="மாவட்டம்">
+                                                <Label className="text-muted">மாவட்டம்:</Label>
+                                                <p className="fw-bold">{data?.district}</p>
+                                            </div>
                                             <div className="col-md-6" key="மாவட்டம்">
                                                 <Label className="text-muted">மாவட்டம்:</Label>
                                                 <p className="fw-bold">{data?.district}</p>

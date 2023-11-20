@@ -348,7 +348,7 @@ function AddUser() {
                                                         ) : null}
                                                     </div>
                                                     <div className="mb-3">
-                                                        <Label>பதிவு எண்<span className="text-danger">*</span> </Label>
+                                                        <Label>உறுப்பினர் எண்<span className="text-danger">*</span> </Label>
                                                         <Input
                                                             id="member_id"
                                                             name="member_id"
@@ -476,8 +476,80 @@ function AddUser() {
                                                     }
 
                                                     )()}
-
+                                                       <div className="mb-3">
+                                                        <FormGroup>
+                                                            <Label className="form-label">இரசீது தேதி</Label>
+                                                            <Input type="date"
+                                                                name="receipt_date"
+                                                                id="receipt_date"
+                                                                onChange={addUserForm.handleChange}
+                                                                onBlur={addUserForm.handleBlur}
+                                                                value={addUserForm.values.receipt_date}
+                                                            >
+                                                            </Input>
+                                                            {addUserForm.touched.receipt_date && addUserForm.errors.receipt_date ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_date}
+                                                            </FormFeedback>
+                                                        ) : null}
+                                                        </FormGroup>
+                                                    </div>
                                                     <div className="mb-3">
+                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
+                                                        <Input
+                                                            id="receipt_book_no"
+                                                            name="receipt_book_no"
+                                                            className="form-control"
+                                                            type="select"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.receipt_book_no || ''}
+                                                            invalid={addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? true : false}
+                                                        >
+                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
+                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
+                                                        </Input>
+                                                        {addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_book_no}</FormFeedback>
+                                                        ) : null}
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
+                                                        <Input
+                                                            id="receipt_no"
+                                                            name="receipt_no"
+                                                            className="form-control"
+                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
+                                                            type="number"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.receipt_no}
+                                                            invalid={addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? true : false}
+                                                        />
+                                                        {addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? (
+                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_no}</FormFeedback>
+                                                        ) : null}
+
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <Label className="form-label">தபால் குறியீடு எண்</Label>
+                                                        <Input
+                                                            id="postal_code"
+                                                            name="postal_code"
+                                                            className="form-control"
+                                                            placeholder="தபால் அலுவலக எண்ணை உள்ளிடவும்"
+                                                            type="text"
+                                                            onChange={addUserForm.handleChange}
+                                                            onBlur={addUserForm.handleBlur}
+                                                            value={addUserForm.values.postal_code}
+                                                        />
+
+                                                    </div>
+                                                   
+
+                                                </div>
+                                                <div className="col-md-6">
+                                                 
+                                                <div className="mb-3">
                                                         <Label className="form-label">நாடு <span className="text-danger">*</span></Label>
                                                         <Input
                                                             id="country"
@@ -537,28 +609,6 @@ function AddUser() {
                                                             <FormFeedback type="invalid">{addUserForm.errors.district}</FormFeedback>
                                                         ) : null}
                                                     </div>
-                                                   
-
-                                                </div>
-                                                <div className="col-md-6">
-                                                    <div className="mb-3">
-                                                        <FormGroup>
-                                                            <Label className="form-label">இரசீது தேதி</Label>
-                                                            <Input type="date"
-                                                                name="receipt_date"
-                                                                id="receipt_date"
-                                                                onChange={addUserForm.handleChange}
-                                                                onBlur={addUserForm.handleBlur}
-                                                                value={addUserForm.values.receipt_date}
-                                                            >
-                                                            </Input>
-                                                            {addUserForm.touched.receipt_date && addUserForm.errors.receipt_date ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_date}
-                                                            </FormFeedback>
-                                                        ) : null}
-                                                        </FormGroup>
-                                                    </div>
-
                                                     <div className="mb-3">
                                                         <Label className="form-label">வட்டம்/தாலுகா</Label>
                                                         <Input
@@ -601,20 +651,7 @@ function AddUser() {
                                                         />
 
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">தபால் குறியீடு எண்</Label>
-                                                        <Input
-                                                            id="postal_code"
-                                                            name="postal_code"
-                                                            className="form-control"
-                                                            placeholder="தபால் அலுவலக எண்ணை உள்ளிடவும்"
-                                                            type="text"
-                                                            onChange={addUserForm.handleChange}
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.postal_code}
-                                                        />
-
-                                                    </div>
+                                                 
                                                     <div className="mb-3">
                                                         <Label className="form-label">அலைபேசி எண்</Label>
                                                         <Input
@@ -709,43 +746,7 @@ function AddUser() {
                                                         />
 
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது புத்தக எண் </Label>
-                                                        <Input
-                                                            id="receipt_book_no"
-                                                            name="receipt_book_no"
-                                                            className="form-control"
-                                                            type="select"
-                                                            onChange={addUserForm.handleChange}
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.receipt_book_no || ''}
-                                                            invalid={addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? true : false}
-                                                        >
-                                                            <option value="" disabled defaultValue="">ரசீது புத்தக எண்ணைத் தேர்ந்தெடுக்கவும்</option>
-                                                            {RECEIPT_BOOK_NO.map((code) => (<option key={code} value={code}>{code}</option>))}
-                                                        </Input>
-                                                        {addUserForm.touched.receipt_book_no && addUserForm.errors.receipt_book_no ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_book_no}</FormFeedback>
-                                                        ) : null}
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <Label className="form-label">இரசீது எண்<span className="text-danger">*</span></Label>
-                                                        <Input
-                                                            id="receipt_no"
-                                                            name="receipt_no"
-                                                            className="form-control"
-                                                            placeholder="இரசீது எண்ணைத் தேர்ந்தெடுக்கவும்"
-                                                            type="number"
-                                                            onChange={addUserForm.handleChange}
-                                                            onBlur={addUserForm.handleBlur}
-                                                            value={addUserForm.values.receipt_no}
-                                                            invalid={addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? true : false}
-                                                        />
-                                                        {addUserForm.touched.receipt_no && addUserForm.errors.receipt_no ? (
-                                                            <FormFeedback type="invalid">{addUserForm.errors.receipt_no}</FormFeedback>
-                                                        ) : null}
-
-                                                    </div>
+                                                    
                                                     <div className="mb-3">
                                                         <Label className="form-label">குடும்ப தலைவரின் புகைப்படம்</Label>
                                                         <Input

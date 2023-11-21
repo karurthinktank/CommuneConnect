@@ -44,8 +44,7 @@ function ViewUser() {
             setShowLoader(false);
         }
     }
-    const trusidvalues=data?.is_charity_member?'true':'false';
-    console.log(trusidvalues);
+    const trusidvalues=data?.is_charity_member;
     return (
         <>
             {showLoader && <Loader />}
@@ -72,7 +71,7 @@ function ViewUser() {
                                                 <Badge color="success" className="rounded-pill ms-2 fw-bold fs-6">{data?.member_id}</Badge></span></Badge>
                                         </div>
                                         {showAddButton && (<div className="d-flex align-items-center justify-content-center" >
-                                            <Label className="mb-0">Add Number</Label>
+                                            <Label className="mb-0">Trustee ID இணைப்பு</Label>
                                             <MemberModal props={id}  trustid={trusidvalues}/>
                                         </div>)
                                         }

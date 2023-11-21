@@ -59,8 +59,8 @@ const fetchData = async () => {
         <Container fluid>
           {/* Render Breadcrumb */}
           <Breadcrumbs
-            title={props.t("Home")}
-            breadcrumbItem={props.t("Home")}
+            title={props.t("முகப்பு")}
+            breadcrumbItem={props.t("முகப்பு")}
           />
           <div>
           <Row>
@@ -155,9 +155,63 @@ const fetchData = async () => {
                 </CardBody>
               </Card>
           </Col>
+          <Col md="3" key="5">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-phone-alert font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">தொடர்பு எண் இல்லாத</p>
+                      <h4 className="mb-0">{data?.id_card_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+          <Col md="3" key="5">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-check-circle font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">ID விநோயோகித்தவை </p>
+                      <h4 className="mb-0">{data?.id_card_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+          <Col md="3" key="5">
+              <Card className="mini-stats-wid">
+                <CardBody>
+                  <div className="d-flex">
+                    
+                    <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                      <span className="avatar-title rounded-circle bg-success">
+                        <i className="mdi mdi-map-check font-size-24"></i>
+                      </span>
+                    </div>
+                    <div className="ms-3">
+                      <p className="text-muted fw-medium">ID இணைத்தவை</p>
+                      <h4 className="mb-0">{data?.id_card_count}</h4>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+          </Col>
+          
             </Row>
-            <Row>
-            </Row>
+            
           </div>
           </Container>
           </div>

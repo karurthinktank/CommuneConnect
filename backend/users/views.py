@@ -341,6 +341,8 @@ class PeopleViewSet(viewsets.ModelViewSet):
             people.modified_at = timezone.now()
             people.is_card_mapped = True
             people.id_card_no = data['card_no']
+            if 'trust_card_no' in data:
+                people.trust_card_no = data['trust_card_no']
             people.save()
             response['message'] = "Card Mapped Successfully!"
             response['code'] = 200
@@ -384,12 +386,16 @@ class DashboardViewSet(viewsets.ModelViewSet):
             card_mapped_count = self.queryset.filter(is_card_mapped=True).count()
             male_count = self.queryset.filter(gender="ஆண்").count() + members.filter(gender="ஆண்").count()
             female_count = self.queryset.filter(gender="பெண்").count() + members.filter(gender="பெண்").count()
+            no_profile_count = self.queryset.filter(Q(profile_image__isnull=True) | Q(profile_image__exact='')).count()
+            no_mobile_count = self.queryset.filter(Q(mobile_number__isnull=True) | Q(mobile_number__exact='')).count()
             response = {
                 "family_count": family_count,
                 "members_count": total_members_count,
                 "id_card_count": card_mapped_count,
                 "male_count": male_count,
-                "female_count": female_count
+                "female_count": female_count,
+                "no_profile_count": no_profile_count,
+                "no_mobile_count": no_mobile_count
             }
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:

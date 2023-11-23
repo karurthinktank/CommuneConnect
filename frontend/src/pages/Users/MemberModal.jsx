@@ -7,48 +7,37 @@ import CustomToast from "components/Common/Toast";
 import { useFormik, FieldArray, FormikProvider, } from 'formik';
 import * as Yup from "yup";
 import { mobileRegExp } from "constants/constants";
+
 function MemberModal(props) {
-  const { data, trustid } = props;
+  const { slug, is_card_mapped } = props;
   const [modal, setModal] = useState(false);
-  const [cardvalue, setCardvalue] = useState('');
   const toggle = () => setModal(!modal);
 
-  const handleChange = (event) => {
-    setCardvalue(event.target.value);
-  }
-  const addModalValues = useFormik({
+  const IdCardForm = useFormik({
     enableReinitialize: false,
     initialValues: {
-      trustcard: '',
+      card_no: '',
+      trust_card_no: ''
     },
     validationSchema: Yup.object({
-      trustcard: Yup.string().required("This field is required!"),
-    })
-  })
-  const addModaltrueValue = useFormik({
-    enableReinitialize: false,
-    initialValues: {
-      trustid: '',
-      familyid:''
-    },
-    validationSchema: Yup.object({
-      trustcard: Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
-      familyid:  Yup.string().matches(mobileRegExp, 'Invalid Mobile number!'),
-    })
+      card_no: Yup.string().matches(mobileRegExp, "ID Card No must be 10 digit!").required("This field is required!"),
+      trust_card_no: is_card_mapped ? Yup.string().matches(mobileRegExp, "ID Card No must be 10 digit!").required("This field is required!") : Yup.string()
+    }),
+    onSubmit: async (values) => {
+      console.log(values)
+      let url = CARD_MAP.replace(":slug", slug)
+      var res = await POST(url, values);
+      if (res.status === 200) {
+        CustomToast(res.data.message, "success");
+        toggle();
+        window.location.reload();
+      }
+      else {
+        CustomToast(res.data.message, "error");
+      }   
+    }
   })
 
-  const handleSubmit = async () => {
-    let url = CARD_MAP.replace(":slug", data.props)
-    var res = await POST(url, { "card_no": cardvalue });
-    if (res.status === 200) {
-      CustomToast(res.data.message, "success");
-      toggle();
-      window.location.reload();
-    }
-    else {
-      CustomToast(res.data.message, "error");
-    }
-  }
 
   return (
     <div>
@@ -62,117 +51,59 @@ function MemberModal(props) {
           <Form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log(addModalValues)
-              addModalValues.handleSubmit();
-              // addModalValues.isValid ? errorSubmit() : CustomToast(JSON.stringify(addModalValues.errors), "error");;
-              // return false;
-            }}
-
-          >
-
-            {/* <div className="mb-3">
-              <Label>Trustee Card</Label>
+              IdCardForm.handleSubmit();
+            }} >
+            {is_card_mapped && <div className="mb-3">
+              <Label>Trust ID Card<span className="text-danger">*</span> </Label>
               <Input
-                id="trusteeCard"
-                name="trusteeCard"
+                id="trust_card_no"
+                name="trust_card_no"
                 className="form-control"
-                placeholder="Enter Trustee Card Number"
+                placeholder="Enter Trust ID No                                                                   "
                 type="number"
-                onChange={addModalValues.handleChange}
-                onBlur={addModalValues.handleBlur}
-                value={addModalValues.values.trusteeid}
-                invalid={
-                  addModalValues.touched.trusteeid &&
-                    addModalValues.errors.trusteeid ? true : false
-                }
+                onChange={IdCardForm.handleChange}
+                onBlur={IdCardForm.handleBlur}
+                value={IdCardForm.values.trust_card_no}
+                invalid={IdCardForm.touched.trust_card_no && IdCardForm.errors.trust_card_no ? true : false}
               />
-              {addModalValues.touched.trusteeid &&
-                addModalValues.errors.trusteeid ? (
-                <FormFeedback type="invalid">
-                  {addModalValues.errors.trusteeid}
+              {IdCardForm.touched.trust_card_no && IdCardForm.errors.trust_card_no ? (
+                <FormFeedback type="invalid">{IdCardForm.errors.trust_card_no}
                 </FormFeedback>
               ) : null}
-            </div> */}
+            </div>}
+
             <div className="mb-3">
-              <Label>Trustee Card<span className="text-danger">*</span> </Label>
+              <Label>Family ID Card<span className="text-danger">*</span> </Label>
               <Input
-                id="trustcard"
-                name="trustcard"
+                id="card_no"
+                name="card_no"
                 className="form-control"
-                placeholder="Enter Trust ID                                                                      "
+                placeholder="Enter Family ID No                                                                   "
                 type="number"
-                onChange={handleChange}
-                onBlur={addModalValues.handleBlur}
-                value={addModalValues.values.trustcard}
-                invalid={addModalValues.touched.trustcard && addModalValues.errors.trustcard ? true : false}
+                onChange={IdCardForm.handleChange}
+                onBlur={IdCardForm.handleBlur}
+                value={IdCardForm.values.card_no}
+                invalid={IdCardForm.touched.card_no && IdCardForm.errors.card_no ? true : false}
               />
-              {addModalValues.touched.trustcard && addModalValues.errors.trustcard ? (
-                <FormFeedback type="invalid">{addModalValues.errors.trustcard}
+              {IdCardForm.touched.card_no && IdCardForm.errors.card_no ? (
+                <FormFeedback type="invalid">{IdCardForm.errors.card_no}
                 </FormFeedback>
               ) : null}
             </div>
-
-          </Form>
-          {trustid && (
-            <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log(addModalValues)
-              addModaltrueValue.handleSubmit();
-              
-            }}
-
-            >
-            <div className="mb-3">
-              <Label>Trustee Id<span className="text-danger">*</span> </Label>
-              <Input
-                id="trustid"
-                name="trustid"
-                className="form-control"
-                placeholder="Enter Trust ID                                                                      "
-                type="number"
-                onChange={handleChange}
-                onBlur={addModaltrueValue.handleBlur}
-                value={addModaltrueValue.values.trustid}
-                invalid={addModaltrueValue.touched.trustid && addModaltrueValue.errors.trustid ? true : false}
-              />
-              {addModaltrueValue.touched.trustid && addModaltrueValue.errors.trustid ? (
-                <FormFeedback type="invalid">{addModaltrueValue.errors.trustid}
-                </FormFeedback>
-              ) : null}
-            </div>
-              <div className="mb-3">
-              <Label>Family Id<span className="text-danger">*</span> </Label>
-              <Input
-                id="familyid"
-                name="familyid"
-                className="form-control"
-                placeholder="Enter Family ID                                                                      "
-                type="number"
-                onChange={handleChange}
-                onBlur={addModalValues.handleBlur}
-                value={addModalValues.values.familyid}
-                invalid={addModalValues.touched.familyid && addModalValues.errors.familyid ? true : false}
-              />
-              {addModalValues.touched.familyid && addModalValues.errors.familyid ? (
-                <FormFeedback type="invalid">{addModalValues.errors.familyid}
-                </FormFeedback>
-              ) : null}
-            </div>
-            </Form>
-
-          )}
-
-
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" type="submit">
+            <ModalFooter>
+            <Button color="primary" type="submit">
             Add
           </Button>{' '}
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>
-        </ModalFooter>
+          </ModalFooter>
+          </Form>
+
+        </ModalBody>
+       
+         
+        
       </Modal>
     </div>
   );

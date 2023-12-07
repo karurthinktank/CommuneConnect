@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { mobileRegExp } from "constants/constants";
 
 function MemberModal(props) {
-  const { slug, is_card_mapped } = props;
+  const { slug, is_charity_member } = props;
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
@@ -21,7 +21,7 @@ function MemberModal(props) {
     },
     validationSchema: Yup.object({
       card_no: Yup.string().matches(mobileRegExp, "ID Card No must be 10 digit!").required("This field is required!"),
-      trust_card_no: is_card_mapped ? Yup.string().matches(mobileRegExp, "ID Card No must be 10 digit!").required("This field is required!") : Yup.string()
+//       trust_card_no: is_charity_member ? Yup.string().matches(mobileRegExp, "ID Card No must be 10 digit!").required("This field is required!") : Yup.string()
     }),
     onSubmit: async (values) => {
       console.log(values)
@@ -53,7 +53,8 @@ function MemberModal(props) {
               e.preventDefault();
               IdCardForm.handleSubmit();
             }} >
-            {is_card_mapped && <div className="mb-3">
+            {/* {is_charity_member &&
+            <div className="mb-3">
               <Label>Trust ID Card<span className="text-danger">*</span> </Label>
               <Input
                 id="trust_card_no"
@@ -70,7 +71,7 @@ function MemberModal(props) {
                 <FormFeedback type="invalid">{IdCardForm.errors.trust_card_no}
                 </FormFeedback>
               ) : null}
-            </div>}
+            </div>} */}
 
             <div className="mb-3">
               <Label>Family ID Card<span className="text-danger">*</span> </Label>

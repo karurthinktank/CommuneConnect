@@ -71,7 +71,7 @@ function ViewUser() {
                                         </div>
                                         {showAddButton && (<div className="d-flex align-items-center justify-content-center" >
                                             <Label className="mb-0">ID Card இணைப்பு</Label>
-                                            <MemberModal slug={id}  is_card_mapped={data?.is_charity_member}/>
+                                            <MemberModal slug={id}  is_charity_member={data?.is_charity_member}/>
                                         </div>)
                                         }
                                         {data?.is_card_mapped && (<div className="d-flex align-items-center justify-content-center" >

@@ -6,10 +6,10 @@ const Footer = () => {
     <React.Fragment>
       <footer className="footer">
         <Container fluid={true}>
-          <Row>
-            <Col md={6}>{new Date().getFullYear()} © THINKTANK.</Col>
-            <Col md={6}>
-              <div className="text-sm-end d-none d-sm-block">
+          <Row className="" >
+            <Col md={6} className="text-md-start text-sm-center">{new Date().getFullYear()} © THINKTANK.</Col>
+            <Col md={6} className="text-md-end text-sm-center">
+              <div className="">
               product of techlake
               </div>
             </Col>

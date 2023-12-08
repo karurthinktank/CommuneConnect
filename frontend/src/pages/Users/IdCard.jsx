@@ -192,7 +192,7 @@ function UseridCard() {
                                                     </div>
                                                 </div>
                                                 <div className="col-md-8 col-sm-10 col-lg-7">
-                                                    <div className="id-cover" ref={horizontalBackside}>
+                                                    <div className="id-cover">
                                                         <img src={horizontalgreenback} className="horizontal-back-img" />
                                                         <div className="user-content">
                                                             <p className="id-address justify-content-center">

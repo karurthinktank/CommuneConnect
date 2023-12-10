@@ -132,14 +132,85 @@ function UseridCard() {
                         <Breadcrumb title="குடும்பங்கள்" parentPath="/users" currentPath="/idcard" breadcrumbItem="அடையாள அட்டை" />
 
                             <Card>
-                                {data?.is_charity_member ? (
-                                    // <--preview start here -->>
-                                    <>
-                                        <div className="id-vertical card mb-5">
-                                            <div className="p-3 head-member">
+                            <div className="id-horizontal">
+                                   <div className="p-3 head-member">
                                                 {/* <Button className="btn-success align-items-center d-flex gap-2 p-1 justify-content-center" onClick={verticalDownloadImage}>
                                                     <span className="mdi mdi-download-circle fs-2"></span>Download
                                                 </Button> */}
+                                                <h4>ID Card Preview</h4>
+                                            </div>
+                                 <div className="row justify-content-center p-3">
+                                     <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
+                                         <div className="id-cover" >
+                                             <img src={horizontalgreenfront} className="horizontal-front-img" />
+                                             <div className="user-content">
+                                                 {/* <img src={profilepicture} className="id-photo" /> */}
+                                                 {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
+                                                     : <img className="id-photo" src={noprofile} alt="User Profie" />}
+                                                 <p className="id-name">{data?.name}</p>
+                                                 <p className="id-reg-no">{data?.member_id}</p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div className="col-md-8 col-sm-10 col-lg-7">
+                                         <div className="id-cover">
+                                             <img src={horizontalgreenback} className="horizontal-back-img" />
+                                             <div className="user-content">
+                                                 <p className="id-address justify-content-center">
+                                                     த/க பெ: {data?.father_or_husband} <br />
+                                                     {data?.current_address}
+                                                 </p>
+                                                 <p className="id-phone-no">{data?.phone_number}</p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                                   </div>
+                                    {/* <<-- White  image Start here -->> */}
+                                    <div className="id-horizontal card mt-3">
+                                       
+                                       <div className="p-3 head-member d-flex ">
+                                   
+                                               <Button className="btn-success ms-auto align-items-center d-flex gap-2 p-1 justify-content-center" onClick={horizontalDownloadImage}>
+                                                   <span className="mdi mdi-download-circle fs-2"></span>Download
+                                               </Button>
+                                           
+                                       </div>
+                                       <div className="row justify-content-center p-3">
+                                               <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
+                                                   <div className="id-cover" ref={horizontalFront}>
+                                                       <img src={horizwhitfront} className="horizontal-front-img" />
+                                                       <div className="user-content">
+                                                           {/* <img src={profilepicture} className="id-photo" /> */}
+                                                           {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
+                                                               : <img className="id-photo" src={noprofile} alt="User Profie" />}
+                                                           <p className="id-name">{data?.name}</p>
+                                                           <p className="id-reg-no">{data?.member_id}</p>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                               <div className="col-md-8 col-sm-10 col-lg-7">
+                                                   <div className="id-cover" ref={horizontalBackside}>
+                                                       <img src={horizwhiteback} className="horizontal-back-img" />
+                                                       <div className="user-content">
+                                                           <p className="id-address justify-content-center">
+                                                               த/க பெ: {data?.father_or_husband} <br />
+                                                               {data?.current_address}
+                                                           </p>
+                                                           <p className="id-phone-no">{data?.phone_number}</p>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                      
+                                      </div>
+                                       {/* <<-- White  image End  here -->> */}
+                                {/* {data?.is_charity_member ? (
+                                    // <--preview start here -->>
+                                    <>
+                                         <div className="id-vertical card mb-5">
+                                            <div className="p-3 head-member">
+                                               
                                                 <h4>ID Card Preview</h4>
                                             </div>
                                             <div className="row justify-content-center p-3" >
@@ -183,11 +254,11 @@ function UseridCard() {
                                                     <div className="id-cover" >
                                                         <img src={horizontalgreenfront} className="horizontal-front-img" />
                                                         <div className="user-content">
-                                                            {/* <img src={profilepicture} className="id-photo" /> */}
+                                                           
                                                             {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
                                                                 : <img className="id-photo" src={noprofile} alt="User Profie" />}
                                                             <p className="id-name">{data?.name}</p>
-                                                            <p className="id-reg-no">{data?.receipt_no}</p>
+                                                            <p className="id-reg-no">{data?.member_id}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -199,143 +270,17 @@ function UseridCard() {
                                                                 த/க பெ: {data?.father_or_husband} <br />
                                                                 {data?.current_address}
                                                             </p>
-                                                            <p className="id-phone-no">{data?.phone_number}</p>
+                                                            <p className="id-phone-no">{data?.member_id}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                     {/* <<-- preview End here -->> */}
+                                        </div> 
                                      
-                                        {/* <div className="id-horizontal card">
-                                    <div className="d-flex ms-auto p-3">
-                                        <Button className="btn-success align-items-center d-flex gap-2 p-1 justify-content-center" onClick={horizontalDownloadImage}>
-                                            <span className="mdi mdi-download-circle fs-2"></span>Download
-                                        </Button>
-                                    </div>
-                                    <div className="row">
-  <div className="col-md-7">
-    <div className="id-cover position-relative" ref={horizontalFront}>
-      <img src={horizontalfront} className="horizontal-front-img img-fluid" />
-      <div className="user-content position-absolute bottom-0 start-0 w-100">
-        {data?.profile_image ? (
-          <img
-            className="id-photo border border-4 border-primary mx-auto d-block"
-            src={base64Image + data?.profile_image}
-            alt="User Avatar"
-          />
-        ) : (
-          <img className="id-photo border border-4 border-primary mx-auto d-block" src={noprofile} alt="User Profile" />
-        )}
-        <p className="id-name position-absolute bottom-0 start-50 translate-middle font-size-14 text-center w-100">
-          {data?.name}
-        </p>
-        <p className="id-reg-no position-absolute bottom-0 start-50 translate-middle font-size-14 text-center w-100">
-          {data?.receipt_no}
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div className="row">
-  <div className="col-md-7">
-    <div className="id-cover position-relative" ref={horizontalBackside}>
-      <img src={horizontalback} className="horizontal-back-img img-fluid" />
-      <div className="user-content position-absolute bottom-0 start-0 w-100">
-        <p className="id-address justify-content-center position-absolute bottom-50 start-50 translate-middle font-size-14 text-center w-100">
-          த/க பெ: {data?.father_or_husband} <br />
-          {data?.current_address}
-        </p>
-        <p className="id-phone-no position-absolute bottom-0 start-50 translate-middle font-size-18 text-center w-100">
-          {data?.phone_number}
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-                                </div> */}
                                     </>
                                 ) : <>
-                                   <div className="id-horizontal">
-                                   <div className="p-3 head-member">
-                                                {/* <Button className="btn-success align-items-center d-flex gap-2 p-1 justify-content-center" onClick={verticalDownloadImage}>
-                                                    <span className="mdi mdi-download-circle fs-2"></span>Download
-                                                </Button> */}
-                                                <h4>ID Card Preview</h4>
-                                            </div>
-                                 <div className="row justify-content-center p-3">
-                                     <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
-                                         <div className="id-cover" >
-                                             <img src={horizontalgreenfront} className="horizontal-front-img" />
-                                             <div className="user-content">
-                                                 {/* <img src={profilepicture} className="id-photo" /> */}
-                                                 {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
-                                                     : <img className="id-photo" src={noprofile} alt="User Profie" />}
-                                                 <p className="id-name">{data?.name}</p>
-                                                 <p className="id-reg-no">{data?.receipt_no}</p>
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div className="col-md-8 col-sm-10 col-lg-7">
-                                         <div className="id-cover">
-                                             <img src={horizontalgreenback} className="horizontal-back-img" />
-                                             <div className="user-content">
-                                                 <p className="id-address justify-content-center">
-                                                     த/க பெ: {data?.father_or_husband} <br />
-                                                     {data?.current_address}
-                                                 </p>
-                                                 <p className="id-phone-no">{data?.phone_number}</p>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                                   </div>
-                                    {/* <<-- White  image Start here -->> */}
-                                    <div className="id-horizontal card mt-3">
-                                       
-                                       <div className="p-3 head-member d-flex ">
-                                   
-                                               <Button className="btn-success ms-auto align-items-center d-flex gap-2 p-1 justify-content-center" onClick={horizontalDownloadImage}>
-                                                   <span className="mdi mdi-download-circle fs-2"></span>Download
-                                               </Button>
-                                           
-                                       </div>
-                                       <div className="row justify-content-center p-3">
-                                               <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
-                                                   <div className="id-cover" ref={horizontalFront}>
-                                                       <img src={horizwhitfront} className="horizontal-front-img" />
-                                                       <div className="user-content">
-                                                           {/* <img src={profilepicture} className="id-photo" /> */}
-                                                           {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
-                                                               : <img className="id-photo" src={noprofile} alt="User Profie" />}
-                                                           <p className="id-name">{data?.name}</p>
-                                                           <p className="id-reg-no">{data?.receipt_no}</p>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                               <div className="col-md-8 col-sm-10 col-lg-7">
-                                                   <div className="id-cover" ref={horizontalBackside}>
-                                                       <img src={horizwhiteback} className="horizontal-back-img" />
-                                                       <div className="user-content">
-                                                           <p className="id-address justify-content-center">
-                                                               த/க பெ: {data?.father_or_husband} <br />
-                                                               {data?.current_address}
-                                                           </p>
-                                                           <p className="id-phone-no">{data?.phone_number}</p>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                      
-                                      </div>
-                                       {/* <<-- White  image End  here -->> */}
-                                </>}
+                                  
+                                </>} */}
                             </Card>
                         </div>
                     </div>

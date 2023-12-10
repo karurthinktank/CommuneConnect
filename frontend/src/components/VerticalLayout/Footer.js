@@ -7,8 +7,8 @@ const Footer = () => {
       <footer className="footer">
         <Container fluid={true}>
           <Row className="" >
-            <Col md={6} className="text-md-start text-sm-center">{new Date().getFullYear()} © THINKTANK.</Col>
-            <Col md={6} className="text-md-end text-sm-center">
+            <Col md={6} className="text-md-start text-sm-center">{new Date().getFullYear()} © THINKTANK</Col>
+            <Col md={6} className="text-md-end text-sm-end">
               <div className="">
               product of techlake
               </div>

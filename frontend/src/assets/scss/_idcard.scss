@@ -24,7 +24,8 @@
 .id-photo, .id-name, .id-reg-no, .id-address, .id-phone-no {
 	position: absolute;
 	color: #000000;
-	font-weight: 600;
+	font-weight: 800;
+	font-size: 16px !important;
 }
 .id-vertical .id-photo {
 	width: 115px;
@@ -58,26 +59,26 @@
 	height: 115px;
 	bottom: 102px;
 	right: 104px;
-	border: 4px solid #aa196b;
+	//  border: 4px solid green !important;
 }
 .id-horizontal .id-name {
 	bottom: 57px;
-	left: 427px;
-	font-size: 14px;
+	left: 433px;
+	font-size: 16px;
 } 
 .id-horizontal .id-reg-no {
-	bottom: 26px;
-	left: 465px;
+	bottom: 28px;
+	left: 461px;
 }
 .id-horizontal .id-address {
-	bottom: 235px;
+	bottom: 275px;
 	left: 350px;
 	width: 260px;
-	font-size: 14px;
+	top:54px
 }
 .id-horizontal .id-phone-no{
-	bottom: 133px;
-	left: 380px;
+	bottom: 165px;
+	left: 487px;
 	font-size: 18px;
 }
 

@@ -369,7 +369,7 @@ class PeopleViewSet(viewsets.ModelViewSet):
             "receipt_no": instance.receipt_no,
             "profile_image": b64_content,
             "current_address": instance.current_address,
-            "phone_number": instance.phone_number
+            "mobile_number": instance.mobile_number
         }
         return Response(data, status=status.HTTP_200_OK)
 

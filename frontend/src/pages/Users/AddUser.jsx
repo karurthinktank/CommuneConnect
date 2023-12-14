@@ -706,8 +706,8 @@ function AddUser() {
                                                         <div className="mb-3">
                                                             <Label className="form-label">சர்வதேச அலைபேசி எண் </Label>
                                                             <Input
-                                                                id="international_mobile_number"
-                                                                name="international_mobile_number"
+                                                                id="mobile_number"
+                                                                name="mobile_number"
                                                                 className="form-control"
                                                                 placeholder="சர்வதேச அலைபேசி எண்ணை உள்ளிடவும்"
                                                                 type="number"

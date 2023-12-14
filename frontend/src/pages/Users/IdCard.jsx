@@ -197,7 +197,7 @@ function UseridCard() {
                                                                த/க பெ: {data?.father_or_husband} <br />
                                                                {data?.current_address}
                                                            </p>
-                                                           <p className="id-phone-no">{data?.phone_number}</p>
+                                                           <p className="id-phone-no">{data?.mobile_number}</p>
                                                        </div>
                                                    </div>
                                                </div>

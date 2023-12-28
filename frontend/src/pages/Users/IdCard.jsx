@@ -91,7 +91,9 @@ function UseridCard() {
                 });
         }
     };
-
+ const handleprint = ()=>{
+    window.print();
+ }
 
     useEffect(() => {
         fetchUser();
@@ -169,15 +171,19 @@ function UseridCard() {
                                     {/* <<-- White  image Start here -->> */}
                                     <div className="id-horizontal card mt-3">
                                        
-                                       <div className="p-3 head-member d-flex ">
+                                       <div className="p-3 head-member d-flex gap-3">
                                    
-                                               <Button className="btn-success ms-auto align-items-center d-flex gap-2 p-1 justify-content-center" onClick={horizontalDownloadImage}>
+                                               {/* <Button className="btn-success ms-auto align-items-center d-flex gap-2 p-1 justify-content-center" onClick={horizontalDownloadImage}>
                                                    <span className="mdi mdi-download-circle fs-2"></span>Download
+                                               </Button> */}
+                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={handleprint}>
+                                                   <span className="mdi mdi-printer fs-2"></span>Print
                                                </Button>
                                            
                                        </div>
-                                       <div className="row justify-content-center p-3">
-                                               <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
+                                       <div>
+                                       <div className="row justify-content-center p-3 " >
+                                               <div className="col-md-8 col-sm-10 col-lg-7 mb-3" id="print-content">
                                                    <div className="id-cover" ref={horizontalFront}>
                                                        <img src={horizwhitfront} className="horizontal-front-img" />
                                                        <div className="user-content">
@@ -202,7 +208,7 @@ function UseridCard() {
                                                    </div>
                                                </div>
                                            </div>
-                                      
+                                           </div>
                                       </div>
                                        {/* <<-- White  image End  here -->> */}
                                 {/* {data?.is_charity_member ? (

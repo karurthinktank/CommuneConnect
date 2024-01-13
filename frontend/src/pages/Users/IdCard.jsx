@@ -21,6 +21,8 @@ import { date } from "yup";
 import { Button, Card, Col, Container } from "reactstrap";
 import Breadcrumb from "components/Common/Breadcrumb";
 import { toPng, toJpeg } from 'html-to-image';
+import ReactToPrint, { PrintContextConsumer, useReactToPrint } from 'react-to-print';
+
 function UseridCard() {
     const [data, setCardvalue] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
@@ -29,6 +31,8 @@ function UseridCard() {
     const verticalBackside = useRef(null);
     const horizontalFront = useRef(null);
     const horizontalBackside = useRef(null);
+    const horizontalPlainFront = useRef(null);
+    const horizontalPlainBackside = useRef(null);
     const base64Image = "data:image/png;base64,"
 
     const verticalDownloadImage = () => {
@@ -61,39 +65,63 @@ function UseridCard() {
                 });
         }
     };
+    
+    const horizontalDownloadImage = useReactToPrint({
+        content: () => horizontalFront.current ? horizontalFront.current : "",
+        copyStyles: true,
+        documentTitle:`${data?.receipt_no}_h_Frontside.jpeg`
+      });
 
-    const horizontalDownloadImage = () => {
-        if (horizontalFront.current) {
-            toPng(horizontalFront.current, { width: 630 })
-                .then(function (dataUrl) {
-                    const link = document.createElement('a');
-                    const filename = `${data?.receipt_no}_h_Frontside.jpeg`;
-                    link.download = filename;
-                    link.href = dataUrl;
-                    link.click();
-                })
-                .catch(function (error) {
-                    console.error('Error capturing the image:', error);
-                });
+      const horizontalBackDownloadImage = useReactToPrint({
+        content: () => horizontalBackside.current ? horizontalBackside.current : "",
+        copyStyles: true,
+        documentTitle:`${data?.receipt_no}_h_Bakeside.jpeg`
+      });
 
-        }
-        if (horizontalBackside.current) {
-            toJpeg(horizontalBackside.current, { width: 630 })
-                .then(function (dataUrl) {
-                    const link = document.createElement('a');
-                    const filename = `${data?.receipt_no}_h_Backside.jpeg`;
-                    link.download = filename;
-                    link.href = dataUrl;
-                    link.click();
-                })
-                .catch(function (error) {
-                    console.error('Error capturing the image:', error);
-                });
-        }
-    };
- const handleprint = ()=>{
-    window.print();
- }
+      const horizontalPlainDownloadImage = useReactToPrint({
+        content: () => horizontalPlainFront.current ? horizontalPlainFront.current : "",
+        copyStyles: true,
+        documentTitle:`${data?.receipt_no}_h_PlainFrontside.jpeg`
+      });
+
+      const horizontalPlainBackDownloadImage = useReactToPrint({
+        content: () => horizontalPlainBackside.current ? horizontalPlainBackside.current : "",
+        copyStyles: true,
+        documentTitle:`${data?.receipt_no}_h_PlainBakeside.jpeg`
+      });
+
+
+
+    // const horizontalDownloadImage = () => {
+    //     if (horizontalFront.current) {
+    //         toPng(horizontalFront.current, { width: 630 })
+    //             .then(function (dataUrl) {
+    //                 const link = document.createElement('a');
+    //                 const filename = `${data?.receipt_no}_h_Frontside.jpeg`;
+    //                 link.download = filename;
+    //                 link.href = dataUrl;
+    //                 link.click();
+    //             })
+    //             .catch(function (error) {
+    //                 console.error('Error capturing the image:', error);
+    //             });
+
+    //     }
+    //     // if (horizontalBackside.current) {
+    //     //     toJpeg(horizontalBackside.current, { width: 630 })
+    //     //         .then(function (dataUrl) {
+    //     //             const link = document.createElement('a');
+    //     //             const filename = `${data?.receipt_no}_h_Backside.jpeg`;
+    //     //             link.download = filename;
+    //     //             link.href = dataUrl;
+    //     //             link.click();
+    //     //         })
+    //     //         .catch(function (error) {
+    //     //             console.error('Error capturing the image:', error);
+    //     //         });
+    //     // }
+    // };
+    
 
     useEffect(() => {
         fetchUser();
@@ -143,19 +171,25 @@ function UseridCard() {
                                             </div>
                                  <div className="row justify-content-center p-3">
                                      <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
-                                         <div className="id-cover" >
-                                             <img src={horizontalgreenfront} className="horizontal-front-img" />
-                                             <div className="user-content">
+                                        <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalDownloadImage} style={{marginBottom: "10px"}}>
+                                                   <span className="mdi mdi-printer fs-2"></span>Print FrontSide
+                                        </Button>
+                                         <div className="id-cover" ref={horizontalFront}>
+                                             <img src={horizontalgreenfront} className="horizontal-front-img"  />
+                                             <div className="user-content" >
                                                  {/* <img src={profilepicture} className="id-photo" /> */}
                                                  {data?.profile_image ? (<img className="id-photo" src={base64Image + data?.profile_image} alt="User Avatar" />)
-                                                     : <img className="id-photo" src={noprofile} alt="User Profie" />}
+                                                     : <img className="id-photo" src={noprofile} alt="User Profie"/>}
                                                  <p className="id-name">{data?.name}</p>
                                                  <p className="id-reg-no">{data?.member_id}</p>
                                              </div>
                                          </div>
                                      </div>
                                      <div className="col-md-8 col-sm-10 col-lg-7">
-                                         <div className="id-cover">
+                                     <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalBackDownloadImage} style={{marginBottom: "10px"}}>
+                                                   <span className="mdi mdi-printer fs-2"></span>Print BackSide
+                                        </Button>
+                                         <div className="id-cover" ref={horizontalBackside}>
                                              <img src={horizontalgreenback} className="horizontal-back-img" />
                                              <div className="user-content">
                                                  <p className="id-address justify-content-center">
@@ -168,23 +202,20 @@ function UseridCard() {
                                      </div>
                                  </div>
                                    </div>
+
                                     {/* <<-- White  image Start here -->> */}
                                     <div className="id-horizontal card mt-3">
                                        
                                        <div className="p-3 head-member d-flex gap-3">
-                                   
-                                               {/* <Button className="btn-success ms-auto align-items-center d-flex gap-2 p-1 justify-content-center" onClick={horizontalDownloadImage}>
-                                                   <span className="mdi mdi-download-circle fs-2"></span>Download
-                                               </Button> */}
-                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={handleprint}>
-                                                   <span className="mdi mdi-printer fs-2"></span>Print
-                                               </Button>
                                            
                                        </div>
                                        <div>
                                        <div className="row justify-content-center p-3 " >
                                                <div className="col-md-8 col-sm-10 col-lg-7 mb-3" id="print-content">
-                                                   <div className="id-cover" ref={horizontalFront}>
+                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalPlainDownloadImage} style={{marginBottom: "10px"}}>
+                                                   <span className="mdi mdi-printer fs-2"></span>Print Plain FrontSide
+                                        </Button>
+                                                   <div className="id-cover" ref={horizontalPlainFront}>
                                                        <img src={horizwhitfront} className="horizontal-front-img" />
                                                        <div className="user-content">
                                                            {/* <img src={profilepicture} className="id-photo" /> */}
@@ -196,7 +227,10 @@ function UseridCard() {
                                                    </div>
                                                </div>
                                                <div className="col-md-8 col-sm-10 col-lg-7">
-                                                   <div className="id-cover" ref={horizontalBackside}>
+                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalPlainBackDownloadImage} style={{marginBottom: "10px"}}>
+                                                   <span className="mdi mdi-printer fs-2"></span>Print Plain BackSide
+                                        </Button>
+                                                   <div className="id-cover" ref={horizontalPlainBackside}>
                                                        <img src={horizwhiteback} className="horizontal-back-img" />
                                                        <div className="user-content">
                                                            <p className="id-address justify-content-center">
@@ -211,6 +245,7 @@ function UseridCard() {
                                            </div>
                                       </div>
                                        {/* <<-- White  image End  here -->> */}
+
                                 {/* {data?.is_charity_member ? (
                                     // <--preview start here -->>
                                     <>

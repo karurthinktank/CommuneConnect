@@ -193,3 +193,61 @@
 // 	left: 55%; /* Adjust left percentage as needed */
 // 	font-size: 18px;
 //   }
+
+@media print {
+	body {
+		margin: 10% !important;
+		padding: 0 !important;
+	  }
+
+	.id-cover{
+		position: relative;;
+	}
+	.horizontal-front-img{
+		width: 636px;
+	}
+	.user-content { 
+		width: 636px;
+		height: 395px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.id-photo {
+		position: absolute;
+		color: #000000;
+		font-weight: 800;
+		font-size: 14px !important;
+		width: 115px;
+		height: 115px;
+		bottom: 102px;
+		right: 104px;
+	}
+
+	.id-name {
+		position: absolute;
+		color: #000000;
+		font-weight: 800;
+		font-size: 14px !important;
+		bottom: 57px;
+		left: 433px;
+		font-size: 14px;
+	} 
+	.id-reg-no {
+		bottom: 28px;
+		left: 461px;
+	}
+	 .id-address {
+		bottom: 275px;
+		left: 350px;
+		width: 260px;
+		top:54px
+	}
+	 .id-phone-no{
+		bottom: 165px;
+		left: 488px;
+		font-size: 18px;
+	}
+	
+}

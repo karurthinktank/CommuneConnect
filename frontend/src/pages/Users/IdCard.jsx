@@ -14,117 +14,550 @@ import profilepicture from "../../assets/images/id-photo-square.png";
 import noprofile from '../../assets/images/noprofile.jpg';
 import horizwhitfront from "../../assets/images/vertical-front-white.jpg"
 import horizwhiteback from "../../assets/images/vertical-back-white.jpg.jpg"
-import horizontalgreenfront from "../../assets/images/horizontal-green-front.jpg";
-import horizontalgreenback from "../../assets/images/horizontal-green-back.jpg";
+import horizontalgreenfront from "../../assets/images/PageFront.jpg";
+import horizontalgreenback from "../../assets/images/PageBack.jpg";
+import { jsPDF } from "jspdf";
 import "../../assets/scss/_idcard.scss";
 import { date } from "yup";
 import { Button, Card, Col, Container } from "reactstrap";
 import Breadcrumb from "components/Common/Breadcrumb";
-import { toPng, toJpeg } from 'html-to-image';
+import { decode,encode } from 'base64-arraybuffer';
 import ReactToPrint, { PrintContextConsumer, useReactToPrint } from 'react-to-print';
+import { PDFDocument,rgb, StandardFonts  } from 'pdf-lib'
+import fontkit from '@pdf-lib/fontkit';
+import { withTranslation,useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+const arrName=['கருப்பண்ணன்']
 
 function UseridCard() {
     const [data, setCardvalue] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
     const { id } = useParams();
-    const verticalFront = useRef(null);
-    const verticalBackside = useRef(null);
     const horizontalFront = useRef(null);
     const horizontalBackside = useRef(null);
     const horizontalPlainFront = useRef(null);
     const horizontalPlainBackside = useRef(null);
+    const [pdfBytes, setPdfBytes] = useState(null);
+    const [pdfBytesPort, setPdfBytesPort] = useState(null);
+    const [pdfBytesPortWhite, setPdfBytesPortWhite] = useState(null);
+    const [pdfBytesWhite, setPdfBytesWhite] = useState(null);
     const base64Image = "data:image/png;base64,"
+    const { t } = useTranslation();
 
-    const verticalDownloadImage = () => {
-        if (verticalFront.current) {
-            toPng(verticalFront.current, { width: 400 })
-                .then(function (dataUrl) {
+    function splitTextIntoLines(text, maxWidth, fontSize,customFont) {
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = words[0];
 
-                    const link = document.createElement('a');
-                    const filename = `${data?.receipt_no}_t_Frontside.jpeg`;
-                    link.download = filename;
-                    link.href = dataUrl;
-                    link.click();
-                })
-                .catch(function (error) {
-                    console.error('Error capturing the image:', error);
-                });
+        for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const width = fontSize * customFont.widthOfTextAtSize(word, fontSize);
 
+            if (width + customFont.widthOfTextAtSize(currentLine + ' ' + word, fontSize) > maxWidth) {
+                lines.push(currentLine);
+                currentLine = word;
+            } else {
+                currentLine += ' ' + word;
+            }
         }
-        if (verticalBackside.current, { width: 650 }) {
-            toPng(verticalBackside.current)
-                .then(function (dataUrl) {
-                    const link = document.createElement('a');
-                    const filename = `${data?.receipt_no}_t_Backside.jpeg`;
-                    link.download = filename;
-                    link.href = dataUrl;
-                    link.click();
-                })
-                .catch(function (error) {
-                    console.error('Error capturing the image:', error);
-                });
+
+        lines.push(currentLine);
+        return lines;
+    }
+
+const landscapepdfColor = (data) => {
+    if(!data){
+        return
+    }
+   
+    async function createPdf() {
+    const pdfBytes = await fetch('http://localhost:5000/pdfrose').then(res => res.arrayBuffer());
+    //const flagPdfBytes = await fetch('http://localhost:5000/convert').then((res) => res.arrayBuffer());
+    
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+   
+    const fontSize = 7;
+    pdfDoc.registerFontkit(fontkit);
+
+    // Embed image into the PDF
+    const fontBytes = await fetch('http://localhost:5000/font').then(res => res.arrayBuffer());
+    
+
+    // Embed the font into the PDF document
+    const customFont = await pdfDoc.embedFont(fontBytes,{ subset: true,features: { liga: false }});
+    //const [americanFlag] = await pdfDoc.embedPdf(flagPdfBytes);
+   // americanFlag.width=200;
+   // americanFlag.height=200;
+    const page = pdfDoc.getPages();
+    page[0].setFont(customFont);
+    // Set the font for the page
+    /*page[0].drawPage(americanFlag, {
+        x: 10,
+        y: 150,
+      });*/
+    if(data?.profile_image){
+        const imageBytes = data?.profile_image || decode(data?.profile_image);
+        try{
+            const image = await pdfDoc.embedPng(imageBytes);
+            page[0].drawImage(image, {
+                x: 162, // X coordinate
+                y: 33, // Y coordinate
+                width:42, // Adjust width as needed
+                height: 42, // Adjust height as needed
+                
+              });
         }
-    };
+       
+          catch(err){
+            const image = await pdfDoc.embedJpg(imageBytes);
+            page[0].drawImage(image, {
+                x: 162, // X coordinate
+                y: 33, // Y coordinate
+                width:42, // Adjust width as needed
+                height: 42, // Adjust height as needed
+              });
+          }
+    }
+   
+    //const page = pdfDoc.addPage([243.13, 154]);
+    page[0].setFont(customFont);
+   
+    //const textWidthName = customFont.widthOfTextAtSize(toConvertName, fontSize);
+    //const startXName = page[0].getWidth() - textWidthName - 20;
+//console.log('கிருஷ்ணராயபுரம்'.split(''))
+//console.log('கருப்பண்ணன்'.split(''))
+
+const toConvertName= (t(data.name).split('.'));
+const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
+//const startXName = page[0].getWidth() - textWidthName - 20;
+page[0].drawText(toConvertName[0]+'.', {
+    x: 166, // X coordinate
+    y: 22, // Y coordinate
+    size: fontSize,
+    font:customFont 
+    // Adjust height as needed
+  });
+page[0].drawText(toConvertName[1], {
+  x: 166+textWidthName, // X coordinate
+  y: 22, // Y coordinate
+  size: fontSize,
+  font:customFont 
+  // Adjust height as needed
+});
+
+
+  
+
+    const toConvertedText=(data.member_id+''||'NA');
+    //const textIdName = customFont.widthOfTextAtSize(toConvertedText, fontSize);
+    //const startXId = page[0].getWidth() - textIdName - 20;
+    page[0].drawText(toConvertedText, {
+        x: 179, // X coordinate
+        y: 11, // Y coordinate
+        size: fontSize, 
+        font:customFont,// Adjust height as needed
+      });
+
+
+    //const page2=pdfDoc.addPage([243.13, 154]);  
+    page[1].setFont(customFont);  
+    const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
+
+      console.log(t(tocFather).split(''));
+      page[1].drawText(t(tocFather).split('').join('')+',', {
+        x: 135, // X coordinate
+        y: 120, // Y coordinate
+        size: fontSize,
+        charSpace: 1, wordSpace: 0 // Adjust height as needed
+      });
     
-    const horizontalDownloadImage = useReactToPrint({
-        content: () => horizontalFront.current ? horizontalFront.current : "",
-        copyStyles: true,
-        documentTitle:`${data?.receipt_no}_h_Frontside.jpeg`
+      const regex = /[\u200B-\u200D\uFEFF]/g;
+    const tocAddress=(data?.current_address.replace(regex, ''));
+   // debugger;
+    const addresSplit= tocAddress.split(',');
+    let y=110;
+    for(let i=0;i<addresSplit.length;i++){
+        const extra=addresSplit.length ===i+1?'':','
+        page[1].drawText((addresSplit[i]+extra).trim(), {
+            x: 135,
+            y,
+            size: fontSize,
+            color: rgb(0, 0, 0),
+            charSpace: 1, wordSpace: 0 // black color
+        });
+        y=y-10
+    }
+
+    const tocPhone=((data?.mobile_number||'NA'));
+    const tocPhoneText = customFont.widthOfTextAtSize(tocAddress, fontSize);
+    const startxPon = page[1].getWidth() - tocPhoneText - 20;
+      page[1].drawText(tocPhone, {
+        x: 190, // X coordinate
+        y: 67, // Y coordinate
+        size: fontSize, // Adjust height as needed
       });
 
-      const horizontalBackDownloadImage = useReactToPrint({
-        content: () => horizontalBackside.current ? horizontalBackside.current : "",
-        copyStyles: true,
-        documentTitle:`${data?.receipt_no}_h_Bakeside.jpeg`
-      });
+      const pdfBytes1 = await pdfDoc.save();
+      const pdfBase64 = encode(pdfBytes1);
+      setPdfBytes(pdfBase64);
+      //const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      //document.getElementById('pdf').src = pdfDataUri;
+    }
+    createPdf();
+};
+const landscapepdfWhite = (data) => {
+    if(!data){
+        return
+    }
+   
+    async function createPdf() {
+    const pdfBytes = await fetch('http://localhost:5000/pdfWhite').then(res => res.arrayBuffer());
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+   
+    const fontSize = 6;
+    pdfDoc.registerFontkit(fontkit);
 
-      const horizontalPlainDownloadImage = useReactToPrint({
-        content: () => horizontalPlainFront.current ? horizontalPlainFront.current : "",
-        copyStyles: true,
-        documentTitle:`${data?.receipt_no}_h_PlainFrontside.jpeg`
-      });
-
-      const horizontalPlainBackDownloadImage = useReactToPrint({
-        content: () => horizontalPlainBackside.current ? horizontalPlainBackside.current : "",
-        copyStyles: true,
-        documentTitle:`${data?.receipt_no}_h_PlainBakeside.jpeg`
-      });
-
-
-
-    // const horizontalDownloadImage = () => {
-    //     if (horizontalFront.current) {
-    //         toPng(horizontalFront.current, { width: 630 })
-    //             .then(function (dataUrl) {
-    //                 const link = document.createElement('a');
-    //                 const filename = `${data?.receipt_no}_h_Frontside.jpeg`;
-    //                 link.download = filename;
-    //                 link.href = dataUrl;
-    //                 link.click();
-    //             })
-    //             .catch(function (error) {
-    //                 console.error('Error capturing the image:', error);
-    //             });
-
-    //     }
-    //     // if (horizontalBackside.current) {
-    //     //     toJpeg(horizontalBackside.current, { width: 630 })
-    //     //         .then(function (dataUrl) {
-    //     //             const link = document.createElement('a');
-    //     //             const filename = `${data?.receipt_no}_h_Backside.jpeg`;
-    //     //             link.download = filename;
-    //     //             link.href = dataUrl;
-    //     //             link.click();
-    //     //         })
-    //     //         .catch(function (error) {
-    //     //             console.error('Error capturing the image:', error);
-    //     //         });
-    //     // }
-    // };
+    // Embed image into the PDF
+    const fontBytes = await fetch('http://localhost:5000/font').then(res => res.arrayBuffer());
     
+
+    // Embed the font into the PDF document
+    const customFont = await pdfDoc.embedFont(fontBytes,{ subset: true,features: { liga: false }});
+    const page = pdfDoc.getPages();
+    // Set the font for the page
+    if(data?.profile_image){
+        const imageBytes = data?.profile_image || decode(data?.profile_image);
+        try{
+            const image = await pdfDoc.embedPng(imageBytes);
+        page[0].drawImage(image, {
+            x: 162, // X coordinate
+            y: 33, // Y coordinate
+            width:42, // Adjust width as needed
+            height: 42, // Adjust height as needed
+          });
+
+        }catch(err){
+            const image = await pdfDoc.embedJpg(imageBytes);
+            page[0].drawImage(image, {
+                x: 162, // X coordinate
+                y: 33, // Y coordinate
+                width:42, // Adjust width as needed
+                height: 42, // Adjust height as needed
+              });
+    
+        }
+        
+    }
+   
+    //const page = pdfDoc.addPage([243.13, 154]);
+    page[0].setFont(customFont);
+   
+    const toConvertName= (t(data.name).split('.'));
+const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
+//const startXName = page[0].getWidth() - textWidthName - 20;
+page[0].drawText(toConvertName[0]+'.', {
+    x: 166, // X coordinate
+    y: 22, // Y coordinate
+    size: fontSize,
+    font:customFont 
+    // Adjust height as needed
+  });
+    //const textWidthName = customFont.widthOfTextAtSize(toConvertName, fontSize);
+    //const startXName = page[0].getWidth() - textWidthName - 20;
+    page[0].drawText(toConvertName[1], {
+      x: 166+textWidthName, // X coordinate
+      y: 22, // Y coordinate
+      size: fontSize, // Adjust height as needed
+    });
+
+    const toConvertedText=(data.member_id+''||'NA');
+    //const textIdName = customFont.widthOfTextAtSize(toConvertedText, fontSize);
+    //const startXId = page[0].getWidth() - textIdName - 20;
+    page[0].drawText(toConvertedText, {
+        x: 179, // X coordinate
+        y: 11, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+
+    //const page2=pdfDoc.addPage([243.13, 154]);  
+    page[1].setFont(customFont);  
+    const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
+      page[1].drawText(tocFather+',', {
+        x: 135, // X coordinate
+        y: 120, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+   
+    const tocAddress=(data?.current_address);
+   // debugger;
+    const addresSplit= tocAddress.split(',');
+    let y=110;
+    for(let i=0;i<addresSplit.length;i++){
+        const extra=addresSplit.length ===i+1?'':','
+        page[1].drawText((addresSplit[i]+extra).trim(), {
+            x: 135,
+            y,
+            size: fontSize,
+            color: rgb(0, 0, 0), // black color
+        });
+        y=y-10
+    }
+
+    const tocPhone=((data?.mobile_number||'NA'));
+    const tocPhoneText = customFont.widthOfTextAtSize(tocAddress, fontSize);
+    const startxPon = page[1].getWidth() - tocPhoneText - 20;
+      page[1].drawText(tocPhone, {
+        x: 190, // X coordinate
+        y: 67, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+
+      const pdfBytes1 = await pdfDoc.save();
+      const pdfBase64 = encode(pdfBytes1);
+      setPdfBytesWhite(pdfBase64);
+      //const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      //document.getElementById('pdf').src = pdfDataUri;
+    }
+    createPdf();
+};
+const portraitColor = (data) => {
+    if(!data){
+        return
+    }
+   
+    async function createPdf() {
+    const pdfBytes = await fetch('http://localhost:5000/pdfgreen').then(res => res.arrayBuffer());
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+   
+    const fontSize = 6;
+    pdfDoc.registerFontkit(fontkit);
+
+    // Embed image into the PDF
+    const fontBytes = await fetch('http://localhost:5000/font').then(res => res.arrayBuffer());
+    
+
+    // Embed the font into the PDF document
+    const customFont = await pdfDoc.embedFont(fontBytes,{ subset: true,features: { liga: false }});
+    const page = pdfDoc.getPages();
+    // Set the font for the page
+    if(data?.profile_image){
+        const imageBytes = data?.profile_image || decode(data?.profile_image);
+        try{
+            const image = await pdfDoc.embedPng(imageBytes);
+            page[0].drawImage(image, {
+                x: 50, // X coordinate
+                y: 25, // Y coordinate
+                width:42, // Adjust width as needed
+                height: 42, // Adjust height as needed
+              });
+        }catch(err){
+            const image = await pdfDoc.embedJpg(imageBytes);
+            page[0].drawImage(image, {
+                x: 50, // X coordinate
+                y: 25, // Y coordinate
+                width:42, // Adjust width as needed
+                height: 42, // Adjust height as needed
+              });
+        }
+       
+       
+    }
+   
+    //const page = pdfDoc.addPage([243.13, 154]);
+    page[0].setFont(customFont);
+   
+    const toConvertName= (t(data.name).split('.'));
+    const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
+    //const startXName = page[0].getWidth() - textWidthName - 20;
+    page[0].drawText(toConvertName[0]+'.', {
+        x: 55, // X coordinate
+        y: 14, // Y coordinate
+        size: fontSize,
+        font:customFont 
+        // Adjust height as needed
+      });
+    //const textWidthName = customFont.widthOfTextAtSize(toConvertName, fontSize);
+    //const startXName = page[0].getWidth() - textWidthName - 20;
+    page[0].drawText(toConvertName[1], {
+      x: 55+textWidthName, // X coordinate
+      y: 14, // Y coordinate
+      size: fontSize, 
+      font:customFont // Adjust height as needed
+    });
+
+    const toConvertedText=(data.member_id+''||'NA');
+    //const textIdName = customFont.widthOfTextAtSize(toConvertedText, fontSize);
+    //const startXId = page[0].getWidth() - textIdName - 20;
+    page[0].drawText(toConvertedText, {
+        x: 64, // X coordinate
+        y: 4, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+
+    //const page2=pdfDoc.addPage([243.13, 154]);  
+    page[1].setFont(customFont);  
+    const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
+      page[1].drawText(tocFather+',', {
+        x: 10, // X coordinate
+        y: 75, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+   
+    const tocAddress=(data?.current_address);
+   // debugger;
+    const addresSplit= tocAddress.split(',');
+    let y=68;
+    for(let i=0;i<addresSplit.length;i++){
+        const extra=addresSplit.length ===i+1?'':','
+        page[1].drawText((addresSplit[i]+extra).trim(), {
+            x: 10,
+            y,
+            size: fontSize,
+            color: rgb(0, 0, 0), // black color
+        });
+        y=y-6
+    }
+
+    const tocPhone=((data?.mobile_number||'NA'));
+    const tocPhoneText = customFont.widthOfTextAtSize(tocAddress, fontSize);
+    const startxPon = page[1].getWidth() - tocPhoneText - 20;
+      page[1].drawText(tocPhone, {
+        x: 65, // X coordinate
+        y: 35, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+
+      const pdfBytes1 = await pdfDoc.save();
+      const pdfBase64 = encode(pdfBytes1);
+      setPdfBytesPort(pdfBase64);
+      //const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      //document.getElementById('pdf').src = pdfDataUri;
+    }
+    createPdf();
+};
+const portraitWhite = (data) => {
+    if(!data){
+        return
+    }
+   
+    async function createPdf() {
+    const pdfBytes = await fetch('http://localhost:5000/pdfport').then(res => res.arrayBuffer());
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+   
+    const fontSize = 6;
+    pdfDoc.registerFontkit(fontkit);
+
+    // Embed image into the PDF
+    const fontBytes = await fetch('http://localhost:5000/font').then(res => res.arrayBuffer());
+    
+
+    // Embed the font into the PDF document
+    const customFont = await pdfDoc.embedFont(fontBytes,{ subset: true,features: { liga: false }});
+    const page = pdfDoc.getPages();
+    // Set the font for the page
+    if(data?.profile_image){
+        const imageBytes = data?.profile_image || decode(data?.profile_image);
+        try{
+            const image = await pdfDoc.embedPng(imageBytes);
+            page[0].drawImage(image, {
+            x: 50, // X coordinate
+            y: 25, // Y coordinate
+            width:42, // Adjust width as needed
+            height: 42, // Adjust height as needed
+          });
+        }catch(err){
+            const image = await pdfDoc.embedJpg(imageBytes);
+            page[0].drawImage(image, {
+                x: 50, // X coordinate
+                y: 25, // Y coordinate
+                width:42, // Adjust width as needed
+                height: 42, // Adjust height as needed
+              });
+        }
+    }
+   
+    //const page = pdfDoc.addPage([243.13, 154]);
+    page[0].setFont(customFont);
+   
+    const toConvertName= (t(data.name).split('.'));
+    const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
+    //const startXName = page[0].getWidth() - textWidthName - 20;
+    page[0].drawText(toConvertName[0]+'.', {
+        x: 55, // X coordinate
+        y: 14, // Y coordinate
+        size: fontSize,
+        font:customFont 
+        // Adjust height as needed
+      });
+    
+    //const textWidthName = customFont.widthOfTextAtSize(toConvertName, fontSize);
+    //const startXName = page[0].getWidth() - textWidthName - 20;
+    page[0].drawText(toConvertName[1], {
+      x: 55+textWidthName, // X coordinate
+      y: 14, // Y coordinate
+      size: fontSize, // Adjust height as needed
+    });
+
+    const toConvertedText=(data.member_id+''||'NA');
+    //const textIdName = customFont.widthOfTextAtSize(toConvertedText, fontSize);
+    //const startXId = page[0].getWidth() - textIdName - 20;
+    page[0].drawText(toConvertedText, {
+        x: 64, // X coordinate
+        y: 4, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+
+    //const page2=pdfDoc.addPage([243.13, 154]);  
+    page[1].setFont(customFont);  
+    const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
+      page[1].drawText(tocFather+',', {
+        x: 10, // X coordinate
+        y: 75, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+   
+    const tocAddress=(data?.current_address);
+   // debugger;
+    const addresSplit= tocAddress.split(',');
+    let y=68;
+    for(let i=0;i<addresSplit.length;i++){
+        const extra=addresSplit.length ===i+1?'':','
+        page[1].drawText((addresSplit[i]+extra).trim(), {
+            x: 10,
+            y,
+            size: fontSize,
+            color: rgb(0, 0, 0), // black color
+        });
+        y=y-6
+    }
+
+    const tocPhone=((data?.mobile_number||'NA'));
+    const tocPhoneText = customFont.widthOfTextAtSize(tocAddress, fontSize);
+    const startxPon = page[1].getWidth() - tocPhoneText - 20;
+      page[1].drawText(tocPhone, {
+        x: 65, // X coordinate
+        y: 35, // Y coordinate
+        size: fontSize, // Adjust height as needed
+      });
+
+      const pdfBytes1 = await pdfDoc.save();
+      const pdfBase64 = encode(pdfBytes1);
+      setPdfBytesPortWhite(pdfBase64);
+      //const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+      //document.getElementById('pdf').src = pdfDataUri;
+    }
+    createPdf();
+};
 
     useEffect(() => {
-        fetchUser();
+        const init=async()=>{
+           const userData= await fetchUser();
+             landscapepdfColor(userData);
+             landscapepdfWhite(userData);
+             portraitColor(userData)
+             portraitWhite(userData)
+        }
+        init();
     }, [])
     const fetchUser = async () => {
         setShowLoader(true);
@@ -135,10 +568,12 @@ function UseridCard() {
             setCardvalue(response.data);
             setShowLoader(false);
             console.log(data);
+            return response.data
         }
         else {
             CustomToast(response.data.message, "error")
             setShowLoader(false);
+            return []
         }
     }
     return (
@@ -170,11 +605,35 @@ function UseridCard() {
                                                 <h4>ID Card Preview</h4>
                                             </div>
                                  <div className="row justify-content-center p-3">
+                                    <div id="backdropImg"></div>
                                      <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
-                                        <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalDownloadImage} style={{marginBottom: "10px"}}>
-                                                   <span className="mdi mdi-printer fs-2"></span>Print FrontSide
+                                    <div style={{display:'flex', alignItems:'center'}}>
+                                     <Button className="btn-success  ms-auto d-flex mr-2 p-1  justify-content-center"  style={{marginBottom: "10px",marginRight:"10px"}}>
+                                            {pdfBytes ? (
+      <a
+      href={`data:application/pdf;base64,${pdfBytes}`} style={{color:'#fff',display:'flex',alignItems:'center'}}
+      download="image.pdf"
+    >
+           <span className="mdi mdi-printer fs-2"></span>
+           <span style={{display:'inline-block',padding:'5px'}}>Color BG</span>
+        </a>
+      ): <> <span className="mdi mdi-printer fs-2"></span>Loading.</>}
+                                                  
                                         </Button>
-                                         <div className="id-cover" ref={horizontalFront}>
+                                        <Button className="btn-success ml-1 align-items-center d-flex gap-1 p-1 justify-content-center"  style={{marginBottom: "10px"}}>
+                                            {pdfBytesWhite ? (
+      <a
+      href={`data:application/pdf;base64,${pdfBytesWhite}`} style={{color:'#fff',display:'flex',alignItems:'center'}}
+      download="image.pdf"
+    >
+           <span className="mdi mdi-printer fs-2"></span>
+           <span style={{display:'inline-block',padding:'5px'}}>White BG</span>
+        </a>
+      ): <> <span className="mdi mdi-printer fs-2"></span>Loading.</>}
+                                                  
+                                        </Button>
+                                        </div>
+                                         <div id="frontside" className="id-cover" ref={horizontalFront}>
                                              <img src={horizontalgreenfront} className="horizontal-front-img"  />
                                              <div className="user-content" >
                                                  {/* <img src={profilepicture} className="id-photo" /> */}
@@ -186,10 +645,8 @@ function UseridCard() {
                                          </div>
                                      </div>
                                      <div className="col-md-8 col-sm-10 col-lg-7">
-                                     <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalBackDownloadImage} style={{marginBottom: "10px"}}>
-                                                   <span className="mdi mdi-printer fs-2"></span>Print BackSide
-                                        </Button>
-                                         <div className="id-cover" ref={horizontalBackside}>
+                                  
+                                         <div id="backside" className="id-cover" ref={horizontalBackside}>
                                              <img src={horizontalgreenback} className="horizontal-back-img" />
                                              <div className="user-content">
                                                  <p className="id-address justify-content-center">
@@ -202,9 +659,9 @@ function UseridCard() {
                                      </div>
                                  </div>
                                    </div>
-
+                        
                                     {/* <<-- White  image Start here -->> */}
-                                    <div className="id-horizontal card mt-3">
+                                    <div style={{display:'none'}} className="id-horizontal card mt-3">
                                        
                                        <div className="p-3 head-member d-flex gap-3">
                                            
@@ -212,10 +669,12 @@ function UseridCard() {
                                        <div>
                                        <div className="row justify-content-center p-3 " >
                                                <div className="col-md-8 col-sm-10 col-lg-7 mb-3" id="print-content">
-                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalPlainDownloadImage} style={{marginBottom: "10px"}}>
+                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={()=>{
+                                           // downloadAllImage('plainFrontSide')
+                                        }} style={{marginBottom: "10px"}}>
                                                    <span className="mdi mdi-printer fs-2"></span>Print Plain FrontSide
                                         </Button>
-                                                   <div className="id-cover" ref={horizontalPlainFront}>
+                                                   <div id="plainFrontSide" className="id-cover" ref={horizontalPlainFront}>
                                                        <img src={horizwhitfront} className="horizontal-front-img" />
                                                        <div className="user-content">
                                                            {/* <img src={profilepicture} className="id-photo" /> */}
@@ -227,10 +686,12 @@ function UseridCard() {
                                                    </div>
                                                </div>
                                                <div className="col-md-8 col-sm-10 col-lg-7">
-                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center" onClick={horizontalPlainBackDownloadImage} style={{marginBottom: "10px"}}>
+                                               <Button className="btn-success  ms-auto align-items-center d-flex gap-2 p-1  justify-content-center"onClick={()=>{
+                                            //downloadAllImage('plainBackSide')
+                                        }}  style={{marginBottom: "10px"}}>
                                                    <span className="mdi mdi-printer fs-2"></span>Print Plain BackSide
                                         </Button>
-                                                   <div className="id-cover" ref={horizontalPlainBackside}>
+                                                   <div id="plainBackSide" className="id-cover" ref={horizontalPlainBackside}>
                                                        <img src={horizwhiteback} className="horizontal-back-img" />
                                                        <div className="user-content">
                                                            <p className="id-address justify-content-center">
@@ -246,15 +707,46 @@ function UseridCard() {
                                       </div>
                                        {/* <<-- White  image End  here -->> */}
 
-                                {/* {data?.is_charity_member ? (
+    
+
+                                {data?.is_charity_member ? (
                                     // <--preview start here -->>
                                     <>
+                                      
                                          <div className="id-vertical card mb-5">
                                             <div className="p-3 head-member">
                                                
                                                 <h4>ID Card Preview</h4>
                                             </div>
                                             <div className="row justify-content-center p-3" >
+                                            <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
+                                    <div style={{display:'flex', alignItems:'center'}}>
+                                     <Button className="btn-success  ms-auto d-flex mr-2 p-1  justify-content-center"  style={{marginBottom: "10px",marginRight:"10px"}}>
+                                            {pdfBytesPort ? (
+      <a
+      href={`data:application/pdf;base64,${pdfBytesPort}`} style={{color:'#fff',display:'flex',alignItems:'center'}}
+      download="image.pdf"
+    >
+           <span className="mdi mdi-printer fs-2"></span>
+           <span style={{display:'inline-block',padding:'5px'}}>Color BG</span>
+        </a>
+      ): <> <span className="mdi mdi-printer fs-2"></span>Loading.</>}
+                                                  
+                                        </Button>
+                                        <Button className="btn-success ml-1 align-items-center d-flex gap-1 p-1 justify-content-center"  style={{marginBottom: "10px"}}>
+                                            {pdfBytesPortWhite ? (
+      <a
+      href={`data:application/pdf;base64,${pdfBytesPortWhite}`} style={{color:'#fff',display:'flex',alignItems:'center'}}
+      download="image.pdf"
+    >
+           <span className="mdi mdi-printer fs-2"></span>
+           <span style={{display:'inline-block',padding:'5px'}}>White BG</span>
+        </a>
+      ): <> <span className="mdi mdi-printer fs-2"></span>Loading.</>}
+                                                  
+                                        </Button>
+                                        </div>
+                                     </div>
                                                 <div className="col-md-8 col-sm-10 col-lg-6" >
 
                                                     <div className="id-cover">
@@ -288,7 +780,7 @@ function UseridCard() {
 
                                             </div>
                                         </div>
-                                       <div className="id-horizontal ">
+                                       <div style={{display:'none'}} className="id-horizontal ">
                                  
                                             <div className="row justify-content-center p-3">
                                                 <div className="col-md-8 col-sm-10 col-lg-7 mb-3">
@@ -321,14 +813,19 @@ function UseridCard() {
                                     </>
                                 ) : <>
                                   
-                                </>} */}
+                                </>} 
                             </Card>
                         </div>
                     </div>
                 </Container>
+               
             </div>
             <ToastContainer />
         </>
     )
 }
-export default UseridCard;
+export default withTranslation()(UseridCard);
+
+UseridCard.propTypes = {
+  t: PropTypes.any
+};

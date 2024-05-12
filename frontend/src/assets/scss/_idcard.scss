@@ -1,8 +1,20 @@
 .id-cover{
 	position:relative;
+	display: inline-flex;
 }
 .vertical-front-img , .vertical-back-img{
 	width: 400px !important;
+}
+#backdropImg{
+	background: white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 100;
+    transform: scale(3);
+	display: none;
 }
 .id-vertical .user-content {
 	width: 400px;
@@ -34,6 +46,7 @@
 	left: 143px;
 	border: 3px solid #9e005e;
 }
+
 .id-vertical .id-name {
 	bottom: 42px;
 	left: 155px;
@@ -53,32 +66,30 @@
 	left: 225px;
 	font-size: 16px;
 }
-/* ID horizontal */
 .id-horizontal .id-photo {
 	width: 115px;
 	height: 115px;
-	bottom: 102px;
-	right: 104px;
-	//  border: 4px solid green !important;
+	bottom: 108px;
+	right: 94px;
 }
 .id-horizontal .id-name {
-	bottom: 57px;
-	left: 433px;
+	bottom: 61px;
+	left: 442px;
 	font-size: 14px;
-} 
+}
 .id-horizontal .id-reg-no {
-	bottom: 28px;
-	left: 461px;
+	bottom: 29px;
+	left: 473px;
 }
 .id-horizontal .id-address {
 	bottom: 275px;
-	left: 350px;
+	left: 357px;
 	width: 260px;
-	top:54px
+	top: 44px;
 }
-.id-horizontal .id-phone-no{
-	bottom: 165px;
-	left: 488px;
+.id-horizontal .id-phone-no {
+	bottom: 175px;
+	left: 498px;
 	font-size: 18px;
 }
 
@@ -202,6 +213,7 @@
 
 	.id-cover{
 		position: relative;;
+		display: inline-flex;
 	}
 	.horizontal-front-img{
 		width: 636px;

@@ -76,7 +76,7 @@ const landscapepdfColor = (data) => {
     
     const pdfDoc = await PDFDocument.load(pdfBytes);
    
-    const fontSize = 7;
+    const fontSize = 8;
     pdfDoc.registerFontkit(fontkit);
 
     // Embed image into the PDF
@@ -101,7 +101,7 @@ const landscapepdfColor = (data) => {
             const image = await pdfDoc.embedPng(imageBytes);
             page[0].drawImage(image, {
                 x: 162, // X coordinate
-                y: 33, // Y coordinate
+                y: 34, // Y coordinate
                 width:42, // Adjust width as needed
                 height: 42, // Adjust height as needed
                 
@@ -112,7 +112,7 @@ const landscapepdfColor = (data) => {
             const image = await pdfDoc.embedJpg(imageBytes);
             page[0].drawImage(image, {
                 x: 162, // X coordinate
-                y: 33, // Y coordinate
+                y: 34, // Y coordinate
                 width:42, // Adjust width as needed
                 height: 42, // Adjust height as needed
               });
@@ -132,14 +132,14 @@ const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
 //const startXName = page[0].getWidth() - textWidthName - 20;
 page[0].drawText(toConvertName[0]+'.', {
     x: 166, // X coordinate
-    y: 22, // Y coordinate
+    y: 23, // Y coordinate
     size: fontSize,
     font:customFont 
     // Adjust height as needed
   });
 page[0].drawText(toConvertName[1], {
   x: 166+textWidthName, // X coordinate
-  y: 22, // Y coordinate
+  y: 23, // Y coordinate
   size: fontSize,
   font:customFont 
   // Adjust height as needed
@@ -153,7 +153,7 @@ page[0].drawText(toConvertName[1], {
     //const startXId = page[0].getWidth() - textIdName - 20;
     page[0].drawText(toConvertedText, {
         x: 179, // X coordinate
-        y: 11, // Y coordinate
+        y: 12, // Y coordinate
         size: fontSize, 
         font:customFont,// Adjust height as needed
       });
@@ -166,7 +166,7 @@ page[0].drawText(toConvertName[1], {
       console.log(t(tocFather).split(''));
       page[1].drawText(t(tocFather).split('').join('')+',', {
         x: 135, // X coordinate
-        y: 120, // Y coordinate
+        y: 121, // Y coordinate
         size: fontSize,
         charSpace: 1, wordSpace: 0 // Adjust height as needed
       });
@@ -175,7 +175,7 @@ page[0].drawText(toConvertName[1], {
     const tocAddress=(data?.current_address.replace(regex, ''));
    // debugger;
     const addresSplit= tocAddress.split(',');
-    let y=110;
+    let y=111;
     for(let i=0;i<addresSplit.length;i++){
         const extra=addresSplit.length ===i+1?'':','
         page[1].drawText((addresSplit[i]+extra).trim(), {
@@ -193,7 +193,7 @@ page[0].drawText(toConvertName[1], {
     const startxPon = page[1].getWidth() - tocPhoneText - 20;
       page[1].drawText(tocPhone, {
         x: 190, // X coordinate
-        y: 67, // Y coordinate
+        y: 68, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 
@@ -214,7 +214,7 @@ const landscapepdfWhite = (data) => {
     const pdfBytes = await fetch('http://localhost:5000/pdfWhite').then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
    
-    const fontSize = 6;
+    const fontSize = 8;
     pdfDoc.registerFontkit(fontkit);
 
     // Embed image into the PDF
@@ -231,7 +231,7 @@ const landscapepdfWhite = (data) => {
             const image = await pdfDoc.embedPng(imageBytes);
         page[0].drawImage(image, {
             x: 162, // X coordinate
-            y: 33, // Y coordinate
+            y: 34, // Y coordinate
             width:42, // Adjust width as needed
             height: 42, // Adjust height as needed
           });
@@ -240,7 +240,7 @@ const landscapepdfWhite = (data) => {
             const image = await pdfDoc.embedJpg(imageBytes);
             page[0].drawImage(image, {
                 x: 162, // X coordinate
-                y: 33, // Y coordinate
+                y: 34, // Y coordinate
                 width:42, // Adjust width as needed
                 height: 42, // Adjust height as needed
               });
@@ -257,7 +257,7 @@ const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
 //const startXName = page[0].getWidth() - textWidthName - 20;
 page[0].drawText(toConvertName[0]+'.', {
     x: 166, // X coordinate
-    y: 22, // Y coordinate
+    y: 23, // Y coordinate
     size: fontSize,
     font:customFont 
     // Adjust height as needed
@@ -266,7 +266,7 @@ page[0].drawText(toConvertName[0]+'.', {
     //const startXName = page[0].getWidth() - textWidthName - 20;
     page[0].drawText(toConvertName[1], {
       x: 166+textWidthName, // X coordinate
-      y: 22, // Y coordinate
+      y: 23, // Y coordinate
       size: fontSize, // Adjust height as needed
     });
 
@@ -275,7 +275,7 @@ page[0].drawText(toConvertName[0]+'.', {
     //const startXId = page[0].getWidth() - textIdName - 20;
     page[0].drawText(toConvertedText, {
         x: 179, // X coordinate
-        y: 11, // Y coordinate
+        y: 12, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 
@@ -284,14 +284,14 @@ page[0].drawText(toConvertName[0]+'.', {
     const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
       page[1].drawText(tocFather+',', {
         x: 135, // X coordinate
-        y: 120, // Y coordinate
+        y: 121, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
    
     const tocAddress=(data?.current_address);
    // debugger;
     const addresSplit= tocAddress.split(',');
-    let y=110;
+    let y=111;
     for(let i=0;i<addresSplit.length;i++){
         const extra=addresSplit.length ===i+1?'':','
         page[1].drawText((addresSplit[i]+extra).trim(), {
@@ -308,7 +308,7 @@ page[0].drawText(toConvertName[0]+'.', {
     const startxPon = page[1].getWidth() - tocPhoneText - 20;
       page[1].drawText(tocPhone, {
         x: 190, // X coordinate
-        y: 67, // Y coordinate
+        y: 68, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 
@@ -329,7 +329,7 @@ const portraitColor = (data) => {
     const pdfBytes = await fetch('http://localhost:5000/pdfgreen').then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
    
-    const fontSize = 6;
+    const fontSize = 8;
     pdfDoc.registerFontkit(fontkit);
 
     // Embed image into the PDF
@@ -345,16 +345,16 @@ const portraitColor = (data) => {
         try{
             const image = await pdfDoc.embedPng(imageBytes);
             page[0].drawImage(image, {
-                x: 50, // X coordinate
-                y: 25, // Y coordinate
+                x: 48, // X coordinate
+                y: 28, // Y coordinate
                 width:42, // Adjust width as needed
                 height: 42, // Adjust height as needed
               });
         }catch(err){
             const image = await pdfDoc.embedJpg(imageBytes);
             page[0].drawImage(image, {
-                x: 50, // X coordinate
-                y: 25, // Y coordinate
+                x: 48, // X coordinate
+                y: 28, // Y coordinate
                 width:42, // Adjust width as needed
                 height: 42, // Adjust height as needed
               });
@@ -370,17 +370,17 @@ const portraitColor = (data) => {
     const textWidthName = customFont.widthOfTextAtSize(toConvertName[0], fontSize);
     //const startXName = page[0].getWidth() - textWidthName - 20;
     page[0].drawText(toConvertName[0]+'.', {
-        x: 55, // X coordinate
-        y: 14, // Y coordinate
-        size: fontSize,
+        x: 53, // X coordinate
+        y: 16, // Y coordinate
+        size: 6,
         font:customFont 
         // Adjust height as needed
       });
     //const textWidthName = customFont.widthOfTextAtSize(toConvertName, fontSize);
     //const startXName = page[0].getWidth() - textWidthName - 20;
     page[0].drawText(toConvertName[1], {
-      x: 55+textWidthName, // X coordinate
-      y: 14, // Y coordinate
+      x: 53+textWidthName, // X coordinate
+      y: 16, // Y coordinate
       size: fontSize, 
       font:customFont // Adjust height as needed
     });
@@ -389,8 +389,8 @@ const portraitColor = (data) => {
     //const textIdName = customFont.widthOfTextAtSize(toConvertedText, fontSize);
     //const startXId = page[0].getWidth() - textIdName - 20;
     page[0].drawText(toConvertedText, {
-        x: 64, // X coordinate
-        y: 4, // Y coordinate
+        x: 62, // X coordinate
+        y: 6, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 
@@ -398,15 +398,15 @@ const portraitColor = (data) => {
     page[1].setFont(customFont);  
     const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
       page[1].drawText(tocFather+',', {
-        x: 10, // X coordinate
-        y: 75, // Y coordinate
+        x: 11, // X coordinate
+        y: 77, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
    
     const tocAddress=(data?.current_address);
    // debugger;
     const addresSplit= tocAddress.split(',');
-    let y=68;
+    let y=71;
     for(let i=0;i<addresSplit.length;i++){
         const extra=addresSplit.length ===i+1?'':','
         page[1].drawText((addresSplit[i]+extra).trim(), {
@@ -415,15 +415,15 @@ const portraitColor = (data) => {
             size: fontSize,
             color: rgb(0, 0, 0), // black color
         });
-        y=y-6
+        y=y-7
     }
 
     const tocPhone=((data?.mobile_number||'NA'));
     const tocPhoneText = customFont.widthOfTextAtSize(tocAddress, fontSize);
     const startxPon = page[1].getWidth() - tocPhoneText - 20;
       page[1].drawText(tocPhone, {
-        x: 65, // X coordinate
-        y: 35, // Y coordinate
+        x: 61, // X coordinate
+        y: 37, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 
@@ -444,7 +444,7 @@ const portraitWhite = (data) => {
     const pdfBytes = await fetch('http://localhost:5000/pdfport').then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
    
-    const fontSize = 6;
+    const fontSize = 8;
     pdfDoc.registerFontkit(fontkit);
 
     // Embed image into the PDF
@@ -461,7 +461,7 @@ const portraitWhite = (data) => {
             const image = await pdfDoc.embedPng(imageBytes);
             page[0].drawImage(image, {
             x: 50, // X coordinate
-            y: 25, // Y coordinate
+            y: 27, // Y coordinate
             width:42, // Adjust width as needed
             height: 42, // Adjust height as needed
           });
@@ -469,7 +469,7 @@ const portraitWhite = (data) => {
             const image = await pdfDoc.embedJpg(imageBytes);
             page[0].drawImage(image, {
                 x: 50, // X coordinate
-                y: 25, // Y coordinate
+                y: 27, // Y coordinate
                 width:42, // Adjust width as needed
                 height: 42, // Adjust height as needed
               });
@@ -484,7 +484,7 @@ const portraitWhite = (data) => {
     //const startXName = page[0].getWidth() - textWidthName - 20;
     page[0].drawText(toConvertName[0]+'.', {
         x: 55, // X coordinate
-        y: 14, // Y coordinate
+        y: 16, // Y coordinate
         size: fontSize,
         font:customFont 
         // Adjust height as needed
@@ -494,7 +494,7 @@ const portraitWhite = (data) => {
     //const startXName = page[0].getWidth() - textWidthName - 20;
     page[0].drawText(toConvertName[1], {
       x: 55+textWidthName, // X coordinate
-      y: 14, // Y coordinate
+      y: 16, // Y coordinate
       size: fontSize, // Adjust height as needed
     });
 
@@ -503,7 +503,7 @@ const portraitWhite = (data) => {
     //const startXId = page[0].getWidth() - textIdName - 20;
     page[0].drawText(toConvertedText, {
         x: 64, // X coordinate
-        y: 4, // Y coordinate
+        y: 6, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 
@@ -512,14 +512,14 @@ const portraitWhite = (data) => {
     const tocFather='த/க பெ : '+(data?.father_or_husband ||'NA');
       page[1].drawText(tocFather+',', {
         x: 10, // X coordinate
-        y: 75, // Y coordinate
+        y: 77, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
    
     const tocAddress=(data?.current_address);
    // debugger;
     const addresSplit= tocAddress.split(',');
-    let y=68;
+    let y=70;
     for(let i=0;i<addresSplit.length;i++){
         const extra=addresSplit.length ===i+1?'':','
         page[1].drawText((addresSplit[i]+extra).trim(), {
@@ -536,7 +536,7 @@ const portraitWhite = (data) => {
     const startxPon = page[1].getWidth() - tocPhoneText - 20;
       page[1].drawText(tocPhone, {
         x: 65, // X coordinate
-        y: 35, // Y coordinate
+        y: 37, // Y coordinate
         size: fontSize, // Adjust height as needed
       });
 

@@ -1,9 +1,7 @@
 import express from 'express';
-import pdf from 'html-pdf';
 import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
-import PDFMerger from 'pdf-merger-js';
 
 const app = express();
 app.use(cors());

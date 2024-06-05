@@ -3,7 +3,7 @@ import Breadcrumb from "components/Common/Breadcrumb";
 import { Link } from "react-router-dom";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Paginator } from 'primereact/paginator';
+import { Paginator } from "primereact/paginator";
 import { GET } from "helpers/api_helper";
 import { USER_URL } from "helpers/url_helper";
 import "../../assets/scss/_listusers.scss";
@@ -11,9 +11,7 @@ import noprofile from '../../assets/images/noprofile.jpg';
 import Loader from "components/Common/Loader";
 import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
-import moment from 'moment/moment';
-import MemberModal from "pages/Users/MemberModal";
-import { Badge, Input, Button, Label, FormGroup } from "reactstrap";
+import {  Input, Button, Label, FormGroup } from "reactstrap";
 import Sanscript from "@indic-transliteration/sanscript";
 
 function UsersListTable() {
@@ -57,9 +55,9 @@ function UsersListTable() {
         const response = await GET(url);
         if (response.status === 200) {
             setUsers(response.data.data);
-            setTotalRows(response.total_count);
+            setTotalRows(response.data.total_count);
+            console.log("usereee",rows);
             setShowLoader(false);
-            console.log(users);
         }
 
         else {
@@ -69,8 +67,9 @@ function UsersListTable() {
     }
     const selectLanguage = () => {
         setLanguage(!language);
-    }
-    const handlePageChange = (event) => {
+        }
+    const handlechange = (event) => {
+        console.log("calledd")
         let page = event.page + 1;
         setFirst(event.first);
         setRows(event.rows);
@@ -256,7 +255,7 @@ function UsersListTable() {
                                 <Column field="actions" header="செயல்" body={actionItems}></Column>
                             </DataTable>
                             <div className="card">
-                                <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />
+                                <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlechange} />
                             </div>
                         </div>
                     </div>

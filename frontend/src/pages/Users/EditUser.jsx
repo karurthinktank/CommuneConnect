@@ -141,7 +141,6 @@ function EditUser() {
             values['files'] = formData;
             values['deleted_members'] = deletedMembers;
             values['profile_image'] = "";
-            console.log(values)
             formData.append("form_data", JSON.stringify(values));
             let url = USER_URL + id + "/";
 
@@ -419,6 +418,8 @@ function EditUser() {
                                                             onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.charity_registration_number}
                                                             invalid={editUserForm.touched.charity_registration_number && editUserForm.errors.charity_registration_number ? true : false}
+                                                            readOnly
+                                                            disabled
                                                         />
                                                         {editUserForm.touched.charity_registration_number && editUserForm.errors.charity_registration_number ? (
                                                             <FormFeedback type="invalid">{editUserForm.errors.charity_registration_number}
@@ -679,6 +680,8 @@ function EditUser() {
                                                             onBlur={editUserForm.handleBlur}
                                                             value={editUserForm.values.mobile_number}
                                                             invalid={editUserForm.touched.mobile_number && editUserForm.errors.mobile_number ? true : false}
+                                                            readOnly={editUserForm.values.mobile_number?.length === 10}
+                                                            disabled={editUserForm.values.mobile_number?.length === 10}
                                                         />
                                                         {editUserForm.touched.mobile_number && editUserForm.errors.mobile_number ? (
                                                             <FormFeedback type="invalid">{editUserForm.errors.mobile_number}</FormFeedback>

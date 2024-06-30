@@ -41,7 +41,7 @@ function MemberModal(props) {
 //   })
 const handleSubmit = async () => {
   setshowLoader(true);
-  let url = CARD_MAP.replace(":slug", slug) + 'rfc';
+  let url = CARD_MAP.replace(":slug", slug);
   console.log(url);
   try {
     var res = await POST(url);

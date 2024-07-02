@@ -98,7 +98,9 @@
   font-weight: bold; /* Bold font for labels */
   margin-bottom: 5px; /* Margin below labels */
 }
-  
+  .user-profile,.user-actions{
+    text-align: center !important;
+  }
    .card.datatable-container .p-datatable .p-datatable-tbody > tr.card-row > td {
     display: block;
      width: 100%;

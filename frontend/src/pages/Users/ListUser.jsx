@@ -13,6 +13,8 @@ import CustomToast from "components/Common/Toast";
 import { ToastContainer } from "react-toastify";
 import { Input, Button, Label, FormGroup } from "reactstrap";
 import Sanscript from "@indic-transliteration/sanscript";
+import tamil from '../../assets/images/tamil.png'
+import english from '../../assets/images/english.png'
 
 function UsersListTable() {
     const [users, setUsers] = useState([]);
@@ -24,7 +26,6 @@ function UsersListTable() {
     const [filter, setFilter] = useState("");
     const [previous, setPreviousValue] = useState("");
     const [language, setLanguage] = useState(false);
-
     useEffect(() => {
         fetchUsers(currentPage);
     }, []);
@@ -50,7 +51,7 @@ function UsersListTable() {
 
     const selectLanguage = () => {
         setLanguage(!language);
-    };
+            };
 
     const handleFilter = (event) => {
         let value = event.target.value;
@@ -116,7 +117,7 @@ function UsersListTable() {
             return (
                 <div className="user-profile">
                     <img src={row.profile_image.public_url} className="rounded-circle header-profile-user" style={{ border: row.is_profile_completed ? "2px solid green" : "2px solid red" }} />
-                    {row.is_card_mapped && <div className="ms-4"><i className="mdi mdi-checkbox-marked-circle-outline fs-2 text-success"></i></div>}
+                    {row.is_card_mapped && <div className="ms-3"><i className="mdi mdi-checkbox-marked-circle-outline fs-2 text-success"></i></div>}
                 </div>
             );
         }
@@ -128,7 +129,7 @@ function UsersListTable() {
     };
 
     const actionItems = (row) => (
-        <div className="fs-2 d-block gap-2">
+        <div className="fs-2 d-block gap-2 user-actions">
             <Link to={"/users/view/" + row?.member_id}><i className="mdi mdi-eye-circle fs-1" /></Link>
             <Link to={"/users/edit/" + row?.member_id}><i className="mdi mdi-pencil-circle fs-1 text-secondary" /></Link>
             {row.is_profile_completed && <Link to={"/users/idcard/" + row?.member_id}><i className="mdi mdi-card-account-details text-success fs-1" /></Link>}
@@ -163,7 +164,18 @@ function UsersListTable() {
                 <div className="row p-2 align-items-center">
                     <div className="col-12 col-md-2">
                         <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
-                            <Label className="m-0 fw-bold">தமிழ்</Label>
+                            {/* <Label className="m-0 fw-bold">{language}</Label> */}
+                            {language ? 
+                            <img src={english} className="" width="40">
+                            
+                            </img> 
+                            : 
+                             (
+                                // <Label className="m-0 fw-bold">English</Label>
+                                <img src={tamil} className="" width="40"></img>
+                             )
+                             }
+                            
                             <Input type="switch" onClick={selectLanguage} checked={language} className="fs-2 ms-1" defaultValue={true} />
                         </FormGroup>
                     </div>
@@ -183,14 +195,18 @@ function UsersListTable() {
                     <div className="col-12 col-md-3">
                         <div className="d-flex">
                             <div className="ms-auto d-flex align-items-center gap-2 center-button">
-                                <Link to={`/users/add`}><button className="btn btn-primary btn-block ms-auto" type="button"><span className="mdi mdi-plus fs-5 me-2"></span>புதிய சேரக்கை</button></Link>
+                                <Link to={`/users/add`}>
+                                    <button className="btn btn-primary btn-block ms-auto" type="button">
+                                        <span className="mdi mdi-plus">
+                                            </span>
+                                            </button>
+                                            </Link>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="container-fluid">
                     <div className="row">
-                        <Breadcrumb title="டேஷ்போர்டு" parentPath="/home" currentPath="/users" breadcrumbItem="குடும்பங்கள்" />
                         <div className="card datatable-container p-datatable-responsive">
                             <DataTable value={users} scrollable scrollHeight="600px" className="custom-datatable" rowClassName="card-row">
                                 <Column field="image" body={(rowData) => getImage(rowData)} header="குடும்ப தலைவர் புகைப்படம்"></Column>
@@ -201,8 +217,11 @@ function UsersListTable() {
                                 <Column field="current_address" header="முகவரி" body={(rowData) => customBodyTemplate(rowData, { field: "current_address", header: "முகவரி" })} sortable></Column>
                                 <Column field="status" header="செயல்" body={actionItems}></Column>
                             </DataTable>
-                            <Paginator first={first} rows={rows} totalRecords={totalRows} onPageChange={handlePageChange} className="p-paginator" />
-                        </div>
+                            <div className="card">
+                            <Paginator first={first} rows={rows} totalRecords={totalRows} rowsPerPageOptions={[25, 50, 75, 100]} onPageChange={handlePageChange} />
+                            
+                            </div>
+                            </div>
                     </div>
                 </div>
                 <ToastContainer />

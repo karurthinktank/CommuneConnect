@@ -23,6 +23,8 @@ import noprofile from '../../assets/images/noprofile.jpg';
 
 import Sanscript from "@indic-transliteration/sanscript";
 import Loader from "components/Common/Loader";
+import tamil from '../../assets/images/tamil.png'
+import english from '../../assets/images/english.png'
 
 
 function EditUser() {
@@ -278,7 +280,17 @@ function EditUser() {
                         <Card className="usercard">
                         <CardHeader className="position-sticky top-0">
                                 <FormGroup switch className="d-flex justify-content-center align-items-center gap-3">
-                                    <Label className="m-0 fw-bold">மொழியை தேர்ந்தெடுங்கள்</Label>
+                                    {/* <Label className="m-0 fw-bold">மொழியை தேர்ந்தெடுங்கள்</Label> */}
+                                    {language ? 
+                            <img src={english} className="" width="40">
+                            
+                            </img> 
+                            : 
+                             (
+                                // <Label className="m-0 fw-bold">English</Label>
+                                <img src={tamil} className="" width="40"></img>
+                             )
+                             }
                                     <Input
                                         type="switch"
                                         onClick={chooseLanguage}
@@ -286,7 +298,7 @@ function EditUser() {
                                         className="fs-2 ms-1"
                                         defaultValue={true}
                                     />
-                                    <Label check>{language ? "தமிழ்" : "English"}  </Label>
+                                    {/* <Label check>{language ? "தமிழ்" : "English"}  </Label> */}
                                 </FormGroup>
                             </CardHeader>
                             <CardBody style={{maxHeight:"650px",overflow:"scroll"}}>
